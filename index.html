@@ -3,316 +3,398 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal Pelajar MPU3212 (BIG)</title>
+    <title>MPU3212 | Portal BIG</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f0fdf4; } /* Light green bg */
-        .loader { border-top-color: #16a34a; -webkit-animation: spinner 1.5s linear infinite; animation: spinner 1.5s linear infinite; }
+        body { font-family: 'Poppins', sans-serif; background: url('https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?q=80&w=2070&auto=format&fit=crop') no-repeat center center fixed; background-size: cover; }
+        .glass { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.3); }
+        .glass-dark { background: rgba(17, 24, 39, 0.85); backdrop-filter: blur(10px); color: white; }
+        .hidden { display: none !important; }
+        .fade-in { animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        /* Loader */
+        .loader { border-top-color: #10b981; -webkit-animation: spinner 1.5s linear infinite; animation: spinner 1.5s linear infinite; }
         @keyframes spinner { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        
-        /* Toast Notification */
-        #toast-container { position: fixed; top: 20px; right: 20px; z-index: 50; display: flex; flex-direction: column; gap: 10px; }
-        .toast { min-width: 250px; padding: 15px; border-radius: 8px; color: white; transform: translateX(100%); transition: transform 0.3s ease-out; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .toast.show { transform: translateX(0); }
-        .toast.success { background-color: #16a34a; } /* Green-600 */
-        .toast.error { background-color: #dc2626; } /* Red-600 */
+        /* Tabs */
+        .tab-active { border-bottom: 3px solid #10b981; color: #10b981; font-weight: bold; }
+        .tab-inactive { color: #6b7280; }
     </style>
 </head>
-<body class="text-gray-800 min-h-screen flex flex-col">
+<body class="min-h-screen flex flex-col items-center justify-center p-4">
 
-    <div id="toast-container"></div>
+    <div id="toast" class="fixed top-5 right-5 z-50 hidden px-6 py-3 rounded shadow-lg text-white font-bold transition-all transform translate-x-full"></div>
 
-    <div id="loading-overlay" class="fixed inset-0 bg-white/90 z-50 hidden flex-col items-center justify-center">
+    <div id="loader" class="fixed inset-0 bg-black/50 z-50 hidden flex flex-col items-center justify-center">
         <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12 mb-4"></div>
-        <p class="text-green-700 font-bold animate-pulse">Sedang memproses...</p>
+        <p class="text-white font-bold">Memproses...</p>
     </div>
 
-    <header class="bg-green-700 text-white shadow-lg sticky top-0 z-40">
-        <div class="max-w-4xl mx-auto px-4 py-4 flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <div class="bg-white text-green-700 w-10 h-10 rounded-lg flex items-center justify-center font-bold text-xl"><i class="fas fa-campground"></i></div>
-                <div>
-                    <h1 class="text-lg font-bold leading-tight">MPU3212 BINA INSAN GURU</h1>
-                    <p class="text-xs text-green-200" id="header-user-info">Portal Pelajar</p>
-                </div>
+    <div id="view-login" class="glass w-full max-w-md p-8 shadow-2xl fade-in">
+        <div class="text-center mb-6">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 text-green-600 mb-2 shadow-inner">
+                <i class="fas fa-campground text-2xl"></i>
             </div>
-            <button onclick="logout()" id="btn-logout" class="hidden bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 rounded text-xs font-bold transition"><i class="fas fa-sign-out-alt"></i> Keluar</button>
+            <h1 class="text-2xl font-bold text-gray-800">Portal MPU3212</h1>
+            <p class="text-xs text-gray-500">Bina Insan Guru</p>
         </div>
-    </header>
 
-    <main class="flex-grow p-4 flex justify-center">
+        <div class="flex justify-center mb-6 border-b">
+            <button onclick="switchTab('student')" id="tab-student" class="w-1/2 pb-2 tab-active transition">PELAJAR</button>
+            <button onclick="switchTab('lecturer')" id="tab-lecturer" class="w-1/2 pb-2 tab-inactive transition">PENSYARAH</button>
+        </div>
+
+        <form id="form-student" onsubmit="loginStudent(event)" class="space-y-4">
+            <div>
+                <label class="block text-xs font-bold text-gray-600 mb-1">NO. KAD PENGENALAN</label>
+                <input type="text" id="login-ic" class="w-full p-3 bg-gray-50 border rounded-lg focus:ring-2 focus:ring-green-500 outline-none text-center tracking-widest font-mono" placeholder="Contoh: 010101010101" required>
+            </div>
+            <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg shadow transition">LOG MASUK PELAJAR</button>
+        </form>
+
+        <form id="form-lecturer" onsubmit="loginLecturer(event)" class="space-y-4 hidden">
+            <div>
+                <label class="block text-xs font-bold text-gray-600 mb-1">EMAIL RASMI</label>
+                <input type="email" id="login-email" class="w-full p-3 bg-gray-50 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" placeholder="pensyarah@ipg.com" required>
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-gray-600 mb-1">KATA LALUAN</label>
+                <input type="password" id="login-pass" class="w-full p-3 bg-gray-50 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" required>
+            </div>
+            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg shadow transition">LOG MASUK PENSYARAH</button>
+        </form>
+    </div>
+
+    <div id="view-student" class="glass w-full max-w-4xl p-6 hidden fade-in relative min-h-[80vh]">
+        <button onclick="logout()" class="absolute top-4 right-4 bg-red-100 text-red-600 px-3 py-1 rounded hover:bg-red-200 font-bold text-xs"><i class="fas fa-sign-out-alt"></i> Keluar</button>
         
-        <div id="login-view" class="w-full max-w-md mt-10">
-            <div class="bg-white p-8 rounded-2xl shadow-xl border-t-4 border-green-600">
-                <div class="text-center mb-6">
-                    <h2 class="text-2xl font-bold text-gray-800">Log Masuk Pelajar</h2>
-                    <p class="text-sm text-gray-500">Sila masukkan No. Kad Pengenalan anda.</p>
+        <div class="flex flex-col md:flex-row gap-8 mt-4">
+            <div class="md:w-1/3 flex flex-col items-center">
+                <div class="w-40 h-40 rounded-full bg-gray-200 border-4 border-white shadow-lg overflow-hidden relative group">
+                    <img id="std-img" src="" class="w-full h-full object-cover hidden">
+                    <div id="std-img-placeholder" class="w-full h-full flex items-center justify-center text-gray-400 text-4xl"><i class="fas fa-user"></i></div>
                 </div>
-                <form onsubmit="handleLogin(event)" class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-1">No. Kad Pengenalan</label>
-                        <input type="text" id="login-ic" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-green-500 outline-none text-center text-lg tracking-widest" placeholder="Contoh: 010101010101" required>
+                <label class="mt-4 bg-green-600 hover:bg-green-700 text-white text-xs font-bold py-2 px-6 rounded-full cursor-pointer shadow transition transform active:scale-95">
+                    <i class="fas fa-camera mr-2"></i> MUAT NAIK GAMBAR
+                    <input type="file" class="hidden" accept="image/*" onchange="processImage(this)">
+                </label>
+                <p class="text-[10px] text-gray-500 mt-2 text-center">Gambar akan dikecilkan automatik.</p>
+            </div>
+
+            <div class="md:w-2/3">
+                <h2 class="text-3xl font-bold text-gray-800" id="std-name">Nama Pelajar</h2>
+                <p class="text-green-600 font-mono font-bold text-sm mb-6" id="std-id">ID: -</p>
+
+                <div class="grid grid-cols-2 gap-4 text-sm mb-6">
+                    <div class="bg-gray-50 p-3 rounded"><p class="text-[10px] font-bold text-gray-400">NO. KP</p><p class="font-bold" id="std-kp">-</p></div>
+                    <div class="bg-gray-50 p-3 rounded"><p class="text-[10px] font-bold text-gray-400">KELAS</p><p class="font-bold" id="std-class">-</p></div>
+                </div>
+
+                <div class="bg-yellow-50 border border-yellow-200 p-4 rounded-lg">
+                    <h3 class="font-bold text-yellow-800 mb-3 flex items-center"><i class="fas fa-notes-medical mr-2"></i> Maklumat Kesihatan</h3>
+                    <div class="space-y-3">
+                        <div>
+                            <label class="text-xs font-bold text-gray-600">ALAHAN</label>
+                            <input type="text" id="std-alahan" class="w-full p-2 border rounded bg-white text-sm">
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-gray-600">UBAT-UBATAN</label>
+                            <input type="text" id="std-ubat" class="w-full p-2 border rounded bg-white text-sm">
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-gray-600">NO. KECEMASAN (WARIS)</label>
+                            <input type="text" id="std-tel" class="w-full p-2 border rounded bg-white text-sm">
+                        </div>
+                        <button onclick="updateStudentData()" class="w-full bg-slate-800 text-white py-2 rounded font-bold text-xs shadow hover:bg-slate-900 mt-2">SIMPAN MAKLUMAT</button>
                     </div>
-                    <button type="submit" class="w-full bg-green-700 hover:bg-green-800 text-white font-bold py-3 rounded-lg shadow transition transform active:scale-95">LOG MASUK</button>
-                </form>
-                <div class="mt-6 text-center text-xs text-gray-400">
-                    Sistem Pengurusan BIG MPU3212
                 </div>
             </div>
         </div>
+    </div>
 
-        <div id="profile-view" class="w-full max-w-4xl hidden space-y-6">
-            
-            <div class="bg-white rounded-xl shadow-sm border overflow-hidden flex flex-col md:flex-row">
-                <div class="bg-gray-100 p-6 flex flex-col items-center justify-center md:w-1/3 border-b md:border-b-0 md:border-r">
-                    <div class="w-32 h-32 rounded-full bg-gray-300 overflow-hidden shadow-inner mb-4 border-4 border-white relative group">
-                        <img id="profile-img" src="" alt="Profile" class="w-full h-full object-cover hidden">
-                        <div id="profile-placeholder" class="w-full h-full flex items-center justify-center text-gray-500 text-4xl"><i class="fas fa-user"></i></div>
-                    </div>
-                    <label for="file-upload" class="cursor-pointer bg-green-600 hover:bg-green-700 text-white text-xs font-bold py-2 px-4 rounded-full shadow flex items-center gap-2 transition">
-                        <i class="fas fa-camera"></i> Tukar Gambar
-                    </label>
-                    <input id="file-upload" type="file" accept="image/*" class="hidden" onchange="previewAndUploadImage(this)">
-                    <p class="text-[10px] text-gray-500 mt-2 text-center">Format: JPG/PNG. Maks: 4MB.</p>
-                </div>
-
-                <div class="p-6 md:w-2/3">
-                    <h2 class="text-2xl font-bold text-gray-800 mb-1" id="disp-name">Nama Pelajar</h2>
-                    <p class="text-sm text-green-600 font-bold mb-4" id="disp-id">ID SISTEM</p>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                        <div class="bg-gray-50 p-3 rounded border"><span class="block text-xs text-gray-500 font-bold">NO. KAD PENGENALAN</span><span class="font-semibold" id="disp-ic">-</span></div>
-                        <div class="bg-gray-50 p-3 rounded border"><span class="block text-xs text-gray-500 font-bold">ANGKA GILIRAN</span><span class="font-semibold" id="disp-giliran">-</span></div>
-                        <div class="bg-gray-50 p-3 rounded border"><span class="block text-xs text-gray-500 font-bold">KELAS</span><span class="font-semibold" id="disp-kelas">-</span></div>
-                        <div class="bg-gray-50 p-3 rounded border"><span class="block text-xs text-gray-500 font-bold">JANTINA</span><span class="font-semibold" id="disp-jantina">-</span></div>
-                        <div class="bg-gray-50 p-3 rounded border"><span class="block text-xs text-gray-500 font-bold">SIRI BIG</span><span class="font-semibold" id="disp-siri">-</span></div>
-                        <div class="bg-gray-50 p-3 rounded border"><span class="block text-xs text-gray-500 font-bold">KUMPULAN BIG</span><span class="font-semibold" id="disp-kumpulan">-</span></div>
-                        <div class="col-span-1 md:col-span-2 bg-blue-50 p-3 rounded border border-blue-100 text-blue-800"><span class="block text-xs text-blue-500 font-bold">PENSYARAH PEMBIMBING</span><span class="font-bold" id="disp-pensyarah">-</span></div>
-                    </div>
-                </div>
+    <div id="view-lecturer" class="glass w-full max-w-6xl p-6 hidden fade-in relative min-h-[90vh]">
+        <div class="flex justify-between items-center border-b pb-4 mb-4">
+            <div>
+                <h1 class="text-xl font-bold text-blue-900">Panel Penilaian Pensyarah</h1>
+                <p class="text-xs text-gray-500">Selamat datang, <span id="lec-name" class="font-bold">Pensyarah</span></p>
             </div>
-
-            <div class="bg-white rounded-xl shadow-sm border p-6">
-                <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2"><i class="fas fa-heartbeat text-red-500"></i> Maklumat Kesihatan & Kecemasan</h3>
-                <form onsubmit="handleUpdateInfo(event)">
-                    <div class="grid grid-cols-1 gap-4 mb-4">
-                        <div>
-                            <label class="block text-xs font-bold text-gray-700 mb-1">Alahan (Jika ada)</label>
-                            <textarea id="inp-alahan" class="w-full p-2 border rounded focus:ring-1 focus:ring-green-500 outline-none text-sm" placeholder="Contoh: Makanan laut, habuk..." rows="2"></textarea>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-gray-700 mb-1">Ubat-Ubatan (Yang sedang diambil)</label>
-                            <textarea id="inp-ubat" class="w-full p-2 border rounded focus:ring-1 focus:ring-green-500 outline-none text-sm" placeholder="Senaraikan ubat jika ada..." rows="2"></textarea>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-gray-700 mb-1">No. Telefon Kecemasan (Waris)</label>
-                            <input type="text" id="inp-tel" class="w-full p-2 border rounded focus:ring-1 focus:ring-green-500 outline-none text-sm" placeholder="Contoh: 012-3456789 (Bapa)">
-                        </div>
-                    </div>
-                    <div class="text-right">
-                        <button type="submit" class="bg-slate-800 hover:bg-slate-900 text-white font-bold py-2 px-6 rounded shadow text-sm transition"><i class="fas fa-save mr-2"></i> KEMASKINI MAKLUMAT</button>
-                    </div>
-                </form>
-            </div>
-
+            <button onclick="logout()" class="bg-red-100 text-red-600 px-3 py-1 rounded hover:bg-red-200 font-bold text-xs"><i class="fas fa-sign-out-alt"></i> Keluar</button>
         </div>
-    </main>
 
-    <footer class="text-center p-4 text-xs text-gray-400">
-        &copy; 2024 Sistem Pengurusan BIG MPU3212
-    </footer>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 bg-blue-50 p-4 rounded-lg">
+            <div>
+                <label class="block text-xs font-bold text-blue-800 mb-1">1. PILIH KELAS</label>
+                <select id="sel-class" onchange="filterStudents()" class="w-full p-2 rounded border text-sm"></select>
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-blue-800 mb-1">2. PILIH PELAJAR</label>
+                <select id="sel-student" class="w-full p-2 rounded border text-sm" disabled></select>
+            </div>
+            <div class="flex items-end">
+                <button onclick="loadGradingForm()" class="w-full bg-blue-600 text-white py-2 rounded font-bold text-sm shadow hover:bg-blue-700">MULA MENILAI</button>
+            </div>
+        </div>
+
+        <div id="grading-area" class="hidden">
+            <div class="flex mb-4 gap-2 overflow-x-auto">
+                <button onclick="showForm('t1')" class="px-4 py-2 bg-purple-100 text-purple-700 rounded font-bold text-xs hover:bg-purple-200 flex-1 whitespace-nowrap">TUGASAN 1 (10%)</button>
+                <button onclick="showForm('t2')" class="px-4 py-2 bg-orange-100 text-orange-700 rounded font-bold text-xs hover:bg-orange-200 flex-1 whitespace-nowrap">AMALI 1 (20%)</button>
+                <button onclick="showForm('t3')" class="px-4 py-2 bg-green-100 text-green-700 rounded font-bold text-xs hover:bg-green-200 flex-1 whitespace-nowrap">AMALI 2 (70%)</button>
+            </div>
+
+            <div id="form-t1" class="grading-form hidden bg-white p-6 rounded shadow border-l-4 border-purple-500">
+                <h3 class="font-bold text-gray-800 mb-4">Kuiz (10%)</h3>
+                <div class="grid grid-cols-2 gap-4">
+                    <div><label class="text-xs font-bold">Kuiz 1: Umum (5)</label><input type="number" id="t1_m1" class="w-full border p-2 rounded" max="5"></div>
+                    <div><label class="text-xs font-bold">Kuiz 2: Alatan (5)</label><input type="number" id="t1_m2" class="w-full border p-2 rounded" max="5"></div>
+                </div>
+                <button onclick="submitMark('MARKAH_TUGASAN1')" class="mt-4 bg-purple-600 text-white px-6 py-2 rounded font-bold text-sm">SIMPAN T1</button>
+            </div>
+
+            <div id="form-t2" class="grading-form hidden bg-white p-6 rounded shadow border-l-4 border-orange-500">
+                <h3 class="font-bold text-gray-800 mb-4">Amali 1: Pra-Perkhemahan (20%)</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div><label class="text-xs font-bold">Etiket Sosial (5)</label><input type="number" id="t2_m1" class="w-full border p-2 rounded" max="5"></div>
+                    <div><label class="text-xs font-bold">Guru & Komuniti (5)</label><input type="number" id="t2_m2" class="w-full border p-2 rounded" max="5"></div>
+                    <div><label class="text-xs font-bold">Kewarganegaraan (10)</label><input type="number" id="t2_m3" class="w-full border p-2 rounded" max="10"></div>
+                </div>
+                <button onclick="submitMark('MARKAH_TUGASAN2')" class="mt-4 bg-orange-600 text-white px-6 py-2 rounded font-bold text-sm">SIMPAN T2</button>
+            </div>
+
+            <div id="form-t3" class="grading-form hidden bg-white p-6 rounded shadow border-l-4 border-green-500">
+                <h3 class="font-bold text-gray-800 mb-2">Amali 2: Perkhemahan (70%)</h3>
+                
+                <p class="text-xs font-bold text-green-700 mt-2 mb-1 border-b">HP3: KEMAHIRAN PRAKTIKAL (25%)</p>
+                <div class="grid grid-cols-2 md:grid-cols-5 gap-2 mb-4">
+                    <div><label class="text-[10px]">Cergas (5)</label><input type="number" id="t3_hp3_1" class="w-full border p-1 rounded text-center"></div>
+                    <div><label class="text-[10px]">Makanan (5)</label><input type="number" id="t3_hp3_2" class="w-full border p-1 rounded text-center"></div>
+                    <div><label class="text-[10px]">Flying Fox (5)</label><input type="number" id="t3_hp3_3" class="w-full border p-1 rounded text-center"></div>
+                    <div><label class="text-[10px]">Tazkirah (5)</label><input type="number" id="t3_hp3_4" class="w-full border p-1 rounded text-center"></div>
+                    <div><label class="text-[10px]">Refleksi (5)</label><input type="number" id="t3_hp3_5" class="w-full border p-1 rounded text-center"></div>
+                </div>
+
+                <p class="text-xs font-bold text-blue-700 mt-2 mb-1 border-b">HP8: KEPIMPINAN (45%)</p>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+                    <div><label class="text-[10px]">Kembara Ind (5)</label><input type="number" id="t3_hp8_1" class="w-full border p-1 rounded text-center"></div>
+                    <div><label class="text-[10px]">Kembara Grp (10)</label><input type="number" id="t3_hp8_2" class="w-full border p-1 rounded text-center"></div>
+                    <div><label class="text-[10px]">Air Ind (5)</label><input type="number" id="t3_hp8_3" class="w-full border p-1 rounded text-center"></div>
+                    <div><label class="text-[10px]">Air Grp (5)</label><input type="number" id="t3_hp8_4" class="w-full border p-1 rounded text-center"></div>
+                    <div><label class="text-[10px]">Rakit Ind (5)</label><input type="number" id="t3_hp8_5" class="w-full border p-1 rounded text-center"></div>
+                    <div><label class="text-[10px]">Rakit Grp (5)</label><input type="number" id="t3_hp8_6" class="w-full border p-1 rounded text-center"></div>
+                    <div><label class="text-[10px]">Makan Grp (10)</label><input type="number" id="t3_hp8_7" class="w-full border p-1 rounded text-center"></div>
+                </div>
+                <button onclick="submitMark('MARKAH_TUGASAN3')" class="mt-4 bg-green-600 text-white px-6 py-2 rounded font-bold text-sm">SIMPAN T3</button>
+            </div>
+        </div>
+    </div>
 
     <script>
-        // ============================================
-        // PASTE URL WEB APP ANDA DI SINI
-        // ============================================
-        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwQnGx-qdLbDcTFR0HD2dgnE34Lr00wrHFTpEOQ7ynNIj_RuPYHeSjtMj3XfF9YDRSSMA/exec";
-        // ============================================
+        // ==========================================
+        // CONFIG
+        // ==========================================
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbx2JQj_JX5_ERUX5zSy1MlWWf5Oz4gMaamCGAJnFQdtC0Hfz4Q12P6NxoLXYXFdp9RYEA/exec"; // PASTE URL BARU DI SINI
+        let allStudentsCache = [];
+        let currentStudent = null;
 
-        let currentUser = null;
-
-        // UI HELPERS
-        const showLoader = (show) => document.getElementById('loading-overlay').style.display = show ? 'flex' : 'none';
-        
+        // UI UTILS
+        function showLoader(show) { document.getElementById('loader').classList.toggle('hidden', !show); }
         function showToast(msg, type='success') {
-            const container = document.getElementById('toast-container');
-            const toast = document.createElement('div');
-            toast.className = `toast ${type}`;
-            toast.innerText = msg;
-            container.appendChild(toast);
-            requestAnimationFrame(() => toast.classList.add('show'));
-            setTimeout(() => {
-                toast.classList.remove('show');
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
+            const t = document.getElementById('toast');
+            t.innerText = msg;
+            t.className = `fixed top-5 right-5 z-50 px-6 py-3 rounded shadow-lg text-white font-bold transition-all transform duration-300 ${type==='success'?'bg-green-500':'bg-red-500'}`;
+            t.classList.remove('hidden', 'translate-x-full');
+            setTimeout(() => t.classList.add('translate-x-full'), 3000);
         }
+        function switchTab(role) {
+            document.getElementById('form-student').classList.toggle('hidden', role !== 'student');
+            document.getElementById('form-lecturer').classList.toggle('hidden', role !== 'lecturer');
+            document.getElementById('tab-student').className = role === 'student' ? 'w-1/2 pb-2 tab-active transition' : 'w-1/2 pb-2 tab-inactive transition';
+            document.getElementById('tab-lecturer').className = role === 'lecturer' ? 'w-1/2 pb-2 tab-active transition' : 'w-1/2 pb-2 tab-inactive transition';
+        }
+        function logout() { location.reload(); }
 
-        // LOGIN LOGIC
-        function handleLogin(e) {
+        // 1. LOGIN LOGIC
+        function loginStudent(e) {
             e.preventDefault();
-            const ic = document.getElementById('login-ic').value.trim();
-            if(!ic) return showToast("Sila masukkan No. KP", "error");
-
+            const ic = document.getElementById('login-ic').value;
             showLoader(true);
-            fetch(WEB_APP_URL, {
-                method: "POST",
-                body: JSON.stringify({ action: "login_student", no_kp: ic })
-            })
-            .then(res => res.json())
-            .then(data => {
+            fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify({ action: "login_student", no_kp: ic }) })
+            .then(r => r.json()).then(res => {
                 showLoader(false);
-                if(data.result === 'success') {
-                    currentUser = data.data;
-                    renderProfile();
-                    document.getElementById('login-view').classList.add('hidden');
-                    document.getElementById('profile-view').classList.remove('hidden');
-                    document.getElementById('btn-logout').classList.remove('hidden');
-                    document.getElementById('header-user-info').innerText = currentUser.nama;
-                    showToast("Log masuk berjaya!");
-                } else {
-                    showToast(data.message, "error");
-                }
-            })
-            .catch(err => {
-                showLoader(false);
-                showToast("Ralat sambungan server", "error");
-                console.error(err);
+                if(res.result === 'success') {
+                    currentStudent = res.data;
+                    loadStudentDashboard(res.data);
+                } else showToast(res.message, 'error');
             });
         }
 
-        // RENDER PROFILE
-        function renderProfile() {
-            if(!currentUser) return;
-            document.getElementById('disp-name').innerText = currentUser.nama;
-            document.getElementById('disp-id').innerText = currentUser.id_sistem;
-            document.getElementById('disp-ic').innerText = currentUser.no_kp;
-            document.getElementById('disp-giliran').innerText = currentUser.no_giliran;
-            document.getElementById('disp-kelas').innerText = currentUser.kelas;
-            document.getElementById('disp-jantina').innerText = currentUser.jantina;
-            document.getElementById('disp-siri').innerText = currentUser.siri_big;
-            document.getElementById('disp-kumpulan').innerText = currentUser.kumpulan_big;
-            document.getElementById('disp-pensyarah').innerText = currentUser.pensyarah;
+        function loginLecturer(e) {
+            e.preventDefault();
+            const em = document.getElementById('login-email').value;
+            const pw = document.getElementById('login-pass').value;
+            showLoader(true);
+            fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify({ action: "login_lecturer", email: em, password: pw }) })
+            .then(r => r.json()).then(res => {
+                showLoader(false);
+                if(res.result === 'success') {
+                    allStudentsCache = res.all_students;
+                    document.getElementById('lec-name').innerText = res.nama;
+                    initLecturerDashboard();
+                } else showToast(res.message, 'error');
+            });
+        }
 
-            // Inputs
-            document.getElementById('inp-alahan').value = currentUser.alahan || "";
-            document.getElementById('inp-ubat').value = currentUser.ubat || "";
-            document.getElementById('inp-tel').value = currentUser.tel_kecemasan || "";
+        // 2. STUDENT DASHBOARD
+        function loadStudentDashboard(data) {
+            document.getElementById('view-login').classList.add('hidden');
+            document.getElementById('view-student').classList.remove('hidden');
+            
+            document.getElementById('std-name').innerText = data.nama;
+            document.getElementById('std-id').innerText = "ID: " + data.id;
+            document.getElementById('std-kp').innerText = data.no_kp;
+            document.getElementById('std-class').innerText = data.kelas;
+            document.getElementById('std-alahan').value = data.alahan || "";
+            document.getElementById('std-ubat').value = data.ubat || "";
+            document.getElementById('std-tel').value = data.tel_kecemasan || "";
 
-            // Image
-            const imgEl = document.getElementById('profile-img');
-            const placeholder = document.getElementById('profile-placeholder');
-            if(currentUser.url_gambar && currentUser.url_gambar !== "") {
-                imgEl.src = currentUser.url_gambar;
-                imgEl.classList.remove('hidden');
-                placeholder.classList.add('hidden');
-            } else {
-                imgEl.classList.add('hidden');
-                placeholder.classList.remove('hidden');
+            if(data.url_gambar) {
+                document.getElementById('std-img').src = data.url_gambar;
+                document.getElementById('std-img').classList.remove('hidden');
+                document.getElementById('std-img-placeholder').classList.add('hidden');
             }
         }
 
-        // UPDATE INFO LOGIC
-        function handleUpdateInfo(e) {
-            e.preventDefault();
-            if(!currentUser) return;
-
-            const alahan = document.getElementById('inp-alahan').value;
-            const ubat = document.getElementById('inp-ubat').value;
-            const tel = document.getElementById('inp-tel').value;
-
+        function updateStudentData() {
             showLoader(true);
-            fetch(WEB_APP_URL, {
-                method: "POST",
-                body: JSON.stringify({
-                    action: "update_student_info",
-                    no_kp: currentUser.no_kp,
-                    alahan: alahan,
-                    ubat: ubat,
-                    tel_kecemasan: tel
-                })
-            })
-            .then(res => res.json())
-            .then(data => {
+            const body = {
+                action: "update_student_info",
+                no_kp: currentStudent.no_kp,
+                alahan: document.getElementById('std-alahan').value,
+                ubat: document.getElementById('std-ubat').value,
+                tel_kecemasan: document.getElementById('std-tel').value
+            };
+            fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify(body) })
+            .then(r => r.json()).then(res => {
                 showLoader(false);
-                if(data.result === 'success') {
-                    showToast("Maklumat dikemaskini!");
-                    // Update local object
-                    currentUser.alahan = alahan;
-                    currentUser.ubat = ubat;
-                    currentUser.tel_kecemasan = tel;
-                } else {
-                    showToast(data.message, "error");
-                }
-            })
-            .catch(err => {
-                showLoader(false);
-                showToast("Gagal mengemaskini", "error");
+                showToast(res.message, res.result);
             });
         }
 
-        // IMAGE UPLOAD LOGIC
-        function previewAndUploadImage(input) {
-            if (input.files && input.files[0]) {
+        // 3. IMAGE COMPRESSION & UPLOAD
+        function processImage(input) {
+            if(input.files && input.files[0]) {
                 const file = input.files[0];
+                if(file.size > 5 * 1024 * 1024) return showToast("Fail > 5MB. Sila guna gambar kecil.", 'error');
                 
-                // Client-side validation
-                if(file.size > 4 * 1024 * 1024) { // 4MB limit
-                    showToast("Fail terlalu besar (Maks 4MB)", "error");
-                    return;
-                }
-
-                // Preview
+                showLoader(true);
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    const imgEl = document.getElementById('profile-img');
-                    const placeholder = document.getElementById('profile-placeholder');
-                    imgEl.src = e.target.result;
-                    imgEl.classList.remove('hidden');
-                    placeholder.classList.add('hidden');
-
-                    // Auto Upload
-                    uploadImageToDrive(e.target.result.split(',')[1], file.type); // Send Base64
+                    const img = new Image();
+                    img.src = e.target.result;
+                    img.onload = function() {
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        
+                        // Resize Logic (Max width 800px)
+                        const maxWidth = 800;
+                        const scale = maxWidth / img.width;
+                        canvas.width = maxWidth;
+                        canvas.height = img.height * scale;
+                        
+                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                        const base64 = canvas.toDataURL('image/jpeg', 0.7); // Compress 0.7 quality
+                        
+                        // Send
+                        uploadImage(base64.split(',')[1], 'image/jpeg');
+                    }
                 }
                 reader.readAsDataURL(file);
             }
         }
 
-        function uploadImageToDrive(base64Data, mimeType) {
-            if(!currentUser) return;
-            showLoader(true);
-            showToast("Sedang memuat naik gambar...", "success");
-
+        function uploadImage(base64, mime) {
             fetch(WEB_APP_URL, {
                 method: "POST",
                 body: JSON.stringify({
                     action: "update_student_info",
-                    no_kp: currentUser.no_kp,
-                    nama: currentUser.nama, // For filename
-                    image_base64: base64Data,
-                    image_mime: mimeType
+                    no_kp: currentStudent.no_kp,
+                    nama: currentStudent.nama,
+                    image_base64: base64,
+                    image_mime: mime
                 })
             })
-            .then(res => res.json())
-            .then(data => {
+            .then(r => r.json()).then(res => {
                 showLoader(false);
-                if(data.result === 'success') {
-                    showToast("Gambar berjaya disimpan!", "success");
-                } else {
-                    showToast("Gagal muat naik: " + data.message, "error");
-                }
-            })
-            .catch(err => {
-                showLoader(false);
-                showToast("Ralat rangkaian", "error");
+                if(res.result === 'success') {
+                    showToast("Gambar berjaya disimpan!", 'success');
+                    // Update preview
+                    document.getElementById('std-img').src = "data:image/jpeg;base64," + base64;
+                    document.getElementById('std-img').classList.remove('hidden');
+                    document.getElementById('std-img-placeholder').classList.add('hidden');
+                } else showToast(res.message, 'error');
             });
         }
 
-        function logout() {
-            if(confirm("Log keluar?")) {
-                location.reload();
+        // 4. LECTURER DASHBOARD
+        function initLecturerDashboard() {
+            document.getElementById('view-login').classList.add('hidden');
+            document.getElementById('view-lecturer').classList.remove('hidden');
+            
+            // Populate Class Dropdown
+            const classes = [...new Set(allStudentsCache.map(s => s.kelas))].sort();
+            const sel = document.getElementById('sel-class');
+            sel.innerHTML = '<option value="">-- Pilih Kelas --</option>';
+            classes.forEach(c => sel.innerHTML += `<option value="${c}">${c}</option>`);
+        }
+
+        function filterStudents() {
+            const cls = document.getElementById('sel-class').value;
+            const selStd = document.getElementById('sel-student');
+            selStd.innerHTML = '<option value="">-- Pilih Pelajar --</option>';
+            selStd.disabled = !cls;
+            
+            if(cls) {
+                const filtered = allStudentsCache.filter(s => s.kelas === cls);
+                filtered.forEach(s => selStd.innerHTML += `<option value="${s.id}">${s.nama}</option>`);
             }
+        }
+
+        function loadGradingForm() {
+            if(!document.getElementById('sel-student').value) return showToast("Pilih pelajar dahulu", 'error');
+            document.getElementById('grading-area').classList.remove('hidden');
+        }
+
+        function showForm(fid) {
+            document.querySelectorAll('.grading-form').forEach(el => el.classList.add('hidden'));
+            document.getElementById('form-' + fid).classList.remove('hidden');
+        }
+
+        function submitMark(sheetName) {
+            if(!confirm("Simpan markah?")) return;
+            showLoader(true);
+            const stdId = document.getElementById('sel-student').value;
+            let payload = { action: "save_mark", sheet_name: sheetName, student_id: stdId };
+
+            // Collect Data
+            if(sheetName === 'MARKAH_TUGASAN1') {
+                payload.m1 = document.getElementById('t1_m1').value;
+                payload.m2 = document.getElementById('t1_m2').value;
+            } else if(sheetName === 'MARKAH_TUGASAN2') {
+                payload.m1 = document.getElementById('t2_m1').value;
+                payload.m2 = document.getElementById('t2_m2').value;
+                payload.m3 = document.getElementById('t2_m3').value;
+            } else {
+                for(let i=1; i<=5; i++) payload[`hp3_${i}`] = document.getElementById(`t3_hp3_${i}`).value;
+                for(let i=1; i<=7; i++) payload[`hp8_${i}`] = document.getElementById(`t3_hp8_${i}`).value;
+            }
+
+            fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify(payload) })
+            .then(r => r.json()).then(res => {
+                showLoader(false);
+                showToast(res.message, res.result);
+                // Clear inputs if needed
+            });
         }
     </script>
 </body>
