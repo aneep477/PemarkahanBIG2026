@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Pelajar MPU3212 (BIG)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f0fdf4; } /* Light green bg */
+        .loader { border-top-color: #16a34a; -webkit-animation: spinner 1.5s linear infinite; animation: spinner 1.5s linear infinite; }
+        @keyframes spinner { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        /* Toast Notification */
+        #toast-container { position: fixed; top: 20px; right: 20px; z-index: 50; display: flex; flex-direction: column; gap: 10px; }
+        .toast { min-width: 250px; padding: 15px; border-radius: 8px; color: white; transform: translateX(100%); transition: transform 0.3s ease-out; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .toast.show { transform: translateX(0); }
+        .toast.success { background-color: #16a34a; } /* Green-600 */
+        .toast.error { background-color: #dc2626; } /* Red-600 */
+    </style>
+</head>
+<body class="text-gray-800 min-h-screen flex flex-col">
+
+    <div id="toast-container"></div>
+
+    <div id="loading-overlay" class="fixed inset-0 bg-white/90 z-50 hidden flex-col items-center justify-center">
+        <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12 mb-4"></div>
+        <p class="text-green-700 font-bold animate-pulse">Sedang memproses...</p>
+    </div>
+
+    <header class="bg-green-700 text-white shadow-lg sticky top-0 z-40">
+        <div class="max-w-4xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="bg-white text-green-700 w-10 h-10 rounded-lg flex items-center justify-center font-bold text-xl"><i class="fas fa-campground"></i></div>
+                <div>
+                    <h1 class="text-lg font-bold leading-tight">MPU3212 BINA INSAN GURU</h1>
+                    <p class="text-xs text-green-200" id="header-user-info">Portal Pelajar</p>
+                </div>
+            </div>
+            <button onclick="logout()" id="btn-logout" class="hidden bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 rounded text-xs font-bold transition"><i class="fas fa-sign-out-alt"></i> Keluar</button>
+        </div>
+    </header>
+
+    <main class="flex-grow p-4 flex justify-center">
+        
+        <div id="login-view" class="w-full max-w-md mt-10">
+            <div class="bg-white p-8 rounded-2xl shadow-xl border-t-4 border-green-600">
+                <div class="text-center mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800">Log Masuk Pelajar</h2>
+                    <p class="text-sm text-gray-500">Sila masukkan No. Kad Pengenalan anda.</p>
+                </div>
+                <form onsubmit="handleLogin(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-1">No. Kad Pengenalan</label>
+                        <input type="text" id="login-ic" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-green-500 outline-none text-center text-lg tracking-widest" placeholder="Contoh: 010101010101" required>
+                    </div>
+                    <button type="submit" class="w-full bg-green-700 hover:bg-green-800 text-white font-bold py-3 rounded-lg shadow transition transform active:scale-95">LOG MASUK</button>
+                </form>
+                <div class="mt-6 text-center text-xs text-gray-400">
+                    Sistem Pengurusan BIG MPU3212
+                </div>
+            </div>
+        </div>
+
+        <div id="profile-view" class="w-full max-w-4xl hidden space-y-6">
+            
+            <div class="bg-white rounded-xl shadow-sm border overflow-hidden flex flex-col md:flex-row">
+                <div class="bg-gray-100 p-6 flex flex-col items-center justify-center md:w-1/3 border-b md:border-b-0 md:border-r">
+                    <div class="w-32 h-32 rounded-full bg-gray-300 overflow-hidden shadow-inner mb-4 border-4 border-white relative group">
+                        <img id="profile-img" src="" alt="Profile" class="w-full h-full object-cover hidden">
+                        <div id="profile-placeholder" class="w-full h-full flex items-center justify-center text-gray-500 text-4xl"><i class="fas fa-user"></i></div>
+                    </div>
+                    <label for="file-upload" class="cursor-pointer bg-green-600 hover:bg-green-700 text-white text-xs font-bold py-2 px-4 rounded-full shadow flex items-center gap-2 transition">
+                        <i class="fas fa-camera"></i> Tukar Gambar
+                    </label>
+                    <input id="file-upload" type="file" accept="image/*" class="hidden" onchange="previewAndUploadImage(this)">
+                    <p class="text-[10px] text-gray-500 mt-2 text-center">Format: JPG/PNG. Maks: 4MB.</p>
+                </div>
+
+                <div class="p-6 md:w-2/3">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-1" id="disp-name">Nama Pelajar</h2>
+                    <p class="text-sm text-green-600 font-bold mb-4" id="disp-id">ID SISTEM</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                        <div class="bg-gray-50 p-3 rounded border"><span class="block text-xs text-gray-500 font-bold">NO. KAD PENGENALAN</span><span class="font-semibold" id="disp-ic">-</span></div>
+                        <div class="bg-gray-50 p-3 rounded border"><span class="block text-xs text-gray-500 font-bold">ANGKA GILIRAN</span><span class="font-semibold" id="disp-giliran">-</span></div>
+                        <div class="bg-gray-50 p-3 rounded border"><span class="block text-xs text-gray-500 font-bold">KELAS</span><span class="font-semibold" id="disp-kelas">-</span></div>
+                        <div class="bg-gray-50 p-3 rounded border"><span class="block text-xs text-gray-500 font-bold">JANTINA</span><span class="font-semibold" id="disp-jantina">-</span></div>
+                        <div class="bg-gray-50 p-3 rounded border"><span class="block text-xs text-gray-500 font-bold">SIRI BIG</span><span class="font-semibold" id="disp-siri">-</span></div>
+                        <div class="bg-gray-50 p-3 rounded border"><span class="block text-xs text-gray-500 font-bold">KUMPULAN BIG</span><span class="font-semibold" id="disp-kumpulan">-</span></div>
+                        <div class="col-span-1 md:col-span-2 bg-blue-50 p-3 rounded border border-blue-100 text-blue-800"><span class="block text-xs text-blue-500 font-bold">PENSYARAH PEMBIMBING</span><span class="font-bold" id="disp-pensyarah">-</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm border p-6">
+                <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2"><i class="fas fa-heartbeat text-red-500"></i> Maklumat Kesihatan & Kecemasan</h3>
+                <form onsubmit="handleUpdateInfo(event)">
+                    <div class="grid grid-cols-1 gap-4 mb-4">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 mb-1">Alahan (Jika ada)</label>
+                            <textarea id="inp-alahan" class="w-full p-2 border rounded focus:ring-1 focus:ring-green-500 outline-none text-sm" placeholder="Contoh: Makanan laut, habuk..." rows="2"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 mb-1">Ubat-Ubatan (Yang sedang diambil)</label>
+                            <textarea id="inp-ubat" class="w-full p-2 border rounded focus:ring-1 focus:ring-green-500 outline-none text-sm" placeholder="Senaraikan ubat jika ada..." rows="2"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 mb-1">No. Telefon Kecemasan (Waris)</label>
+                            <input type="text" id="inp-tel" class="w-full p-2 border rounded focus:ring-1 focus:ring-green-500 outline-none text-sm" placeholder="Contoh: 012-3456789 (Bapa)">
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <button type="submit" class="bg-slate-800 hover:bg-slate-900 text-white font-bold py-2 px-6 rounded shadow text-sm transition"><i class="fas fa-save mr-2"></i> KEMASKINI MAKLUMAT</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="text-center p-4 text-xs text-gray-400">
+        &copy; 2024 Sistem Pengurusan BIG MPU3212
+    </footer>
+
+    <script>
+        // ============================================
+        // PASTE URL WEB APP ANDA DI SINI
+        // ============================================
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyPGiybvGXIDO9Mp1W3ha80nfWASoP3lw1Q2do5uu39csiYK4Q4VSrR30SE_eN69fxmnA/exec";
+        // ============================================
+
+        let currentUser = null;
+
+        // UI HELPERS
+        const showLoader = (show) => document.getElementById('loading-overlay').style.display = show ? 'flex' : 'none';
+        
+        function showToast(msg, type='success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerText = msg;
+            container.appendChild(toast);
+            requestAnimationFrame(() => toast.classList.add('show'));
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // LOGIN LOGIC
+        function handleLogin(e) {
+            e.preventDefault();
+            const ic = document.getElementById('login-ic').value.trim();
+            if(!ic) return showToast("Sila masukkan No. KP", "error");
+
+            showLoader(true);
+            fetch(WEB_APP_URL, {
+                method: "POST",
+                body: JSON.stringify({ action: "login_student", no_kp: ic })
+            })
+            .then(res => res.json())
+            .then(data => {
+                showLoader(false);
+                if(data.result === 'success') {
+                    currentUser = data.data;
+                    renderProfile();
+                    document.getElementById('login-view').classList.add('hidden');
+                    document.getElementById('profile-view').classList.remove('hidden');
+                    document.getElementById('btn-logout').classList.remove('hidden');
+                    document.getElementById('header-user-info').innerText = currentUser.nama;
+                    showToast("Log masuk berjaya!");
+                } else {
+                    showToast(data.message, "error");
+                }
+            })
+            .catch(err => {
+                showLoader(false);
+                showToast("Ralat sambungan server", "error");
+                console.error(err);
+            });
+        }
+
+        // RENDER PROFILE
+        function renderProfile() {
+            if(!currentUser) return;
+            document.getElementById('disp-name').innerText = currentUser.nama;
+            document.getElementById('disp-id').innerText = currentUser.id_sistem;
+            document.getElementById('disp-ic').innerText = currentUser.no_kp;
+            document.getElementById('disp-giliran').innerText = currentUser.no_giliran;
+            document.getElementById('disp-kelas').innerText = currentUser.kelas;
+            document.getElementById('disp-jantina').innerText = currentUser.jantina;
+            document.getElementById('disp-siri').innerText = currentUser.siri_big;
+            document.getElementById('disp-kumpulan').innerText = currentUser.kumpulan_big;
+            document.getElementById('disp-pensyarah').innerText = currentUser.pensyarah;
+
+            // Inputs
+            document.getElementById('inp-alahan').value = currentUser.alahan || "";
+            document.getElementById('inp-ubat').value = currentUser.ubat || "";
+            document.getElementById('inp-tel').value = currentUser.tel_kecemasan || "";
+
+            // Image
+            const imgEl = document.getElementById('profile-img');
+            const placeholder = document.getElementById('profile-placeholder');
+            if(currentUser.url_gambar && currentUser.url_gambar !== "") {
+                imgEl.src = currentUser.url_gambar;
+                imgEl.classList.remove('hidden');
+                placeholder.classList.add('hidden');
+            } else {
+                imgEl.classList.add('hidden');
+                placeholder.classList.remove('hidden');
+            }
+        }
+
+        // UPDATE INFO LOGIC
+        function handleUpdateInfo(e) {
+            e.preventDefault();
+            if(!currentUser) return;
+
+            const alahan = document.getElementById('inp-alahan').value;
+            const ubat = document.getElementById('inp-ubat').value;
+            const tel = document.getElementById('inp-tel').value;
+
+            showLoader(true);
+            fetch(WEB_APP_URL, {
+                method: "POST",
+                body: JSON.stringify({
+                    action: "update_student_info",
+                    no_kp: currentUser.no_kp,
+                    alahan: alahan,
+                    ubat: ubat,
+                    tel_kecemasan: tel
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                showLoader(false);
+                if(data.result === 'success') {
+                    showToast("Maklumat dikemaskini!");
+                    // Update local object
+                    currentUser.alahan = alahan;
+                    currentUser.ubat = ubat;
+                    currentUser.tel_kecemasan = tel;
+                } else {
+                    showToast(data.message, "error");
+                }
+            })
+            .catch(err => {
+                showLoader(false);
+                showToast("Gagal mengemaskini", "error");
+            });
+        }
+
+        // IMAGE UPLOAD LOGIC
+        function previewAndUploadImage(input) {
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                
+                // Client-side validation
+                if(file.size > 4 * 1024 * 1024) { // 4MB limit
+                    showToast("Fail terlalu besar (Maks 4MB)", "error");
+                    return;
+                }
+
+                // Preview
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const imgEl = document.getElementById('profile-img');
+                    const placeholder = document.getElementById('profile-placeholder');
+                    imgEl.src = e.target.result;
+                    imgEl.classList.remove('hidden');
+                    placeholder.classList.add('hidden');
+
+                    // Auto Upload
+                    uploadImageToDrive(e.target.result.split(',')[1], file.type); // Send Base64
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function uploadImageToDrive(base64Data, mimeType) {
+            if(!currentUser) return;
+            showLoader(true);
+            showToast("Sedang memuat naik gambar...", "success");
+
+            fetch(WEB_APP_URL, {
+                method: "POST",
+                body: JSON.stringify({
+                    action: "update_student_info",
+                    no_kp: currentUser.no_kp,
+                    nama: currentUser.nama, // For filename
+                    image_base64: base64Data,
+                    image_mime: mimeType
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                showLoader(false);
+                if(data.result === 'success') {
+                    showToast("Gambar berjaya disimpan!", "success");
+                } else {
+                    showToast("Gagal muat naik: " + data.message, "error");
+                }
+            })
+            .catch(err => {
+                showLoader(false);
+                showToast("Ralat rangkaian", "error");
+            });
+        }
+
+        function logout() {
+            if(confirm("Log keluar?")) {
+                location.reload();
+            }
+        }
+    </script>
+</body>
+</html>
