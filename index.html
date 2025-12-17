@@ -11,15 +11,21 @@
         /* Background & Glassmorphism */
         body { font-family: 'Poppins', sans-serif; background: url('https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?q=80&w=2070&auto=format&fit=crop') no-repeat center center fixed; background-size: cover; }
         .glass { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.5); box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37); }
+        .glass-dark { background: rgba(31, 41, 55, 0.9); backdrop-filter: blur(12px); border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.1); color: white; }
+        
+        /* Utils */
         .hidden { display: none !important; }
         .fade-in { animation: fadeIn 0.4s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
         /* Loader */
         .loader { border-top-color: #10b981; -webkit-animation: spinner 1s linear infinite; animation: spinner 1s linear infinite; }
         @keyframes spinner { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        /* Tabs */
+        
+        /* Tab Styles */
         .tab-btn { padding-bottom: 8px; font-weight: 600; transition: all 0.3s; width: 50%; text-align: center; border-bottom: 3px solid transparent; color: #6b7280; }
         .tab-btn.active { border-color: #10b981; color: #10b981; }
+        
         /* Drag & Drop Zone */
         .drop-zone { border: 2px dashed #cbd5e1; transition: all 0.3s; background-color: #f8fafc; }
         .drop-zone.drag-active { border-color: #10b981; background-color: #ecfdf5; transform: scale(1.02); }
@@ -155,31 +161,18 @@
             <button onclick="logout()" class="bg-red-50 text-red-600 px-4 py-2 rounded-lg hover:bg-red-100 font-bold text-xs"><i class="fas fa-sign-out-alt"></i></button>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 bg-blue-50/50 p-4 rounded-xl border border-blue-100 items-center">
-            
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 bg-blue-50/50 p-4 rounded-xl border border-blue-100">
             <div>
                 <label class="block text-[10px] font-bold text-blue-800 mb-1 tracking-wider">1. PILIH KELAS</label>
                 <select id="sel-class" onchange="filterStudents()" class="w-full p-2 rounded border border-blue-200 text-sm focus:outline-none"></select>
             </div>
-            
-            <div class="md:col-span-2">
+            <div>
                 <label class="block text-[10px] font-bold text-blue-800 mb-1 tracking-wider">2. PILIH PELAJAR</label>
-                <select id="sel-student" onchange="previewStudentImage()" class="w-full p-2 rounded border border-blue-200 text-sm focus:outline-none" disabled></select>
+                <select id="sel-student" class="w-full p-2 rounded border border-blue-200 text-sm focus:outline-none" disabled></select>
             </div>
-
-            <div class="flex flex-col items-center justify-center">
-                <div class="w-16 h-16 rounded-full bg-gray-200 border-2 border-white shadow overflow-hidden">
-                    <img id="lec-view-img" src="" class="w-full h-full object-cover hidden">
-                    <div id="lec-view-placeholder" class="w-full h-full flex items-center justify-center text-gray-400">
-                        <i class="fas fa-user text-2xl"></i>
-                    </div>
-                </div>
-                <p class="text-[10px] text-gray-500 mt-1">Foto Pelajar</p>
+            <div class="flex items-end">
+                <button onclick="loadGradingForm()" class="w-full bg-blue-600 text-white py-2 rounded font-bold text-sm shadow hover:bg-blue-700 transition">BUKA BORANG MARKAH</button>
             </div>
-        </div>
-
-        <div class="flex justify-end mb-4">
-             <button onclick="loadGradingForm()" class="bg-blue-600 text-white py-2 px-6 rounded font-bold text-sm shadow hover:bg-blue-700 transition">BUKA BORANG MARKAH</button>
         </div>
 
         <div id="grading-area" class="hidden">
@@ -239,7 +232,7 @@
         // ============================================
         // PASTE URL WEB APP ANDA DI SINI
         // ============================================
-        const WEB_APP_URL = "URL_WEB_APP_APPS_SCRIPT_ANDA_DI_SINI";
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbx2JQj_JX5_ERUX5zSy1MlWWf5Oz4gMaamCGAJnFQdtC0Hfz4Q12P6NxoLXYXFdp9RYEA/exec";
         // ============================================
 
         let allStudentsCache = [];
@@ -420,7 +413,7 @@
             });
         }
 
-        // --- 4. LOGIN PENSYARAH (UPDATED: SHOW STUDENT IMG) ---
+        // --- 4. LOGIN PENSYARAH ---
         function loginLecturer(e) {
             e.preventDefault();
             const em = document.getElementById('login-email').value;
@@ -430,7 +423,7 @@
             .then(r => r.json()).then(res => {
                 showLoader(false);
                 if(res.result === 'success') {
-                    allStudentsCache = res.students_list; // Now includes 'url_gambar'
+                    allStudentsCache = res.students_list;
                     document.getElementById('lec-name').innerText = res.nama;
                     document.getElementById('view-login').classList.add('hidden');
                     document.getElementById('view-lecturer').classList.remove('hidden');
@@ -449,43 +442,13 @@
         function filterStudents() {
             const cls = document.getElementById('sel-class').value;
             const selStd = document.getElementById('sel-student');
-            
-            // Reset Dropdown & Image
             selStd.innerHTML = '<option value="">-- Pilih Pelajar --</option>';
             selStd.disabled = !cls;
-            resetLecImage();
-
+            
             if(cls) {
                 const filtered = allStudentsCache.filter(s => s.kelas === cls);
                 filtered.forEach(s => selStd.innerHTML += `<option value="${s.id}">${s.nama}</option>`);
             }
-        }
-
-        // FUNGSI BARU: Preview Gambar Pelajar di Panel Pensyarah
-        function previewStudentImage() {
-            const stdId = document.getElementById('sel-student').value;
-            const imgEl = document.getElementById('lec-view-img');
-            const placeholderEl = document.getElementById('lec-view-placeholder');
-
-            if (!stdId) {
-                resetLecImage();
-                return;
-            }
-
-            const student = allStudentsCache.find(s => s.id == stdId);
-            
-            if (student && student.url_gambar && student.url_gambar.trim() !== "") {
-                imgEl.src = student.url_gambar;
-                imgEl.classList.remove('hidden');
-                placeholderEl.classList.add('hidden');
-            } else {
-                resetLecImage();
-            }
-        }
-
-        function resetLecImage() {
-            document.getElementById('lec-view-img').classList.add('hidden');
-            document.getElementById('lec-view-placeholder').classList.remove('hidden');
         }
 
         function loadGradingForm() {
