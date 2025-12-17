@@ -260,7 +260,7 @@
 
     <script>
         // ============================================
-        // PASTE URL WEB APP ANDA DI SINI (https://script.google.com/macros/s/.../exec)
+        // PASTE URL WEB APP ANDA DI SINI
         // ============================================
         const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbx2JQj_JX5_ERUX5zSy1MlWWf5Oz4gMaamCGAJnFQdtC0Hfz4Q12P6NxoLXYXFdp9RYEA/exec";
         // ============================================
@@ -278,22 +278,19 @@
         function showToast(msg, type='success') {
             const t = document.getElementById('toast');
             const icon = document.getElementById('toast-icon');
-            
             document.getElementById('toast-msg').innerText = msg;
             t.className = `fixed top-6 right-6 z-[60] px-6 py-4 rounded-lg shadow-xl text-white font-bold transition-all transform duration-300 flex items-center gap-3 ${type==='success'?'bg-green-600':'bg-red-600'}`;
             icon.className = type === 'success' ? 'fas fa-check-circle text-xl' : 'fas fa-exclamation-circle text-xl';
-            
             t.classList.remove('hidden', 'translate-x-full');
             setTimeout(() => t.classList.add('translate-x-full'), 3000);
         }
 
-        // --- IMAGE ZOOM MODAL LOGIC ---
+        // --- IMAGE ZOOM LOGIC ---
         function openImageModal(src) {
             if(!src) return;
             document.getElementById('modal-img-content').src = src;
             document.getElementById('image-modal').classList.remove('hidden');
         }
-        
         function closeImageModal() {
             document.getElementById('image-modal').classList.add('hidden');
         }
@@ -345,7 +342,6 @@
                         const canvas = document.createElement('canvas');
                         const ctx = canvas.getContext('2d');
                         
-                        // Resize: Maksimum lebar 600px (Sangat pantas upload)
                         const maxWidth = 600; 
                         let newWidth = img.width;
                         let newHeight = img.height;
@@ -360,18 +356,13 @@
                         canvas.height = newHeight;
                         ctx.drawImage(img, 0, 0, newWidth, newHeight);
                         
-                        // Compress: Kualiti 60%
                         const base64 = canvas.toDataURL('image/jpeg', 0.6); 
                         
-                        // Papar Preview
                         document.getElementById('std-img').src = base64;
                         document.getElementById('std-img').classList.remove('hidden');
                         document.getElementById('img-status').innerText = "Gambar sedia disimpan";
-                        document.getElementById('img-status').className = "text-[10px] font-bold text-green-600 bg-green-100 px-2 py-1 rounded";
                         
-                        // Simpan dalam variable global
                         pendingImageBase64 = base64;
-                        
                         showLoader(false);
                     }
                 }
@@ -431,7 +422,6 @@
                 tel_kecemasan: document.getElementById('std-tel').value
             };
 
-            // Masukkan gambar jika ada yang baru
             if(pendingImageBase64) {
                 bodyData.image_base64 = pendingImageBase64;
                 bodyData.image_mime = "image/jpeg";
@@ -442,7 +432,7 @@
                 showLoader(false);
                 if(res.result === 'success') {
                     showToast(res.message, 'success');
-                    pendingImageBase64 = null; // Reset
+                    pendingImageBase64 = null; 
                     document.getElementById('img-status').innerText = "Gambar profil dikemaskini";
                 } else {
                     showToast(res.message, 'error');
@@ -464,7 +454,7 @@
             .then(r => r.json()).then(res => {
                 showLoader(false);
                 if(res.result === 'success') {
-                    allStudentsCache = res.students_list; // Contains URL Gambar
+                    allStudentsCache = res.students_list;
                     document.getElementById('lec-name').innerText = res.nama;
                     document.getElementById('view-login').classList.add('hidden');
                     document.getElementById('view-lecturer').classList.remove('hidden');
@@ -483,10 +473,9 @@
         function filterStudents() {
             const cls = document.getElementById('sel-class').value;
             const selStd = document.getElementById('sel-student');
-            
             selStd.innerHTML = '<option value="">-- Pilih Pelajar --</option>';
             selStd.disabled = !cls;
-            resetLecImage(); // Kosongkan gambar bila tukar kelas
+            resetLecImage(); 
 
             if(cls) {
                 const filtered = allStudentsCache.filter(s => s.kelas === cls);
@@ -494,7 +483,7 @@
             }
         }
 
-        // FUNGSI UTAMA UNTUK PAPAR GAMBAR PELAJAR KEPADA PENSYARAH
+        // --- FUNGSI PREVIEW GAMBAR PENSYARAH ---
         function previewStudentImage() {
             const stdId = document.getElementById('sel-student').value;
             const imgEl = document.getElementById('lec-view-img');
@@ -506,14 +495,13 @@
                 return;
             }
 
-            // Cari pelajar dalam cache (data yang dihantar masa login)
             const student = allStudentsCache.find(s => s.id == stdId);
             
             if (student && student.url_gambar && student.url_gambar.trim() !== "") {
                 imgEl.src = student.url_gambar;
                 imgEl.classList.remove('hidden');
                 placeholderEl.classList.add('hidden');
-                hintEl.classList.remove('hidden'); // Tunjuk hint "Klik untuk Zoom"
+                hintEl.classList.remove('hidden'); 
             } else {
                 resetLecImage();
             }
