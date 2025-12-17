@@ -161,18 +161,31 @@
             <button onclick="logout()" class="bg-red-50 text-red-600 px-4 py-2 rounded-lg hover:bg-red-100 font-bold text-xs"><i class="fas fa-sign-out-alt"></i></button>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 bg-blue-50/50 p-4 rounded-xl border border-blue-100">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 bg-blue-50/50 p-4 rounded-xl border border-blue-100 items-center">
+            
             <div>
                 <label class="block text-[10px] font-bold text-blue-800 mb-1 tracking-wider">1. PILIH KELAS</label>
                 <select id="sel-class" onchange="filterStudents()" class="w-full p-2 rounded border border-blue-200 text-sm focus:outline-none"></select>
             </div>
-            <div>
+            
+            <div class="md:col-span-2">
                 <label class="block text-[10px] font-bold text-blue-800 mb-1 tracking-wider">2. PILIH PELAJAR</label>
-                <select id="sel-student" class="w-full p-2 rounded border border-blue-200 text-sm focus:outline-none" disabled></select>
+                <select id="sel-student" onchange="previewStudentImage()" class="w-full p-2 rounded border border-blue-200 text-sm focus:outline-none" disabled></select>
             </div>
-            <div class="flex items-end">
-                <button onclick="loadGradingForm()" class="w-full bg-blue-600 text-white py-2 rounded font-bold text-sm shadow hover:bg-blue-700 transition">BUKA BORANG MARKAH</button>
+
+            <div class="flex flex-col items-center justify-center">
+                <div class="w-16 h-16 rounded-full bg-gray-200 border-2 border-white shadow overflow-hidden">
+                    <img id="lec-view-img" src="" class="w-full h-full object-cover hidden">
+                    <div id="lec-view-placeholder" class="w-full h-full flex items-center justify-center text-gray-400">
+                        <i class="fas fa-user text-2xl"></i>
+                    </div>
+                </div>
+                <p class="text-[10px] text-gray-500 mt-1">Foto Pelajar</p>
             </div>
+        </div>
+
+        <div class="flex justify-end mb-4">
+             <button onclick="loadGradingForm()" class="bg-blue-600 text-white py-2 px-6 rounded font-bold text-sm shadow hover:bg-blue-700 transition">BUKA BORANG MARKAH</button>
         </div>
 
         <div id="grading-area" class="hidden">
@@ -230,7 +243,7 @@
 
     <script>
         // ============================================
-        // PASTE URL WEB APP ANDA DI SINI
+        // PASTE URL WEB APP ANDA DI SINI (https://script.google.com/macros/s/.../exec)
         // ============================================
         const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbx2JQj_JX5_ERUX5zSy1MlWWf5Oz4gMaamCGAJnFQdtC0Hfz4Q12P6NxoLXYXFdp9RYEA/exec";
         // ============================================
@@ -442,13 +455,43 @@
         function filterStudents() {
             const cls = document.getElementById('sel-class').value;
             const selStd = document.getElementById('sel-student');
+            
+            // Reset Dropdown & Image
             selStd.innerHTML = '<option value="">-- Pilih Pelajar --</option>';
             selStd.disabled = !cls;
-            
+            resetLecImage();
+
             if(cls) {
                 const filtered = allStudentsCache.filter(s => s.kelas === cls);
                 filtered.forEach(s => selStd.innerHTML += `<option value="${s.id}">${s.nama}</option>`);
             }
+        }
+
+        // FUNGSI BARU: Preview Gambar Pelajar di Panel Pensyarah
+        function previewStudentImage() {
+            const stdId = document.getElementById('sel-student').value;
+            const imgEl = document.getElementById('lec-view-img');
+            const placeholderEl = document.getElementById('lec-view-placeholder');
+
+            if (!stdId) {
+                resetLecImage();
+                return;
+            }
+
+            const student = allStudentsCache.find(s => s.id == stdId);
+            
+            if (student && student.url_gambar && student.url_gambar.trim() !== "") {
+                imgEl.src = student.url_gambar;
+                imgEl.classList.remove('hidden');
+                placeholderEl.classList.add('hidden');
+            } else {
+                resetLecImage();
+            }
+        }
+
+        function resetLecImage() {
+            document.getElementById('lec-view-img').classList.add('hidden');
+            document.getElementById('lec-view-placeholder').classList.remove('hidden');
         }
 
         function loadGradingForm() {
