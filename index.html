@@ -31,7 +31,7 @@
         .drop-zone.drag-active { border-color: #10b981; background-color: #ecfdf5; transform: scale(1.02); }
 
         /* Image Zoom Modal */
-        .modal-zoom { background-color: rgba(0,0,0,0.85); }
+        .modal-zoom { background-color: rgba(0,0,0,0.9); cursor: pointer; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col items-center justify-center p-4">
@@ -190,16 +190,16 @@
             </div>
 
             <div class="w-full md:w-1/4 flex flex-col items-center justify-center bg-white p-3 rounded-xl shadow-sm border border-gray-200">
-                <div class="w-full aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden relative group border">
-                    <img id="lec-view-img" src="" class="w-full h-full object-cover hidden cursor-zoom-in hover:opacity-90 transition" onclick="openImageModal(this.src)" title="Klik untuk besarkan">
+                <div class="w-full aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden relative group border cursor-zoom-in" onclick="if(this.querySelector('img').src) openImageModal(this.querySelector('img').src)">
+                    <img id="lec-view-img" src="" class="w-full h-full object-cover hidden hover:opacity-90 transition">
                     
                     <div id="lec-view-placeholder" class="w-full h-full flex flex-col items-center justify-center text-gray-300">
                         <i class="fas fa-user text-6xl mb-2"></i>
                         <p class="text-[10px] font-bold">Foto Pelajar</p>
                     </div>
                     
-                    <div id="lec-img-hint" class="hidden absolute bottom-0 left-0 right-0 bg-black/60 text-white text-[10px] text-center py-1">
-                        Klik untuk Zoom
+                    <div id="lec-img-hint" class="hidden absolute bottom-0 left-0 right-0 bg-black/60 text-white text-[10px] text-center py-1 font-bold">
+                        KLIK UNTUK ZOOM
                     </div>
                 </div>
             </div>
