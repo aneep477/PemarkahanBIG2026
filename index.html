@@ -38,9 +38,6 @@
 
     <div id="view-login" class="glass w-full max-w-md p-8 fade-in">
         <div class="text-center mb-8">
-            <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-green-100 text-green-700 mb-3 shadow-md">
-                <i class="fas fa-campground text-3xl"></i>
-            </div>
             <h1 class="text-2xl font-extrabold text-gray-800">Sistem BIG</h1>
             <p class="text-sm text-gray-500 font-medium">Bina Insan Guru MPU3212</p>
         </div>
@@ -59,35 +56,6 @@
         </form>
     </div>
 
-    <div id="view-student" class="glass w-full max-w-5xl p-6 hidden fade-in relative min-h-[85vh]">
-        <button onclick="logout()" class="absolute top-4 right-4 text-red-600 font-bold text-xs"><i class="fas fa-sign-out-alt"></i> KELUAR</button>
-        <div class="flex flex-col md:flex-row gap-8 mt-6">
-            <div class="md:w-1/3 flex flex-col items-center">
-                <div class="w-full aspect-[3/4] bg-white rounded-xl shadow-inner border-2 border-dashed border-gray-300 flex items-center justify-center relative overflow-hidden group cursor-pointer">
-                    <img id="std-img" class="w-full h-full object-cover hidden absolute z-10" onclick="openImageModal(this.src)">
-                    <div class="text-center p-4"><i class="fas fa-cloud-upload-alt text-4xl text-gray-300 mb-2"></i><p class="text-xs text-gray-500 font-bold">Muat Naik Gambar</p></div>
-                    <input type="file" class="absolute inset-0 opacity-0 cursor-pointer z-20" accept="image/*" onchange="handleFiles(this.files)">
-                </div>
-                <span id="img-status" class="text-[10px] font-bold text-gray-400 mt-2 bg-gray-100 px-2 py-1 rounded">Tiada gambar baru</span>
-            </div>
-            <div class="md:w-2/3 space-y-4">
-                <div><h2 class="text-3xl font-bold text-gray-800" id="std-name">...</h2><p class="text-sm text-gray-500" id="std-id">ID: -</p></div>
-                <div class="grid grid-cols-3 gap-2">
-                    <div class="bg-white/50 p-2 rounded border"><p class="text-[10px] font-bold text-gray-400">NO. KP</p><p class="font-bold text-sm" id="std-kp">-</p></div>
-                    <div class="bg-white/50 p-2 rounded border"><p class="text-[10px] font-bold text-gray-400">KELAS</p><p class="font-bold text-sm" id="std-class">-</p></div>
-                    <div class="bg-white/50 p-2 rounded border"><p class="text-[10px] font-bold text-gray-400">KUMP</p><p class="font-bold text-sm" id="std-group">-</p></div>
-                </div>
-                <div class="bg-white p-5 rounded-xl border-l-4 border-yellow-400 shadow-sm space-y-3">
-                    <h3 class="font-bold text-gray-800 flex items-center gap-2"><i class="fas fa-file-medical text-yellow-500"></i> MAKLUMAT KESIHATAN</h3>
-                    <input type="text" id="std-alahan" class="w-full p-2 border rounded text-sm" placeholder="Alahan">
-                    <input type="text" id="std-ubat" class="w-full p-2 border rounded text-sm" placeholder="Ubat">
-                    <input type="text" id="std-tel" class="w-full p-2 border rounded text-sm" placeholder="No. Waris">
-                    <button onclick="updateStudentData()" class="w-full bg-slate-800 text-white py-2 rounded font-bold text-sm hover:bg-slate-900">SIMPAN</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <div id="view-lecturer" class="glass w-full max-w-7xl p-6 hidden fade-in relative min-h-[90vh]">
         <div class="flex justify-between items-center border-b pb-4 mb-6">
             <div class="flex items-center gap-3"><div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-bold"><i class="fas fa-chalkboard-teacher"></i></div><div><h1 class="text-lg font-bold text-gray-800">Panel Penilaian</h1><p class="text-xs text-gray-500" id="lec-name">...</p></div></div>
@@ -101,15 +69,15 @@
 
         <div id="sec-entry">
             <div class="flex flex-col md:flex-row gap-6 mb-6 bg-white/50 p-6 rounded-xl border border-blue-100">
-                <div class="w-full md:w-3/4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="w-full md:w-2/3 grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div><label class="text-[10px] font-bold text-blue-800 uppercase">1. Pilih Kelas</label><select id="sel-class" onchange="filterStudents()" class="w-full p-3 rounded border text-sm"></select></div>
                     <div><label class="text-[10px] font-bold text-blue-800 uppercase">2. Pilih Pelajar</label><select id="sel-student" onchange="previewStudentImage()" class="w-full p-3 rounded border text-sm" disabled></select></div>
                     <div class="md:col-span-2"><button onclick="loadGradingForm()" class="w-full bg-blue-600 text-white py-3 rounded font-bold text-sm shadow hover:bg-blue-700">MULA MENILAI</button></div>
                 </div>
-                <div class="w-full md:w-1/4 flex justify-center">
-                    <div class="w-56 aspect-[3/4] bg-gray-200 rounded-lg overflow-hidden relative cursor-zoom-in group shadow-lg" onclick="if(this.querySelector('img').src) openImageModal(this.querySelector('img').src)">
+                <div class="w-full md:w-1/3 flex justify-center">
+                    <div class="w-64 aspect-[3/4] bg-gray-200 rounded-2xl overflow-hidden relative cursor-zoom-in group shadow-lg border-4 border-white" onclick="if(this.querySelector('img').src) openImageModal(this.querySelector('img').src)">
                         <img id="lec-view-img" class="w-full h-full object-cover hidden">
-                        <div id="lec-view-placeholder" class="w-full h-full flex flex-col items-center justify-center text-gray-400"><i class="fas fa-user text-5xl mb-1"></i><span class="text-xs font-bold">FOTO</span></div>
+                        <div id="lec-view-placeholder" class="w-full h-full flex flex-col items-center justify-center text-gray-400"><i class="fas fa-user text-6xl mb-2"></i><span class="text-xs font-bold">FOTO</span></div>
                     </div>
                 </div>
             </div>
@@ -117,12 +85,12 @@
             <div id="grading-area" class="hidden">
                 <div class="flex gap-2 mb-4 overflow-x-auto pb-1">
                     <button onclick="switchMarkTab('t1')" id="tab-mark-t1" class="flex-1 py-2 px-4 rounded-lg text-xs font-bold border transition tab-inactive hover:bg-gray-50">TUGASAN 1 (10%)</button>
-                    <button onclick="switchMarkTab('t2')" id="tab-mark-t2" class="flex-1 py-2 px-4 rounded-lg text-xs font-bold border transition tab-inactive hover:bg-gray-50">AMALI 1 (20%)</button>
-                    <button onclick="switchMarkTab('t3')" id="tab-mark-t3" class="flex-1 py-2 px-4 rounded-lg text-xs font-bold border transition tab-inactive hover:bg-gray-50">AMALI 2 (70%)</button>
+                    <button onclick="switchMarkTab('t2')" id="tab-mark-t2" class="flex-1 py-2 px-4 rounded-lg text-xs font-bold border transition tab-inactive hover:bg-gray-50">UJIAN AMALI 1 (20%)</button>
+                    <button onclick="switchMarkTab('t3')" id="tab-mark-t3" class="flex-1 py-2 px-4 rounded-lg text-xs font-bold border transition tab-inactive hover:bg-gray-50">UJIAN AMALI 2 (70%)</button>
                 </div>
 
                 <div id="form-t1" class="mark-form hidden bg-white p-6 rounded-xl shadow-sm border border-purple-200">
-                    <h3 class="font-bold text-purple-700 mb-4 flex items-center gap-2"><i class="fas fa-pencil-alt"></i> KUIZ</h3>
+                    <h3 class="font-bold text-purple-700 mb-4 flex items-center gap-2"><i class="fas fa-pencil-alt"></i> KUIZ (10%)</h3>
                     <div class="grid grid-cols-2 gap-4">
                         <div><label class="text-xs font-bold text-gray-500 block mb-1">Kuiz 1 (5m)</label><input type="number" id="t1_m1" class="input-mark" max="5"></div>
                         <div><label class="text-xs font-bold text-gray-500 block mb-1">Kuiz 2 (5m)</label><input type="number" id="t1_m2" class="input-mark" max="5"></div>
@@ -131,11 +99,21 @@
                 </div>
 
                 <div id="form-t2" class="mark-form hidden bg-white p-6 rounded-xl shadow-sm border border-orange-200">
-                    <h3 class="font-bold text-orange-700 mb-4 flex items-center gap-2"><i class="fas fa-users"></i> AMALI 1: PRA-KEM</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div><label class="text-xs font-bold text-gray-500 block mb-1">Etiket (5m)</label><input type="number" id="t2_m1" class="input-mark" max="5"></div>
-                        <div><label class="text-xs font-bold text-gray-500 block mb-1">Peranan Guru (5m)</label><input type="number" id="t2_m2" class="input-mark" max="5"></div>
-                        <div><label class="text-xs font-bold text-gray-500 block mb-1">Warganegara (10m)</label><input type="number" id="t2_m3" class="input-mark" max="10"></div>
+                    <h3 class="font-bold text-orange-700 mb-4 flex items-center gap-2"><i class="fas fa-users"></i> UJIAN AMALI 1: SEBELUM PERKHEMAHAN</h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="p-4 bg-orange-50 rounded-lg border border-orange-100">
+                            <span class="block text-xs font-bold text-orange-800 mb-3 bg-white px-2 py-1 rounded w-max">HP4: PENGURUSAN & ETIKET (10%)</span>
+                            <div class="space-y-3">
+                                <div><label class="text-xs font-bold text-gray-500 block mb-1">Etiket Sosial (5m)</label><input type="number" id="t2_m1" class="input-mark" max="5"></div>
+                                <div><label class="text-xs font-bold text-gray-500 block mb-1">Peranan Guru (5m)</label><input type="number" id="t2_m2" class="input-mark" max="5"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="p-4 bg-orange-50 rounded-lg border border-orange-100">
+                            <span class="block text-xs font-bold text-orange-800 mb-3 bg-white px-2 py-1 rounded w-max">HP5: KEWARGANEGARAAN (10%)</span>
+                            <div><label class="text-xs font-bold text-gray-500 block mb-1">Nilai Kewarganegaraan (10m)</label><input type="number" id="t2_m3" class="input-mark" max="10"></div>
+                        </div>
                     </div>
                     <button onclick="submitMark('MARKAH_TUGASAN2')" class="mt-6 w-full bg-orange-600 text-white py-2 rounded-lg font-bold text-sm shadow hover:bg-orange-700">SIMPAN AMALI 1</button>
                 </div>
@@ -151,18 +129,26 @@
                             <div><label class="text-[10px] font-bold text-gray-400 block mb-1">Refleksi</label><input type="number" id="t3_hp3_5" class="input-mark" max="5"></div>
                         </div>
                     </div>
+                    
                     <div class="bg-white p-5 rounded-xl shadow-sm border border-blue-200">
-                        <div class="mb-3"><span class="bg-blue-100 text-blue-800 text-[10px] font-bold px-2 py-1 rounded">HP8: KEPIMPINAN & TANGGUNGJAWAB (45%)</span></div>
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-                            <div><label class="text-[10px] font-bold text-gray-400 block mb-1">Kem I</label><input type="number" id="t3_hp8_1" class="input-mark" max="5"></div>
-                            <div><label class="text-[10px] font-bold text-gray-400 block mb-1">Kem K (10)</label><input type="number" id="t3_hp8_2" class="input-mark" max="10"></div>
-                            <div><label class="text-[10px] font-bold text-gray-400 block mb-1">Air I</label><input type="number" id="t3_hp8_3" class="input-mark" max="5"></div>
-                            <div><label class="text-[10px] font-bold text-gray-400 block mb-1">Air K</label><input type="number" id="t3_hp8_4" class="input-mark" max="5"></div>
-                            <div><label class="text-[10px] font-bold text-gray-400 block mb-1">Rak I</label><input type="number" id="t3_hp8_5" class="input-mark" max="5"></div>
-                            <div><label class="text-[10px] font-bold text-gray-400 block mb-1">Rak K</label><input type="number" id="t3_hp8_6" class="input-mark" max="5"></div>
-                            <div class="col-span-2 md:col-span-2"><label class="text-[10px] font-bold text-gray-400 block mb-1">Makan K (10)</label><input type="number" id="t3_hp8_7" class="input-mark" max="10"></div>
+                        <div class="mb-3"><span class="bg-blue-100 text-blue-800 text-[10px] font-bold px-2 py-1 rounded">HP8: INDIVIDU (15%)</span></div>
+                        <div class="grid grid-cols-3 gap-3">
+                            <div><label class="text-[10px] font-bold text-gray-400 block mb-1">Kembara (I)</label><input type="number" id="t3_hp8_1" class="input-mark" max="5"></div>
+                            <div><label class="text-[10px] font-bold text-gray-400 block mb-1">Keyakinan Air (I)</label><input type="number" id="t3_hp8_3" class="input-mark" max="5"></div>
+                            <div><label class="text-[10px] font-bold text-gray-400 block mb-1">Rakit (I)</label><input type="number" id="t3_hp8_5" class="input-mark" max="5"></div>
                         </div>
                     </div>
+
+                    <div class="bg-white p-5 rounded-xl shadow-sm border border-purple-200">
+                        <div class="mb-3"><span class="bg-purple-100 text-purple-800 text-[10px] font-bold px-2 py-1 rounded">HP8: KUMPULAN (30%)</span></div>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                            <div><label class="text-[10px] font-bold text-gray-400 block mb-1">Kembara (K) (10)</label><input type="number" id="t3_hp8_2" class="input-mark" max="10"></div>
+                            <div><label class="text-[10px] font-bold text-gray-400 block mb-1">Air (K) (5)</label><input type="number" id="t3_hp8_4" class="input-mark" max="5"></div>
+                            <div><label class="text-[10px] font-bold text-gray-400 block mb-1">Rakit (K) (5)</label><input type="number" id="t3_hp8_6" class="input-mark" max="5"></div>
+                            <div><label class="text-[10px] font-bold text-gray-400 block mb-1">Masakan (K) (10)</label><input type="number" id="t3_hp8_7" class="input-mark" max="10"></div>
+                        </div>
+                    </div>
+
                     <button onclick="submitMark('MARKAH_TUGASAN3')" class="w-full bg-green-600 text-white py-3 rounded-lg font-bold text-sm shadow hover:bg-green-700">SIMPAN AMALI 2 (MARKAH PENUH)</button>
                 </div>
             </div>
@@ -194,9 +180,9 @@
                         <tr>
                             <th>Nama Pelajar</th>
                             <th class="hidden md:table-cell text-center">Kelas</th>
-                            <th class="text-center font-bold text-gray-500">T1</th>
-                            <th class="text-center font-bold text-orange-500">A1</th>
-                            <th class="text-center font-bold text-green-500">A2</th>
+                            <th class="text-center font-bold text-gray-500">KUIZ (10%)</th>
+                            <th class="text-center font-bold text-orange-500">AMALI 1 (20%)</th>
+                            <th class="text-center font-bold text-green-500">AMALI 2 (70%)</th>
                             <th class="text-center bg-gray-100 text-slate-800 font-extrabold">TOTAL</th>
                             <th class="text-center bg-gray-200 text-slate-900 font-extrabold">GRED</th>
                         </tr>
@@ -205,6 +191,35 @@
                         <tr><td colspan="7" class="text-center py-8 text-gray-400 italic">Sila pilih kelas dan tekan 'Jana'</td></tr>
                     </tbody>
                 </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="view-student" class="glass w-full max-w-5xl p-6 hidden fade-in relative min-h-[85vh]">
+        <button onclick="logout()" class="absolute top-4 right-4 text-red-600 font-bold text-xs"><i class="fas fa-sign-out-alt"></i> KELUAR</button>
+        <div class="flex flex-col md:flex-row gap-8 mt-6">
+            <div class="md:w-1/3 flex flex-col items-center">
+                <div id="drop-area" class="drop-zone w-full aspect-[3/4] rounded-xl flex items-center justify-center relative bg-white">
+                    <img id="std-img" class="w-full h-full object-cover rounded-xl hidden absolute z-10" onclick="openImageModal(this.src)">
+                    <div class="text-center p-4"><i class="fas fa-cloud-upload-alt text-4xl text-gray-300 mb-2"></i><p class="text-xs text-gray-500 font-bold">Muat Naik Gambar</p></div>
+                    <input type="file" id="file-input" class="absolute inset-0 opacity-0 cursor-pointer z-20" accept="image/*" onchange="handleFiles(this.files)">
+                </div>
+                <span id="img-status" class="text-[10px] font-bold text-gray-400 mt-2 bg-gray-100 px-2 py-1 rounded">Tiada gambar baru</span>
+            </div>
+            <div class="md:w-2/3 space-y-4">
+                <div><h2 class="text-3xl font-bold text-gray-800" id="std-name">...</h2><p class="text-sm text-gray-500" id="std-id">ID: -</p></div>
+                <div class="grid grid-cols-3 gap-2">
+                    <div class="bg-white/50 p-2 rounded border"><p class="text-[10px] font-bold text-gray-400">NO. KP</p><p class="font-bold text-sm" id="std-kp">-</p></div>
+                    <div class="bg-white/50 p-2 rounded border"><p class="text-[10px] font-bold text-gray-400">KELAS</p><p class="font-bold text-sm" id="std-class">-</p></div>
+                    <div class="bg-white/50 p-2 rounded border"><p class="text-[10px] font-bold text-gray-400">KUMP</p><p class="font-bold text-sm" id="std-group">-</p></div>
+                </div>
+                <div class="bg-white p-5 rounded-xl border-l-4 border-yellow-400 shadow-sm space-y-3">
+                    <h3 class="font-bold text-gray-800 flex items-center gap-2"><i class="fas fa-file-medical text-yellow-500"></i> MAKLUMAT KESIHATAN</h3>
+                    <input type="text" id="std-alahan" class="w-full p-2 border rounded text-sm" placeholder="Alahan">
+                    <input type="text" id="std-ubat" class="w-full p-2 border rounded text-sm" placeholder="Ubat">
+                    <input type="text" id="std-tel" class="w-full p-2 border rounded text-sm" placeholder="No. Waris">
+                    <button onclick="updateStudentData()" class="w-full bg-slate-800 text-white py-2 rounded font-bold text-sm hover:bg-slate-900">SIMPAN</button>
+                </div>
             </div>
         </div>
     </div>
@@ -304,20 +319,18 @@
         }
         function resetLecImg(){ document.getElementById('lec-view-img').classList.add('hidden'); document.getElementById('lec-view-placeholder').classList.remove('hidden'); }
         
-        // --- FUNGSI FETCHER BARU (UNTUK TARIK MARKAH) ---
+        // --- LOAD MARKS ---
         function loadGradingForm(){ 
             const stdId = document.getElementById('sel-student').value;
             if(!stdId) return showToast('Pilih pelajar!','error'); 
             
             showLoader(true, "Memuat turun markah...");
             
-            // Panggil API untuk dapatkan markah
             fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify({ action: "get_student_marks", student_id: stdId }) })
             .then(r => r.json())
             .then(res => {
                 showLoader(false);
                 if(res.result === 'success') {
-                    // Isi markah ke dalam borang
                     const d = res.data;
                     ['t1_m1','t1_m2','t2_m1','t2_m2','t2_m3','t3_hp3_1','t3_hp3_2','t3_hp3_3','t3_hp3_4','t3_hp3_5','t3_hp8_1','t3_hp8_2','t3_hp8_3','t3_hp8_4','t3_hp8_5','t3_hp8_6','t3_hp8_7'].forEach(id => {
                         document.getElementById(id).value = d[id] || "";
