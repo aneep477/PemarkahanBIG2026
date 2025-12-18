@@ -8,35 +8,22 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Background & Glassmorphism */
-        /* DIKEMASKINI: URL Background ditukar kepada Imgur link anda */
         body { 
             font-family: 'Poppins', sans-serif; 
-            background: url('https://imgur.com/a/2mQc6AA') no-repeat center center fixed; 
+            background: url('https://i.imgur.com/2mQc6AA.jpg') no-repeat center center fixed; 
             background-size: cover; 
         }
-        
         .glass { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.5); box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37); }
         .glass-dark { background: rgba(31, 41, 55, 0.9); backdrop-filter: blur(12px); border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.1); color: white; }
-        
-        /* Utils */
         .hidden { display: none !important; }
         .fade-in { animation: fadeIn 0.4s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
-        /* Loader */
         .loader { border-top-color: #10b981; -webkit-animation: spinner 1s linear infinite; animation: spinner 1s linear infinite; }
         @keyframes spinner { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        
-        /* Tab Styles */
         .tab-btn { padding-bottom: 8px; font-weight: 600; transition: all 0.3s; width: 50%; text-align: center; border-bottom: 3px solid transparent; color: #6b7280; }
         .tab-btn.active { border-color: #10b981; color: #10b981; }
-        
-        /* Drag & Drop Zone */
         .drop-zone { border: 2px dashed #cbd5e1; transition: all 0.3s; background-color: #f8fafc; }
         .drop-zone.drag-active { border-color: #10b981; background-color: #ecfdf5; transform: scale(1.02); }
-
-        /* Image Zoom Modal */
         .modal-zoom { background-color: rgba(0,0,0,0.9); cursor: pointer; }
     </style>
 </head>
@@ -106,19 +93,15 @@
         <div class="flex flex-col md:flex-row gap-8 mt-6">
             <div class="md:w-1/3 flex flex-col items-center">
                 <h3 class="font-bold text-gray-700 mb-3 text-sm">GAMBAR PROFIL</h3>
-                
                 <div id="drop-area" class="drop-zone w-full aspect-[3/4] rounded-xl flex flex-col items-center justify-center relative cursor-pointer group shadow-inner bg-white">
                     <img id="std-img" src="" class="w-full h-full object-cover rounded-xl hidden absolute inset-0 z-10" onclick="openImageModal(this.src); event.stopPropagation();" title="Klik untuk zoom">
-                    
                     <div id="std-img-placeholder" class="text-center p-4 z-0">
                         <i class="fas fa-cloud-upload-alt text-4xl text-gray-300 mb-2 group-hover:text-green-500 transition"></i>
                         <p class="text-xs text-gray-500 font-bold">Tarik Gambar Ke Sini</p>
                         <p class="text-[10px] text-gray-400">atau klik untuk cari fail</p>
                     </div>
-
                     <input type="file" id="file-input" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20" accept="image/*" onchange="handleFiles(this.files)">
                 </div>
-                
                 <div class="mt-3 text-center">
                     <span id="img-status" class="text-[10px] font-bold text-gray-400 bg-gray-100 px-2 py-1 rounded">Tiada gambar baru dipilih</span>
                 </div>
@@ -176,18 +159,15 @@
         </div>
 
         <div class="flex flex-col md:flex-row gap-6 mb-6 bg-blue-50/50 p-6 rounded-xl border border-blue-100 items-start">
-            
             <div class="w-full md:w-3/4 grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                     <label class="block text-[10px] font-bold text-blue-800 mb-1 tracking-wider uppercase">Langkah 1: Pilih Kelas</label>
                     <select id="sel-class" onchange="filterStudents()" class="w-full p-3 rounded border border-blue-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white shadow-sm"></select>
                 </div>
-                
                 <div>
                     <label class="block text-[10px] font-bold text-blue-800 mb-1 tracking-wider uppercase">Langkah 2: Pilih Pelajar</label>
                     <select id="sel-student" onchange="previewStudentImage()" class="w-full p-3 rounded border border-blue-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white shadow-sm" disabled></select>
                 </div>
-
                 <div class="md:col-span-2 mt-2">
                     <button onclick="loadGradingForm()" class="w-full bg-blue-600 text-white py-3 px-6 rounded font-bold text-sm shadow hover:bg-blue-700 transition flex items-center justify-center gap-2">
                         <i class="fas fa-edit"></i> ISI MARKAH PELAJAR INI
@@ -198,15 +178,11 @@
             <div class="w-full md:w-1/4 flex flex-col items-center justify-center bg-white p-3 rounded-xl shadow-sm border border-gray-200">
                 <div class="w-full aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden relative group border cursor-zoom-in" onclick="if(this.querySelector('img').src) openImageModal(this.querySelector('img').src)">
                     <img id="lec-view-img" src="" class="w-full h-full object-cover hidden hover:opacity-90 transition">
-                    
                     <div id="lec-view-placeholder" class="w-full h-full flex flex-col items-center justify-center text-gray-300">
                         <i class="fas fa-user text-6xl mb-2"></i>
                         <p class="text-[10px] font-bold">Foto Pelajar</p>
                     </div>
-                    
-                    <div id="lec-img-hint" class="hidden absolute bottom-0 left-0 right-0 bg-black/60 text-white text-[10px] text-center py-1 font-bold">
-                        KLIK UNTUK ZOOM
-                    </div>
+                    <div id="lec-img-hint" class="hidden absolute bottom-0 left-0 right-0 bg-black/60 text-white text-[10px] text-center py-1 font-bold">KLIK UNTUK ZOOM</div>
                 </div>
             </div>
         </div>
@@ -239,7 +215,6 @@
 
             <div id="form-t3" class="grading-form hidden bg-white p-6 rounded-xl shadow-sm border border-green-100">
                 <h3 class="font-bold text-green-800 mb-4 border-b pb-2">AMALI 2: PERKHEMAHAN (70%)</h3>
-                
                 <p class="text-xs font-extrabold text-gray-400 mt-2 mb-2">HP3: KEMAHIRAN PRAKTIKAL (25%)</p>
                 <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-6">
                     <div><label class="text-[10px] font-bold">Cergas (5)</label><input type="number" id="t3_hp3_1" class="w-full border p-2 rounded text-center bg-green-50" max="5"></div>
@@ -266,10 +241,9 @@
 
     <script>
         // ============================================
-        // PASTE URL WEB APP ANDA DI SINI (https://script.google.com/macros/s/.../exec)
+        // Gantikan dengan Web App URL sebenar (pastikan tiada spasi di hujung!)
         // ============================================
         const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbx2JQj_JX5_ERUX5zSy1MlWWf5Oz4gMaamCGAJnFQdtC0Hfz4Q12P6NxoLXYXFdp9RYEA/exec";
-        // ============================================
 
         let allStudentsCache = [];
         let currentStudent = null;
@@ -280,62 +254,45 @@
             document.getElementById('loader').classList.toggle('hidden', !show); 
             document.getElementById('loader-text').innerText = text;
         }
-        
         function showToast(msg, type='success') {
             const t = document.getElementById('toast');
             const icon = document.getElementById('toast-icon');
-            
             document.getElementById('toast-msg').innerText = msg;
             t.className = `fixed top-6 right-6 z-[60] px-6 py-4 rounded-lg shadow-xl text-white font-bold transition-all transform duration-300 flex items-center gap-3 ${type==='success'?'bg-green-600':'bg-red-600'}`;
             icon.className = type === 'success' ? 'fas fa-check-circle text-xl' : 'fas fa-exclamation-circle text-xl';
-            
             t.classList.remove('hidden', 'translate-x-full');
             setTimeout(() => t.classList.add('translate-x-full'), 3000);
         }
 
-        // --- IMAGE ZOOM LOGIC ---
-        function openImageModal(src) {
-            if(!src) return;
-            document.getElementById('modal-img-content').src = src;
-            document.getElementById('image-modal').classList.remove('hidden');
-        }
-        
-        function closeImageModal() {
-            document.getElementById('image-modal').classList.add('hidden');
-        }
-
+        // IMAGE & UI
+        function openImageModal(src) { if(src) { document.getElementById('modal-img-content').src = src; document.getElementById('image-modal').classList.remove('hidden'); } }
+        function closeImageModal() { document.getElementById('image-modal').classList.add('hidden'); }
         function switchTab(role) {
             document.getElementById('form-student').classList.toggle('hidden', role !== 'student');
             document.getElementById('form-lecturer').classList.toggle('hidden', role !== 'lecturer');
             document.getElementById('tab-student').className = role === 'student' ? 'tab-btn active' : 'tab-btn';
             document.getElementById('tab-lecturer').className = role === 'lecturer' ? 'tab-btn active' : 'tab-btn';
         }
-
         function logout() { location.reload(); }
 
-        // --- 1. DRAG & DROP & RESIZE GAMBAR ---
+        // DRAG & DROP
         const dropArea = document.getElementById('drop-area');
-        
         ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
             dropArea.addEventListener(eventName, preventDefaults, false);
         });
         function preventDefaults(e) { e.preventDefault(); e.stopPropagation(); }
-
         ['dragenter', 'dragover'].forEach(eventName => {
             dropArea.addEventListener(eventName, () => dropArea.classList.add('drag-active'), false);
         });
         ['dragleave', 'drop'].forEach(eventName => {
             dropArea.addEventListener(eventName, () => dropArea.classList.remove('drag-active'), false);
         });
-
         dropArea.addEventListener('drop', handleDrop, false);
-        
         function handleDrop(e) {
             const dt = e.dataTransfer;
             const files = dt.files;
             handleFiles(files);
         }
-
         function handleFiles(files) {
             if(files.length > 0) {
                 const file = files[0];
@@ -350,34 +307,23 @@
                     img.onload = function() {
                         const canvas = document.createElement('canvas');
                         const ctx = canvas.getContext('2d');
-                        
-                        // Resize: Maksimum lebar 600px (Sangat pantas upload)
                         const maxWidth = 600; 
                         let newWidth = img.width;
                         let newHeight = img.height;
-
                         if (img.width > maxWidth) {
                             const scale = maxWidth / img.width;
                             newWidth = maxWidth;
                             newHeight = img.height * scale;
                         }
-                        
                         canvas.width = newWidth;
                         canvas.height = newHeight;
                         ctx.drawImage(img, 0, 0, newWidth, newHeight);
-                        
-                        // Compress: Kualiti 60%
                         const base64 = canvas.toDataURL('image/jpeg', 0.6); 
-                        
-                        // Papar Preview
                         document.getElementById('std-img').src = base64;
                         document.getElementById('std-img').classList.remove('hidden');
                         document.getElementById('img-status').innerText = "Gambar sedia disimpan";
                         document.getElementById('img-status').className = "text-[10px] font-bold text-green-600 bg-green-100 px-2 py-1 rounded";
-                        
-                        // Simpan dalam variable global
                         pendingImageBase64 = base64;
-                        
                         showLoader(false);
                     }
                 }
@@ -385,12 +331,11 @@
             }
         }
 
-        // --- 2. LOGIN PELAJAR ---
+        // STUDENT LOGIN & UPDATE
         function loginStudent(e) {
             e.preventDefault();
-            const ic = document.getElementById('login-ic').value;
+            const ic = document.getElementById('login-ic').value.trim();
             if(!ic) return showToast("Sila masukkan No. KP", 'error');
-
             showLoader(true, "Log masuk...");
             fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify({ action: "login_student", no_kp: ic }) })
             .then(r => r.json()).then(res => {
@@ -401,33 +346,26 @@
                 } else showToast(res.message, 'error');
             }).catch(() => { showLoader(false); showToast("Ralat sambungan", 'error'); });
         }
-
         function loadStudentDashboard(data) {
             document.getElementById('view-login').classList.add('hidden');
             document.getElementById('view-student').classList.remove('hidden');
-            
             document.getElementById('std-name').innerText = data.nama;
             document.getElementById('std-id').innerText = "ID: " + data.id;
             document.getElementById('std-kp').innerText = data.no_kp;
             document.getElementById('std-class').innerText = data.kelas;
             document.getElementById('std-siri').innerText = data.siri || "-";
             document.getElementById('std-group').innerText = data.kumpulan || "-";
-            
             document.getElementById('std-alahan').value = data.alahan || "";
             document.getElementById('std-ubat').value = data.ubat || "";
             document.getElementById('std-tel').value = data.tel_kecemasan || "";
-
             if(data.url_gambar) {
                 document.getElementById('std-img').src = data.url_gambar;
                 document.getElementById('std-img').classList.remove('hidden');
                 document.getElementById('img-status').innerText = "Gambar profil semasa";
             }
         }
-
-        // --- 3. UPDATE DATA PELAJAR ---
         function updateStudentData() {
             showLoader(true, "Menghantar data...");
-            
             const bodyData = {
                 action: "update_student_info",
                 no_kp: currentStudent.no_kp,
@@ -436,19 +374,16 @@
                 ubat: document.getElementById('std-ubat').value,
                 tel_kecemasan: document.getElementById('std-tel').value
             };
-
-            // Masukkan gambar jika ada yang baru
             if(pendingImageBase64) {
                 bodyData.image_base64 = pendingImageBase64;
                 bodyData.image_mime = "image/jpeg";
             }
-
             fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify(bodyData) })
             .then(r => r.json()).then(res => {
                 showLoader(false);
                 if(res.result === 'success') {
                     showToast(res.message, 'success');
-                    pendingImageBase64 = null; // Reset
+                    pendingImageBase64 = null;
                     document.getElementById('img-status').innerText = "Gambar profil dikemaskini";
                 } else {
                     showToast(res.message, 'error');
@@ -460,7 +395,7 @@
             });
         }
 
-        // --- 4. LOGIN PENSYARAH ---
+        // LECTURER LOGIN & STUDENT LIST
         function loginLecturer(e) {
             e.preventDefault();
             const em = document.getElementById('login-email').value;
@@ -470,7 +405,7 @@
             .then(r => r.json()).then(res => {
                 showLoader(false);
                 if(res.result === 'success') {
-                    allStudentsCache = res.students_list; // Contains URL Gambar
+                    allStudentsCache = res.students_list;
                     document.getElementById('lec-name').innerText = res.nama;
                     document.getElementById('view-login').classList.add('hidden');
                     document.getElementById('view-lecturer').classList.remove('hidden');
@@ -478,57 +413,94 @@
                 } else showToast(res.message, 'error');
             });
         }
-
         function initLecturerDashboard() {
             const classes = [...new Set(allStudentsCache.map(s => s.kelas))].sort();
             const sel = document.getElementById('sel-class');
             sel.innerHTML = '<option value="">-- Pilih Kelas --</option>';
             classes.forEach(c => sel.innerHTML += `<option value="${c}">${c}</option>`);
         }
-
         function filterStudents() {
             const cls = document.getElementById('sel-class').value;
             const selStd = document.getElementById('sel-student');
-            
             selStd.innerHTML = '<option value="">-- Pilih Pelajar --</option>';
             selStd.disabled = !cls;
-            resetLecImage(); // Kosongkan gambar bila tukar kelas
-
+            resetLecImage();
             if(cls) {
                 const filtered = allStudentsCache.filter(s => s.kelas === cls);
                 filtered.forEach(s => selStd.innerHTML += `<option value="${s.id}">${s.nama}</option>`);
             }
         }
-
-        // FUNGSI UTAMA UNTUK PAPAR GAMBAR PELAJAR KEPADA PENSYARAH
         function previewStudentImage() {
             const stdId = document.getElementById('sel-student').value;
             const imgEl = document.getElementById('lec-view-img');
             const placeholderEl = document.getElementById('lec-view-placeholder');
             const hintEl = document.getElementById('lec-img-hint');
-
-            if (!stdId) {
-                resetLecImage();
-                return;
-            }
-
-            // Cari pelajar dalam cache (data yang dihantar masa login)
+            if (!stdId) return resetLecImage();
             const student = allStudentsCache.find(s => s.id == stdId);
-            
             if (student && student.url_gambar && student.url_gambar.trim() !== "") {
                 imgEl.src = student.url_gambar;
                 imgEl.classList.remove('hidden');
                 placeholderEl.classList.add('hidden');
-                hintEl.classList.remove('hidden'); // Tunjuk hint "Klik untuk Zoom"
+                hintEl.classList.remove('hidden');
             } else {
                 resetLecImage();
             }
         }
-
         function resetLecImage() {
             document.getElementById('lec-view-img').classList.add('hidden');
             document.getElementById('lec-view-placeholder').classList.remove('hidden');
             document.getElementById('lec-img-hint').classList.add('hidden');
+        }
+
+        // 🔴 FUNGSI BARU: MUAT MARKAH SEDIA ADA
+        function loadStudentMarks(sheetName, formId) {
+            const studentId = document.getElementById('sel-student').value;
+            if (!studentId) return;
+            fetch(WEB_APP_URL, {
+                method: "POST",
+                body: JSON.stringify({
+                    action: "get_mark",
+                    student_id: studentId,
+                    sheet_name: sheetName
+                })
+            })
+            .then(r => r.json())
+            .then(res => {
+                if (res.result === "success") {
+                    const form = document.getElementById(formId);
+                    if (!form) return;
+                    if (sheetName === "MARKAH_TUGASAN1") {
+                        form.querySelector('#t1_m1').value = res.m1 || "";
+                        form.querySelector('#t1_m2').value = res.m2 || "";
+                    } else if (sheetName === "MARKAH_TUGASAN2") {
+                        form.querySelector('#t2_m1').value = res.m1 || "";
+                        form.querySelector('#t2_m2').value = res.m2 || "";
+                        form.querySelector('#t2_m3').value = res.m3 || "";
+                    } else if (sheetName === "MARKAH_TUGASAN3") {
+                        const hp3 = res.hp3 || [];
+                        const hp8 = res.hp8 || [];
+                        for (let i = 1; i <= 5; i++) {
+                            const el = form.querySelector(`#t3_hp3_${i}`);
+                            if (el && hp3[i-1] !== undefined) el.value = hp3[i-1] || "";
+                        }
+                        for (let i = 1; i <= 7; i++) {
+                            const el = form.querySelector(`#t3_hp8_${i}`);
+                            if (el && hp8[i-1] !== undefined) el.value = hp8[i-1] || "";
+                        }
+                    }
+                }
+            })
+            .catch(err => console.warn("Gagal muat markah:", err));
+        }
+
+        // 🔴 KEMASKINI: showForm sekarang muat markah
+        function showForm(fid) {
+            document.querySelectorAll('.grading-form').forEach(el => el.classList.add('hidden'));
+            const formEl = document.getElementById('form-' + fid);
+            formEl.classList.remove('hidden');
+            if (fid === 't1') loadStudentMarks('MARKAH_TUGASAN1', 'form-t1');
+            else if (fid === 't2') loadStudentMarks('MARKAH_TUGASAN2', 'form-t2');
+            else if (fid === 't3') loadStudentMarks('MARKAH_TUGASAN3', 'form-t3');
         }
 
         function loadGradingForm() {
@@ -536,17 +508,11 @@
             document.getElementById('grading-area').classList.remove('hidden');
         }
 
-        function showForm(fid) {
-            document.querySelectorAll('.grading-form').forEach(el => el.classList.add('hidden'));
-            document.getElementById('form-' + fid).classList.remove('hidden');
-        }
-
         function submitMark(sheetName) {
             if(!confirm("Simpan markah?")) return;
             showLoader(true);
             const stdId = document.getElementById('sel-student').value;
             let payload = { action: "save_mark", sheet_name: sheetName, student_id: stdId };
-
             if(sheetName === 'MARKAH_TUGASAN1') {
                 payload.m1 = document.getElementById('t1_m1').value;
                 payload.m2 = document.getElementById('t1_m2').value;
@@ -558,7 +524,6 @@
                 for(let i=1; i<=5; i++) payload[`hp3_${i}`] = document.getElementById(`t3_hp3_${i}`).value;
                 for(let i=1; i<=7; i++) payload[`hp8_${i}`] = document.getElementById(`t3_hp8_${i}`).value;
             }
-
             fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify(payload) })
             .then(r => r.json()).then(res => {
                 showLoader(false);
