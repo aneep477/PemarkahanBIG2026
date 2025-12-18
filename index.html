@@ -16,10 +16,11 @@
         @keyframes spinner { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .tab-active { background-color: #10b981; color: white; border-color: #10b981; }
         .tab-inactive { background-color: white; color: #6b7280; border-color: #e5e7eb; }
-        .input-mark { text-align: center; border: 1px solid #d1d5db; border-radius: 0.5rem; padding: 0.5rem; width: 100%; font-weight: bold; }
+        .input-mark { text-align: center; border: 1px solid #d1d5db; border-radius: 0.5rem; padding: 0.5rem; width: 100%; transition: all 0.2s; font-weight: bold; }
         .input-mark:focus { border-color: #10b981; outline: none; ring: 2px solid #a7f3d0; background-color: #f0fdf4; }
-        .styled-table th { background-color: #f3f4f6; padding: 10px; font-size: 0.75rem; text-transform: uppercase; color: #374151; }
-        .styled-table td { padding: 10px; border-bottom: 1px solid #e5e7eb; font-size: 0.85rem; }
+        .styled-table th { background-color: #f3f4f6; padding: 8px; font-size: 0.7rem; text-transform: uppercase; border-bottom: 2px solid #e5e7eb; text-align: center; }
+        .styled-table td { padding: 8px; border-bottom: 1px solid #e5e7eb; font-size: 0.8rem; text-align: center; }
+        .text-left { text-align: left !important; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col items-center justify-center p-4">
@@ -33,7 +34,6 @@
     </div>
     <div id="image-modal" class="fixed inset-0 z-[80] bg-black/90 hidden flex items-center justify-center p-4" onclick="closeImageModal()">
         <img id="modal-img-content" class="max-w-full max-h-[90vh] rounded-lg shadow-2xl border-4 border-white">
-        <p class="absolute bottom-10 text-white text-sm font-bold bg-black/50 px-4 py-2 rounded-full">Klik untuk tutup</p>
     </div>
 
     <div id="view-login" class="glass w-full max-w-md p-8 fade-in">
@@ -91,13 +91,13 @@
 
         <div id="sec-entry">
             <div class="flex flex-col md:flex-row gap-6 mb-6 bg-white/50 p-6 rounded-xl border border-blue-100">
-                <div class="w-full md:w-3/4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="w-full md:w-2/3 grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div><label class="text-[10px] font-bold text-blue-800 uppercase">1. Pilih Kelas</label><select id="sel-class" onchange="filterStudents()" class="w-full p-3 rounded border text-sm"></select></div>
                     <div><label class="text-[10px] font-bold text-blue-800 uppercase">2. Pilih Pelajar</label><select id="sel-student" onchange="previewStudentImage()" class="w-full p-3 rounded border text-sm" disabled></select></div>
                     <div class="md:col-span-2"><button onclick="loadGradingForm()" class="w-full bg-blue-600 text-white py-3 rounded font-bold text-sm shadow hover:bg-blue-700">MULA MENILAI</button></div>
                 </div>
-                <div class="w-full md:w-1/4 flex justify-center">
-                    <div class="w-48 aspect-[3/4] bg-gray-200 rounded-lg overflow-hidden border-4 border-white shadow-lg cursor-zoom-in" onclick="if(this.querySelector('img').src) openImageModal(this.querySelector('img').src)">
+                <div class="w-full md:w-1/3 flex justify-center">
+                    <div class="w-64 aspect-[3/4] bg-gray-200 rounded-2xl overflow-hidden relative cursor-zoom-in group shadow-lg border-4 border-white" onclick="if(this.querySelector('img').src) openImageModal(this.querySelector('img').src)">
                         <img id="lec-view-img" class="w-full h-full object-cover hidden">
                         <div id="lec-view-placeholder" class="w-full h-full flex flex-col items-center justify-center text-gray-400"><i class="fas fa-user text-6xl mb-1"></i><span class="text-xs font-bold">FOTO</span></div>
                     </div>
@@ -112,16 +112,16 @@
                 </div>
 
                 <div id="form-t1" class="mark-form hidden bg-white p-6 rounded-xl shadow-sm border border-purple-200">
-                    <h3 class="font-bold text-purple-700 mb-4">KUIZ (10%)</h3>
+                    <h3 class="font-bold text-purple-700 mb-4 flex items-center justify-between"><span>KUIZ (10%)</span><span id="total_kuiz" class="text-sm bg-purple-100 px-2 py-1 rounded">0 / 10</span></h3>
                     <div class="grid grid-cols-2 gap-4">
-                        <div><label class="text-xs font-bold text-gray-500 block mb-1">Kuiz 1 (5m)</label><input type="number" id="t1_m1" class="input-mark" max="5"></div>
-                        <div><label class="text-xs font-bold text-gray-500 block mb-1">Kuiz 2 (5m)</label><input type="number" id="t1_m2" class="input-mark" max="5"></div>
+                        <div><label class="text-xs font-bold text-gray-500 block mb-1">Kuiz 1 (5)</label><input type="number" id="t1_m1" class="input-mark cal-kuiz" max="5" oninput="calcTotal('kuiz')"></div>
+                        <div><label class="text-xs font-bold text-gray-500 block mb-1">Kuiz 2 (5)</label><input type="number" id="t1_m2" class="input-mark cal-kuiz" max="5" oninput="calcTotal('kuiz')"></div>
                     </div>
                     <button onclick="submitMark('MARKAH_TUGASAN1')" class="mt-6 w-full bg-purple-600 text-white py-2 rounded-lg font-bold text-sm">SIMPAN TUGASAN 1</button>
                 </div>
 
                 <div id="form-t2" class="mark-form hidden bg-white p-6 rounded-xl shadow-sm border border-orange-200">
-                    <h3 class="font-bold text-orange-700 mb-4">UJIAN AMALI 1: SEBELUM PERKHEMAHAN</h3>
+                    <h3 class="font-bold text-orange-700 mb-4">AMALI 1 (20%)</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="p-4 bg-orange-50 rounded border border-orange-100">
                             <div class="flex justify-between items-center mb-3"><span class="text-xs font-bold text-orange-800">HP4 (10%)</span><span class="text-xs font-bold bg-white px-2 py-1 rounded border" id="total_hp4">0 / 10</span></div>
@@ -132,7 +132,7 @@
                         </div>
                         <div class="p-4 bg-orange-50 rounded border border-orange-100">
                             <div class="flex justify-between items-center mb-3"><span class="text-xs font-bold text-orange-800">HP5 (10%)</span><span class="text-xs font-bold bg-white px-2 py-1 rounded border" id="total_hp5">0 / 10</span></div>
-                            <div><label class="text-xs text-gray-500 block">Warganegara (10)</label><input type="number" id="t2_m3" class="input-mark cal-hp5" max="10" oninput="calcTotal('hp5')"></div>
+                            <div><label class="text-xs text-gray-500 block">Warga (10)</label><input type="number" id="t2_m3" class="input-mark cal-hp5" max="10" oninput="calcTotal('hp5')"></div>
                         </div>
                     </div>
                     <button onclick="submitMark('MARKAH_TUGASAN2')" class="mt-6 w-full bg-orange-600 text-white py-2 rounded-lg font-bold text-sm">SIMPAN AMALI 1</button>
@@ -142,28 +142,28 @@
                     <div class="bg-white p-5 rounded-xl shadow-sm border border-green-200">
                         <div class="flex justify-between items-center mb-3"><span class="bg-green-100 text-green-800 text-[10px] font-bold px-2 py-1 rounded">HP3: KEMAHIRAN (25%)</span><span class="text-xs font-bold" id="total_hp3">0 / 25</span></div>
                         <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
-                            <div><label class="text-[10px] font-bold text-gray-400 block mb-1">Cergas</label><input type="number" id="t3_hp3_1" class="input-mark cal-hp3" max="5" oninput="calcTotal('hp3')"></div>
-                            <div><label class="text-[10px] font-bold text-gray-400 block mb-1">Makan</label><input type="number" id="t3_hp3_2" class="input-mark cal-hp3" max="5" oninput="calcTotal('hp3')"></div>
-                            <div><label class="text-[10px] font-bold text-gray-400 block mb-1">Flying</label><input type="number" id="t3_hp3_3" class="input-mark cal-hp3" max="5" oninput="calcTotal('hp3')"></div>
-                            <div><label class="text-[10px] font-bold text-gray-400 block mb-1">Tazkirah</label><input type="number" id="t3_hp3_4" class="input-mark cal-hp3" max="5" oninput="calcTotal('hp3')"></div>
-                            <div><label class="text-[10px] font-bold text-gray-400 block mb-1">Refleksi</label><input type="number" id="t3_hp3_5" class="input-mark cal-hp3" max="5" oninput="calcTotal('hp3')"></div>
+                            <div><label class="text-[10px] text-gray-400 block mb-1">Cergas</label><input type="number" id="t3_hp3_1" class="input-mark cal-hp3" max="5" oninput="calcTotal('hp3')"></div>
+                            <div><label class="text-[10px] text-gray-400 block mb-1">Makan</label><input type="number" id="t3_hp3_2" class="input-mark cal-hp3" max="5" oninput="calcTotal('hp3')"></div>
+                            <div><label class="text-[10px] text-gray-400 block mb-1">Flying</label><input type="number" id="t3_hp3_3" class="input-mark cal-hp3" max="5" oninput="calcTotal('hp3')"></div>
+                            <div><label class="text-[10px] text-gray-400 block mb-1">Tazk</label><input type="number" id="t3_hp3_4" class="input-mark cal-hp3" max="5" oninput="calcTotal('hp3')"></div>
+                            <div><label class="text-[10px] text-gray-400 block mb-1">Ref</label><input type="number" id="t3_hp3_5" class="input-mark cal-hp3" max="5" oninput="calcTotal('hp3')"></div>
                         </div>
                     </div>
                     <div class="bg-white p-5 rounded-xl shadow-sm border border-blue-200">
                         <div class="flex justify-between items-center mb-3"><span class="bg-blue-100 text-blue-800 text-[10px] font-bold px-2 py-1 rounded">HP8: INDIVIDU (15%)</span><span class="text-xs font-bold" id="total_hp8i">0 / 15</span></div>
                         <div class="grid grid-cols-3 gap-3">
-                            <div><label class="text-[10px] font-bold text-gray-400 block mb-1">Kem I</label><input type="number" id="t3_hp8_1" class="input-mark cal-hp8i" max="5" oninput="calcTotal('hp8i')"></div>
-                            <div><label class="text-[10px] font-bold text-gray-400 block mb-1">Air I</label><input type="number" id="t3_hp8_3" class="input-mark cal-hp8i" max="5" oninput="calcTotal('hp8i')"></div>
-                            <div><label class="text-[10px] font-bold text-gray-400 block mb-1">Rak I</label><input type="number" id="t3_hp8_5" class="input-mark cal-hp8i" max="5" oninput="calcTotal('hp8i')"></div>
+                            <div><label class="text-[10px] text-gray-400 block mb-1">Kem I</label><input type="number" id="t3_hp8_1" class="input-mark cal-hp8i" max="5" oninput="calcTotal('hp8i')"></div>
+                            <div><label class="text-[10px] text-gray-400 block mb-1">Air I</label><input type="number" id="t3_hp8_3" class="input-mark cal-hp8i" max="5" oninput="calcTotal('hp8i')"></div>
+                            <div><label class="text-[10px] text-gray-400 block mb-1">Rak I</label><input type="number" id="t3_hp8_5" class="input-mark cal-hp8i" max="5" oninput="calcTotal('hp8i')"></div>
                         </div>
                     </div>
                     <div class="bg-white p-5 rounded-xl shadow-sm border border-purple-200">
                         <div class="flex justify-between items-center mb-3"><span class="bg-purple-100 text-purple-800 text-[10px] font-bold px-2 py-1 rounded">HP8: KUMPULAN (30%)</span><span class="text-xs font-bold" id="total_hp8k">0 / 30</span></div>
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-                            <div><label class="text-[10px] font-bold text-gray-400 block mb-1">Kem K (10)</label><input type="number" id="t3_hp8_2" class="input-mark cal-hp8k" max="10" oninput="calcTotal('hp8k')"></div>
-                            <div><label class="text-[10px] font-bold text-gray-400 block mb-1">Air K (5)</label><input type="number" id="t3_hp8_4" class="input-mark cal-hp8k" max="5" oninput="calcTotal('hp8k')"></div>
-                            <div><label class="text-[10px] font-bold text-gray-400 block mb-1">Rak K (5)</label><input type="number" id="t3_hp8_6" class="input-mark cal-hp8k" max="5" oninput="calcTotal('hp8k')"></div>
-                            <div><label class="text-[10px] font-bold text-gray-400 block mb-1">Makan (10)</label><input type="number" id="t3_hp8_7" class="input-mark cal-hp8k" max="10" oninput="calcTotal('hp8k')"></div>
+                            <div><label class="text-[10px] text-gray-400 block mb-1">Kem K (10)</label><input type="number" id="t3_hp8_2" class="input-mark cal-hp8k" max="10" oninput="calcTotal('hp8k')"></div>
+                            <div><label class="text-[10px] text-gray-400 block mb-1">Air K (5)</label><input type="number" id="t3_hp8_4" class="input-mark cal-hp8k" max="5" oninput="calcTotal('hp8k')"></div>
+                            <div><label class="text-[10px] text-gray-400 block mb-1">Rak K (5)</label><input type="number" id="t3_hp8_6" class="input-mark cal-hp8k" max="5" oninput="calcTotal('hp8k')"></div>
+                            <div><label class="text-[10px] text-gray-400 block mb-1">Mkn K (10)</label><input type="number" id="t3_hp8_7" class="input-mark cal-hp8k" max="10" oninput="calcTotal('hp8k')"></div>
                         </div>
                     </div>
                     <button onclick="submitMark('MARKAH_TUGASAN3')" class="w-full bg-green-600 text-white py-3 rounded-lg font-bold text-sm shadow hover:bg-green-700">SIMPAN AMALI 2</button>
@@ -181,26 +181,23 @@
             </div>
             <div class="overflow-x-auto bg-white rounded-lg shadow border border-gray-200">
                 <table class="w-full text-left styled-table">
-                    <thead><tr><th>Nama</th><th class="hidden md:table-cell text-center">Kelas</th><th class="text-center">KUIZ</th><th class="text-center">A1</th><th class="text-center">A2</th><th class="text-center bg-gray-100">TOTAL</th><th class="text-center bg-gray-200">GRED</th></tr></thead>
-                    <tbody id="summary-body"><tr><td colspan="7" class="text-center py-8 text-gray-400 italic">Sila pilih kelas dan tekan 'Jana'</td></tr></tbody>
+                    <thead><tr><th class="text-left">Nama</th><th class="text-center">KUIZ (10%)</th><th class="text-center">HP4 (10%)</th><th class="text-center">HP5 (10%)</th><th class="text-center">HP3 (25%)</th><th class="text-center">HP8 (15%)</th><th class="text-center">HP8 (30%)</th><th class="text-center bg-gray-100">JUMLAH</th><th class="text-center bg-gray-200">GRED</th></tr></thead>
+                    <tbody id="summary-body"><tr><td colspan="9" class="text-center py-8 text-gray-400 italic">Sila pilih kelas dan tekan 'Jana'</td></tr></tbody>
                 </table>
             </div>
         </div>
     </div>
 
     <script>
-        // ============================================
-        // PASTE URL WEB APP ANDA DI SINI
-        // ============================================
         const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbx2JQj_JX5_ERUX5zSy1MlWWf5Oz4gMaamCGAJnFQdtC0Hfz4Q12P6NxoLXYXFdp9RYEA/exec"; 
-        // ============================================
+        let allStudentsCache = [], currentStudent = null, pendingImageBase64 = null;
 
-        let allStudentsCache = [];
-        let currentStudent = null;
-        let pendingImageBase64 = null;
-
-        const showLoader = (s, t="Memproses...") => { document.getElementById('loader').classList.toggle('hidden',!s); document.getElementById('loader-text').innerText=t; };
-        const showToast = (m, t='success') => { const el=document.getElementById('toast'); document.getElementById('toast-msg').innerText=m; el.className=`fixed top-6 right-6 z-[60] px-6 py-4 rounded-lg shadow-xl text-white font-bold transition-all transform duration-300 flex items-center gap-3 ${t==='success'?'bg-green-600':'bg-red-600'}`; el.classList.remove('hidden','translate-x-full'); setTimeout(()=>el.classList.add('translate-x-full'),3000); };
+        const showLoader = (s,t="Memproses...") => { document.getElementById('loader').classList.toggle('hidden',!s); document.getElementById('loader-text').innerText=t; };
+        const showToast = (m, t='success') => { 
+            const el=document.getElementById('toast'); document.getElementById('toast-msg').innerText=m; 
+            el.className=`fixed top-6 right-6 z-[60] px-6 py-4 rounded-lg shadow-xl text-white font-bold flex items-center gap-3 ${t==='success'?'bg-green-600':'bg-red-600'}`;
+            el.classList.remove('hidden','translate-x-full'); setTimeout(()=>el.classList.add('translate-x-full'),3000); 
+        };
         const openImageModal = (s) => { if(s){ document.getElementById('modal-img-content').src=s; document.getElementById('image-modal').classList.remove('hidden'); }};
         const closeImageModal = () => document.getElementById('image-modal').classList.add('hidden');
         
@@ -212,7 +209,6 @@
         };
         const logout = () => location.reload();
 
-        // DRAG DROP
         const da=document.getElementById('drop-area');
         ['dragenter','dragover','dragleave','drop'].forEach(e=>da.addEventListener(e,ev=>{ev.preventDefault();ev.stopPropagation()},false));
         ['dragenter','dragover'].forEach(e=>da.addEventListener(e,()=>da.classList.add('bg-blue-50','border-blue-400'),false));
@@ -302,7 +298,7 @@
                     });
                     document.getElementById('grading-area').classList.remove('hidden'); 
                     switchMarkTab('t1');
-                    ['hp4','hp5','hp3','hp8i','hp8k'].forEach(calcTotal);
+                    ['kuiz','hp4','hp5','hp3','hp8i','hp8k'].forEach(calcTotal);
                 } else showToast("Gagal muat markah", 'error');
             });
         }
@@ -316,7 +312,6 @@
             });
         }
 
-        // --- NEW: AUTO CALCULATE TOTALS ---
         function calcTotal(group) {
             let total = 0, max = 0;
             const fields = document.querySelectorAll('.cal-' + group);
@@ -348,10 +343,10 @@
                 showLoader(false);
                 if(res.result==='success'){
                     const tb=document.getElementById('summary-body'); tb.innerHTML='';
-                    if(res.data.length===0) tb.innerHTML='<tr><td colspan="7" class="text-center py-8 text-gray-400">Tiada data.</td></tr>';
+                    if(res.data.length===0) tb.innerHTML='<tr><td colspan="9" class="text-center py-8 text-gray-400">Tiada data.</td></tr>';
                     else res.data.forEach(d=>{
                         let cl='text-gray-600'; if(d.gred.startsWith('A'))cl='text-green-600'; else if(d.gred.startsWith('B'))cl='text-blue-600'; else if(d.gred==='F')cl='text-red-600';
-                        tb.innerHTML+=`<tr class="hover:bg-gray-50"><td class="font-bold text-gray-700">${d.nama}</td><td class="hidden md:table-cell text-center text-xs text-gray-500">${d.kelas}</td><td class="text-center text-xs font-mono">${d.jum_t1}</td><td class="text-center text-xs font-mono">${d.jum_t2}</td><td class="text-center text-xs font-mono">${d.jum_t3}</td><td class="text-center font-extrabold text-white bg-slate-700 text-sm shadow-sm rounded">${d.grand_total}</td><td class="text-center font-extrabold ${cl} text-sm">${d.gred}</td></tr>`;
+                        tb.innerHTML+=`<tr class="hover:bg-gray-50"><td class="text-left font-bold text-gray-700 py-3 pl-4">${d.nama}</td><td class="text-center text-xs font-mono font-bold text-gray-500">${d.kuiz}</td><td class="text-center text-xs font-mono">${d.hp4}</td><td class="text-center text-xs font-mono">${d.hp5}</td><td class="text-center text-xs font-mono">${d.hp3}</td><td class="text-center text-xs font-mono">${d.hp8i}</td><td class="text-center text-xs font-mono">${d.hp8k}</td><td class="text-center font-extrabold text-white bg-slate-700 text-sm shadow-sm rounded">${d.total}</td><td class="text-center font-extrabold ${cl} text-sm">${d.gred}</td></tr>`;
                     });
                 } else showToast(res.message,'error');
             });
