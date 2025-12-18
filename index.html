@@ -12,18 +12,20 @@
         .glass { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.5); box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37); }
         .hidden { display: none !important; }
         .fade-in { animation: fadeIn 0.4s ease-out; }
-        .loader { border-top-color: #10b981; animation: spinner 1s infinite linear; }
+        .loader { border-top-color: #10b981; -webkit-animation: spinner 1s linear infinite; animation: spinner 1s linear infinite; }
         @keyframes spinner { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .tab-active { background-color: #10b981; color: white; border-color: #10b981; }
         .tab-inactive { background-color: white; color: #6b7280; border-color: #e5e7eb; }
-        .input-mark { text-align: center; border: 1px solid #d1d5db; border-radius: 0.5rem; padding: 0.5rem; width: 100%; font-weight: bold; }
+        .input-mark { text-align: center; border: 1px solid #d1d5db; border-radius: 0.5rem; padding: 0.5rem; width: 100%; transition: all 0.2s; font-weight: bold; }
         .input-mark:focus { border-color: #10b981; outline: none; ring: 2px solid #a7f3d0; background-color: #f0fdf4; }
+        .styled-table th { background-color: #f3f4f6; padding: 12px; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: #374151; }
+        .styled-table td { padding: 12px; border-bottom: 1px solid #e5e7eb; font-size: 0.85rem; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col items-center justify-center p-4">
 
-    <div id="toast" class="fixed top-6 right-6 z-[60] hidden px-6 py-4 rounded-lg shadow-xl text-white font-bold transition flex items-center gap-3">
-        <i id="toast-icon"></i> <span id="toast-msg"></span>
+    <div id="toast" class="fixed top-6 right-6 z-[60] hidden px-6 py-4 rounded-lg shadow-xl text-white font-bold transition-transform transform translate-x-full flex items-center gap-3">
+        <i id="toast-icon" class="fas fa-info-circle"></i> <span id="toast-msg">Mesej</span>
     </div>
     <div id="loader" class="fixed inset-0 bg-black/60 z-[70] hidden flex flex-col items-center justify-center backdrop-blur-sm">
         <div class="loader ease-linear rounded-full border-4 border-t-4 border-white h-12 w-12 mb-4"></div>
@@ -31,22 +33,29 @@
     </div>
     <div id="image-modal" class="fixed inset-0 z-[80] bg-black/90 hidden flex items-center justify-center p-4" onclick="closeImageModal()">
         <img id="modal-img-content" class="max-w-full max-h-[90vh] rounded-lg shadow-2xl border-4 border-white">
+        <p class="absolute bottom-10 text-white text-sm font-bold bg-black/50 px-4 py-2 rounded-full">Klik untuk tutup</p>
     </div>
 
     <div id="view-login" class="glass w-full max-w-md p-8 fade-in">
-        <div class="text-center mb-8"><h1 class="text-2xl font-extrabold text-gray-800">Sistem BIG</h1><p class="text-sm text-gray-500">MPU3212</p></div>
+        <div class="text-center mb-8">
+            <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-green-100 text-green-700 mb-3 shadow-md">
+                <i class="fas fa-campground text-3xl"></i>
+            </div>
+            <h1 class="text-2xl font-extrabold text-gray-800">Sistem BIG</h1>
+            <p class="text-sm text-gray-500 font-medium">Bina Insan Guru MPU3212</p>
+        </div>
         <div class="flex border-b mb-6">
             <button onclick="switchLogin('student')" id="tab-student" class="flex-1 pb-2 font-bold text-green-600 border-b-2 border-green-600">PELAJAR</button>
             <button onclick="switchLogin('lecturer')" id="tab-lecturer" class="flex-1 pb-2 font-bold text-gray-400 border-b-2 border-transparent">PENSYARAH</button>
         </div>
         <form id="form-student" onsubmit="loginStudent(event)" class="space-y-5">
-            <div><label class="text-xs font-bold text-gray-500">NO. KP</label><input type="text" id="login-ic" class="w-full p-3 border rounded-lg text-center font-bold" required></div>
-            <button class="w-full bg-green-600 text-white font-bold py-3 rounded-lg shadow-md">LOG MASUK</button>
+            <div><label class="text-xs font-bold text-gray-500">NO. KAD PENGENALAN</label><input type="text" id="login-ic" class="w-full p-3 border rounded-lg text-center font-bold tracking-wider" placeholder="Contoh: 010101010101" required></div>
+            <button class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg shadow-md">LOG MASUK</button>
         </form>
         <form id="form-lecturer" onsubmit="loginLecturer(event)" class="space-y-5 hidden">
-            <input type="email" id="login-email" class="w-full p-3 border rounded-lg" placeholder="Emel" required>
-            <input type="password" id="login-pass" class="w-full p-3 border rounded-lg" placeholder="Kata Laluan" required>
-            <button class="w-full bg-blue-600 text-white font-bold py-3 rounded-lg shadow-md">LOG MASUK STAF</button>
+            <div><label class="text-xs font-bold text-gray-500">EMEL</label><input type="email" id="login-email" class="w-full p-3 border rounded-lg" required></div>
+            <div><label class="text-xs font-bold text-gray-500">KATA LALUAN</label><input type="password" id="login-pass" class="w-full p-3 border rounded-lg" required></div>
+            <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg shadow-md">LOG MASUK PENILAI</button>
         </form>
     </div>
 
