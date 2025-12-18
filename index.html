@@ -12,21 +12,18 @@
         .glass { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.5); box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37); }
         .hidden { display: none !important; }
         .fade-in { animation: fadeIn 0.4s ease-out; }
-        .loader { border-top-color: #10b981; -webkit-animation: spinner 1s linear infinite; animation: spinner 1s linear infinite; }
+        .loader { border-top-color: #10b981; animation: spinner 1s infinite linear; }
         @keyframes spinner { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .tab-active { background-color: #10b981; color: white; border-color: #10b981; }
         .tab-inactive { background-color: white; color: #6b7280; border-color: #e5e7eb; }
-        .input-mark { text-align: center; border: 1px solid #d1d5db; border-radius: 0.5rem; padding: 0.5rem; width: 100%; transition: all 0.2s; font-weight: bold; }
+        .input-mark { text-align: center; border: 1px solid #d1d5db; border-radius: 0.5rem; padding: 0.5rem; width: 100%; font-weight: bold; }
         .input-mark:focus { border-color: #10b981; outline: none; ring: 2px solid #a7f3d0; background-color: #f0fdf4; }
-        .styled-table th { background-color: #f3f4f6; padding: 8px; font-size: 0.7rem; text-transform: uppercase; border-bottom: 2px solid #e5e7eb; text-align: center; }
-        .styled-table td { padding: 8px; border-bottom: 1px solid #e5e7eb; font-size: 0.8rem; text-align: center; }
-        .text-left { text-align: left !important; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col items-center justify-center p-4">
 
-    <div id="toast" class="fixed top-6 right-6 z-[60] hidden px-6 py-4 rounded-lg shadow-xl text-white font-bold transition-transform transform translate-x-full flex items-center gap-3">
-        <i id="toast-icon" class="fas fa-info-circle"></i> <span id="toast-msg">Mesej</span>
+    <div id="toast" class="fixed top-6 right-6 z-[60] hidden px-6 py-4 rounded-lg shadow-xl text-white font-bold transition flex items-center gap-3">
+        <i id="toast-icon"></i> <span id="toast-msg"></span>
     </div>
     <div id="loader" class="fixed inset-0 bg-black/60 z-[70] hidden flex flex-col items-center justify-center backdrop-blur-sm">
         <div class="loader ease-linear rounded-full border-4 border-t-4 border-white h-12 w-12 mb-4"></div>
@@ -38,14 +35,17 @@
 
     <div id="view-login" class="glass w-full max-w-md p-8 fade-in">
         <div class="text-center mb-8"><h1 class="text-2xl font-extrabold text-gray-800">Sistem BIG</h1><p class="text-sm text-gray-500">MPU3212</p></div>
-        <div class="flex border-b mb-6"><button onclick="switchLogin('student')" id="tab-student" class="flex-1 pb-2 font-bold text-green-600 border-b-2 border-green-600">PELAJAR</button><button onclick="switchLogin('lecturer')" id="tab-lecturer" class="flex-1 pb-2 font-bold text-gray-400 border-b-2 border-transparent">PENSYARAH</button></div>
+        <div class="flex border-b mb-6">
+            <button onclick="switchLogin('student')" id="tab-student" class="flex-1 pb-2 font-bold text-green-600 border-b-2 border-green-600">PELAJAR</button>
+            <button onclick="switchLogin('lecturer')" id="tab-lecturer" class="flex-1 pb-2 font-bold text-gray-400 border-b-2 border-transparent">PENSYARAH</button>
+        </div>
         <form id="form-student" onsubmit="loginStudent(event)" class="space-y-5">
             <div><label class="text-xs font-bold text-gray-500">NO. KP</label><input type="text" id="login-ic" class="w-full p-3 border rounded-lg text-center font-bold" required></div>
             <button class="w-full bg-green-600 text-white font-bold py-3 rounded-lg shadow-md">LOG MASUK</button>
         </form>
         <form id="form-lecturer" onsubmit="loginLecturer(event)" class="space-y-5 hidden">
-            <div><label class="text-xs font-bold text-gray-500">EMEL</label><input type="email" id="login-email" class="w-full p-3 border rounded-lg" required></div>
-            <div><label class="text-xs font-bold text-gray-500">KATA LALUAN</label><input type="password" id="login-pass" class="w-full p-3 border rounded-lg" required></div>
+            <input type="email" id="login-email" class="w-full p-3 border rounded-lg" placeholder="Emel" required>
+            <input type="password" id="login-pass" class="w-full p-3 border rounded-lg" placeholder="Kata Laluan" required>
             <button class="w-full bg-blue-600 text-white font-bold py-3 rounded-lg shadow-md">LOG MASUK STAF</button>
         </form>
     </div>
@@ -54,7 +54,7 @@
         <button onclick="logout()" class="absolute top-4 right-4 text-red-600 font-bold text-xs">KELUAR</button>
         <div class="flex flex-col md:flex-row gap-8 mt-6">
             <div class="md:w-1/3 flex flex-col items-center">
-                <div id="drop-area" class="drop-zone w-full aspect-[3/4] rounded-xl flex items-center justify-center relative bg-white overflow-hidden group">
+                <div id="drop-area" class="w-full aspect-[3/4] bg-white rounded-xl shadow-inner border-2 border-dashed border-gray-300 flex items-center justify-center relative overflow-hidden group cursor-pointer">
                     <img id="std-img" class="w-full h-full object-cover hidden absolute z-10" onclick="openImageModal(this.src)">
                     <div class="text-center p-4"><p class="text-xs text-gray-500 font-bold">Muat Naik Gambar</p></div>
                     <input type="file" id="file-input" class="absolute inset-0 opacity-0 cursor-pointer z-20" accept="image/*" onchange="handleFiles(this.files)">
@@ -81,9 +81,10 @@
 
     <div id="view-lecturer" class="glass w-full max-w-7xl p-6 hidden fade-in relative min-h-[90vh]">
         <div class="flex justify-between items-center border-b pb-4 mb-6">
-            <h1 class="text-lg font-bold text-gray-800">Panel Penilaian <span id="lec-name" class="text-blue-600"></span></h1>
+            <div class="flex items-center gap-3"><div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-bold"><i class="fas fa-chalkboard-teacher"></i></div><div><h1 class="text-lg font-bold text-gray-800">Panel Penilaian</h1><p class="text-xs text-gray-500" id="lec-name">...</p></div></div>
             <button onclick="logout()" class="text-red-600 font-bold text-xs">KELUAR</button>
         </div>
+
         <div class="flex gap-2 mb-6">
             <button onclick="showLecSection('entry')" id="btn-sec-entry" class="bg-blue-600 text-white px-6 py-2 rounded-lg font-bold text-sm shadow">ISI MARKAH</button>
             <button onclick="showLecSection('summary')" id="btn-sec-summary" class="bg-white text-gray-600 px-6 py-2 rounded-lg font-bold text-sm shadow border">RUMUSAN</button>
@@ -97,7 +98,7 @@
                     <div class="md:col-span-2"><button onclick="loadGradingForm()" class="w-full bg-blue-600 text-white py-3 rounded font-bold text-sm shadow hover:bg-blue-700">MULA MENILAI</button></div>
                 </div>
                 <div class="w-full md:w-1/3 flex justify-center">
-                    <div class="w-64 aspect-[3/4] bg-gray-200 rounded-2xl overflow-hidden relative cursor-zoom-in group shadow-lg border-4 border-white" onclick="if(this.querySelector('img').src) openImageModal(this.querySelector('img').src)">
+                    <div class="w-64 aspect-[3/4] bg-gray-200 rounded-xl overflow-hidden shadow-lg border-4 border-white cursor-zoom-in" onclick="if(this.querySelector('img').src) openImageModal(this.querySelector('img').src)">
                         <img id="lec-view-img" class="w-full h-full object-cover hidden">
                         <div id="lec-view-placeholder" class="w-full h-full flex flex-col items-center justify-center text-gray-400"><i class="fas fa-user text-6xl mb-1"></i><span class="text-xs font-bold">FOTO</span></div>
                     </div>
@@ -112,26 +113,26 @@
                 </div>
 
                 <div id="form-t1" class="mark-form hidden bg-white p-6 rounded-xl shadow-sm border border-purple-200">
-                    <h3 class="font-bold text-purple-700 mb-4 flex items-center justify-between"><span>KUIZ (10%)</span><span id="total_kuiz" class="text-sm bg-purple-100 px-2 py-1 rounded">0 / 10</span></h3>
+                    <h3 class="font-bold text-purple-700 mb-4 flex justify-between"><span>KUIZ (10%)</span><span id="total_kuiz" class="text-xs bg-purple-100 px-2 py-1 rounded">0/10</span></h3>
                     <div class="grid grid-cols-2 gap-4">
                         <div><label class="text-xs font-bold text-gray-500 block mb-1">Kuiz 1 (5)</label><input type="number" id="t1_m1" class="input-mark cal-kuiz" max="5" oninput="calcTotal('kuiz')"></div>
                         <div><label class="text-xs font-bold text-gray-500 block mb-1">Kuiz 2 (5)</label><input type="number" id="t1_m2" class="input-mark cal-kuiz" max="5" oninput="calcTotal('kuiz')"></div>
                     </div>
-                    <button onclick="submitMark('MARKAH_TUGASAN1')" class="mt-6 w-full bg-purple-600 text-white py-2 rounded-lg font-bold text-sm">SIMPAN TUGASAN 1</button>
+                    <button onclick="submitMark('MARKAH_TUGASAN1')" class="mt-6 w-full bg-purple-600 text-white py-2 rounded-lg font-bold text-sm">SIMPAN KUIZ</button>
                 </div>
 
                 <div id="form-t2" class="mark-form hidden bg-white p-6 rounded-xl shadow-sm border border-orange-200">
-                    <h3 class="font-bold text-orange-700 mb-4">AMALI 1 (20%)</h3>
+                    <h3 class="font-bold text-orange-700 mb-4">AMALI 1: SEBELUM PERKHEMAHAN</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="p-4 bg-orange-50 rounded border border-orange-100">
-                            <div class="flex justify-between items-center mb-3"><span class="text-xs font-bold text-orange-800">HP4 (10%)</span><span class="text-xs font-bold bg-white px-2 py-1 rounded border" id="total_hp4">0 / 10</span></div>
+                            <div class="flex justify-between items-center mb-3"><span class="text-xs font-bold text-orange-800">HP4 (10%)</span><span class="text-xs font-bold bg-white px-2 py-1 rounded border" id="total_hp4">0/10</span></div>
                             <div class="space-y-3">
                                 <div><label class="text-xs text-gray-500 block">Etiket (5)</label><input type="number" id="t2_m1" class="input-mark cal-hp4" max="5" oninput="calcTotal('hp4')"></div>
                                 <div><label class="text-xs text-gray-500 block">Guru (5)</label><input type="number" id="t2_m2" class="input-mark cal-hp4" max="5" oninput="calcTotal('hp4')"></div>
                             </div>
                         </div>
                         <div class="p-4 bg-orange-50 rounded border border-orange-100">
-                            <div class="flex justify-between items-center mb-3"><span class="text-xs font-bold text-orange-800">HP5 (10%)</span><span class="text-xs font-bold bg-white px-2 py-1 rounded border" id="total_hp5">0 / 10</span></div>
+                            <div class="flex justify-between items-center mb-3"><span class="text-xs font-bold text-orange-800">HP5 (10%)</span><span class="text-xs font-bold bg-white px-2 py-1 rounded border" id="total_hp5">0/10</span></div>
                             <div><label class="text-xs text-gray-500 block">Warga (10)</label><input type="number" id="t2_m3" class="input-mark cal-hp5" max="10" oninput="calcTotal('hp5')"></div>
                         </div>
                     </div>
@@ -140,30 +141,32 @@
 
                 <div id="form-t3" class="mark-form hidden space-y-4">
                     <div class="bg-white p-5 rounded-xl shadow-sm border border-green-200">
-                        <div class="flex justify-between items-center mb-3"><span class="bg-green-100 text-green-800 text-[10px] font-bold px-2 py-1 rounded">HP3: KEMAHIRAN (25%)</span><span class="text-xs font-bold" id="total_hp3">0 / 25</span></div>
-                        <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
-                            <div><label class="text-[10px] text-gray-400 block mb-1">Cergas</label><input type="number" id="t3_hp3_1" class="input-mark cal-hp3" max="5" oninput="calcTotal('hp3')"></div>
-                            <div><label class="text-[10px] text-gray-400 block mb-1">Makan</label><input type="number" id="t3_hp3_2" class="input-mark cal-hp3" max="5" oninput="calcTotal('hp3')"></div>
-                            <div><label class="text-[10px] text-gray-400 block mb-1">Flying</label><input type="number" id="t3_hp3_3" class="input-mark cal-hp3" max="5" oninput="calcTotal('hp3')"></div>
-                            <div><label class="text-[10px] text-gray-400 block mb-1">Tazk</label><input type="number" id="t3_hp3_4" class="input-mark cal-hp3" max="5" oninput="calcTotal('hp3')"></div>
-                            <div><label class="text-[10px] text-gray-400 block mb-1">Ref</label><input type="number" id="t3_hp3_5" class="input-mark cal-hp3" max="5" oninput="calcTotal('hp3')"></div>
+                        <div class="flex justify-between items-center mb-3"><span class="bg-green-100 text-green-800 text-[10px] font-bold px-2 py-1 rounded">HP3: KEMAHIRAN (25%)</span><span class="text-xs font-bold" id="total_hp3">0/25</span></div>
+                        <div class="grid grid-cols-5 gap-2 text-center text-xs">
+                            <div><label>Cergas</label><input type="number" id="t3_hp3_1" class="input-mark cal-hp3" max="5" oninput="calcTotal('hp3')"></div>
+                            <div><label>Makan</label><input type="number" id="t3_hp3_2" class="input-mark cal-hp3" max="5" oninput="calcTotal('hp3')"></div>
+                            <div><label>Flying</label><input type="number" id="t3_hp3_3" class="input-mark cal-hp3" max="5" oninput="calcTotal('hp3')"></div>
+                            <div><label>Tazkirah</label><input type="number" id="t3_hp3_4" class="input-mark cal-hp3" max="5" oninput="calcTotal('hp3')"></div>
+                            <div><label>Refleksi</label><input type="number" id="t3_hp3_5" class="input-mark cal-hp3" max="5" oninput="calcTotal('hp3')"></div>
                         </div>
                     </div>
-                    <div class="bg-white p-5 rounded-xl shadow-sm border border-blue-200">
-                        <div class="flex justify-between items-center mb-3"><span class="bg-blue-100 text-blue-800 text-[10px] font-bold px-2 py-1 rounded">HP8: INDIVIDU (15%)</span><span class="text-xs font-bold" id="total_hp8i">0 / 15</span></div>
-                        <div class="grid grid-cols-3 gap-3">
-                            <div><label class="text-[10px] text-gray-400 block mb-1">Kem I</label><input type="number" id="t3_hp8_1" class="input-mark cal-hp8i" max="5" oninput="calcTotal('hp8i')"></div>
-                            <div><label class="text-[10px] text-gray-400 block mb-1">Air I</label><input type="number" id="t3_hp8_3" class="input-mark cal-hp8i" max="5" oninput="calcTotal('hp8i')"></div>
-                            <div><label class="text-[10px] text-gray-400 block mb-1">Rak I</label><input type="number" id="t3_hp8_5" class="input-mark cal-hp8i" max="5" oninput="calcTotal('hp8i')"></div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-white p-5 rounded-xl shadow-sm border border-blue-200">
+                            <div class="flex justify-between items-center mb-3"><span class="bg-blue-100 text-blue-800 text-[10px] font-bold px-2 py-1 rounded">HP8: IND (15%)</span><span class="text-xs font-bold" id="total_hp8i">0/15</span></div>
+                            <div class="grid grid-cols-3 gap-2 text-center text-xs">
+                                <div><label>Kem</label><input type="number" id="t3_hp8_1" class="input-mark cal-hp8i" max="5" oninput="calcTotal('hp8i')"></div>
+                                <div><label>Air</label><input type="number" id="t3_hp8_3" class="input-mark cal-hp8i" max="5" oninput="calcTotal('hp8i')"></div>
+                                <div><label>Rak</label><input type="number" id="t3_hp8_5" class="input-mark cal-hp8i" max="5" oninput="calcTotal('hp8i')"></div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="bg-white p-5 rounded-xl shadow-sm border border-purple-200">
-                        <div class="flex justify-between items-center mb-3"><span class="bg-purple-100 text-purple-800 text-[10px] font-bold px-2 py-1 rounded">HP8: KUMPULAN (30%)</span><span class="text-xs font-bold" id="total_hp8k">0 / 30</span></div>
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-                            <div><label class="text-[10px] text-gray-400 block mb-1">Kem K (10)</label><input type="number" id="t3_hp8_2" class="input-mark cal-hp8k" max="10" oninput="calcTotal('hp8k')"></div>
-                            <div><label class="text-[10px] text-gray-400 block mb-1">Air K (5)</label><input type="number" id="t3_hp8_4" class="input-mark cal-hp8k" max="5" oninput="calcTotal('hp8k')"></div>
-                            <div><label class="text-[10px] text-gray-400 block mb-1">Rak K (5)</label><input type="number" id="t3_hp8_6" class="input-mark cal-hp8k" max="5" oninput="calcTotal('hp8k')"></div>
-                            <div><label class="text-[10px] text-gray-400 block mb-1">Mkn K (10)</label><input type="number" id="t3_hp8_7" class="input-mark cal-hp8k" max="10" oninput="calcTotal('hp8k')"></div>
+                        <div class="bg-white p-5 rounded-xl shadow-sm border border-purple-200">
+                            <div class="flex justify-between items-center mb-3"><span class="bg-purple-100 text-purple-800 text-[10px] font-bold px-2 py-1 rounded">HP8: KUM (30%)</span><span class="text-xs font-bold" id="total_hp8k">0/30</span></div>
+                            <div class="grid grid-cols-4 gap-2 text-center text-xs">
+                                <div><label>Kem</label><input type="number" id="t3_hp8_2" class="input-mark cal-hp8k" max="10" oninput="calcTotal('hp8k')"></div>
+                                <div><label>Air</label><input type="number" id="t3_hp8_4" class="input-mark cal-hp8k" max="5" oninput="calcTotal('hp8k')"></div>
+                                <div><label>Rak</label><input type="number" id="t3_hp8_6" class="input-mark cal-hp8k" max="5" oninput="calcTotal('hp8k')"></div>
+                                <div><label>Makan</label><input type="number" id="t3_hp8_7" class="input-mark cal-hp8k" max="10" oninput="calcTotal('hp8k')"></div>
+                            </div>
                         </div>
                     </div>
                     <button onclick="submitMark('MARKAH_TUGASAN3')" class="w-full bg-green-600 text-white py-3 rounded-lg font-bold text-sm shadow hover:bg-green-700">SIMPAN AMALI 2</button>
@@ -179,34 +182,48 @@
                     <button onclick="loadSummaryData()" class="bg-slate-800 text-white px-4 py-2 rounded text-sm font-bold shadow hover:bg-slate-900 transition">JANA</button>
                 </div>
             </div>
+            
+            <div id="summary-stats" class="grid grid-cols-2 gap-4 mb-4 hidden">
+                <div class="bg-blue-50 p-4 rounded border">Mean: <span id="stat-mean" class="font-bold">0.00</span></div>
+                <div class="bg-purple-50 p-4 rounded border">Std Dev: <span id="stat-std" class="font-bold">0.00</span></div>
+            </div>
+
             <div class="overflow-x-auto bg-white rounded-lg shadow border border-gray-200">
-                <table class="w-full text-left styled-table">
-                    <thead><tr><th class="text-left">Nama</th><th class="text-center">KUIZ (10%)</th><th class="text-center">HP4 (10%)</th><th class="text-center">HP5 (10%)</th><th class="text-center">HP3 (25%)</th><th class="text-center">HP8 (15%)</th><th class="text-center">HP8 (30%)</th><th class="text-center bg-gray-100">JUMLAH</th><th class="text-center bg-gray-200">GRED</th></tr></thead>
-                    <tbody id="summary-body"><tr><td colspan="9" class="text-center py-8 text-gray-400 italic">Sila pilih kelas dan tekan 'Jana'</td></tr></tbody>
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-gray-100 text-[10px] font-bold text-gray-700 uppercase text-center">
+                            <th rowspan="2" class="p-3 border bg-white text-left">NAMA</th>
+                            <th rowspan="2" class="p-3 border hidden md:table-cell">KELAS</th>
+                            <th rowspan="2" class="p-3 border bg-purple-50">KUIZ<br>(10%)</th>
+                            <th colspan="2" class="p-2 border bg-orange-50">AMALI 1 (20%)</th>
+                            <th colspan="3" class="p-2 border bg-green-50">AMALI 2 (70%)</th>
+                            <th rowspan="2" class="p-3 border bg-slate-800 text-white">JUM</th>
+                            <th rowspan="2" class="p-3 border bg-slate-900 text-white">GRED</th>
+                        </tr>
+                        <tr class="text-[9px] font-bold text-gray-600 text-center uppercase">
+                            <th class="border p-1 bg-orange-50/50">HP4 (10)</th>
+                            <th class="border p-1 bg-orange-50/50">HP5 (10)</th>
+                            <th class="border p-1 bg-green-50/50">HP3 (25)</th>
+                            <th class="border p-1 bg-green-50/50">HP8I (15)</th>
+                            <th class="border p-1 bg-green-50/50">HP8K (30)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="summary-body"><tr><td colspan="10" class="text-center py-8 text-gray-400 italic">Sila pilih kelas dan tekan 'Jana'</td></tr></tbody>
                 </table>
             </div>
         </div>
     </div>
 
     <script>
-        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbx2JQj_JX5_ERUX5zSy1MlWWf5Oz4gMaamCGAJnFQdtC0Hfz4Q12P6NxoLXYXFdp9RYEA/exec"; 
+        const WEB_APP_URL = "URL_WEB_APP_APPS_SCRIPT_ANDA_DI_SINI"; 
         let allStudentsCache = [], currentStudent = null, pendingImageBase64 = null;
 
         const showLoader = (s,t="Memproses...") => { document.getElementById('loader').classList.toggle('hidden',!s); document.getElementById('loader-text').innerText=t; };
-        const showToast = (m, t='success') => { 
-            const el=document.getElementById('toast'); document.getElementById('toast-msg').innerText=m; 
-            el.className=`fixed top-6 right-6 z-[60] px-6 py-4 rounded-lg shadow-xl text-white font-bold flex items-center gap-3 ${t==='success'?'bg-green-600':'bg-red-600'}`;
-            el.classList.remove('hidden','translate-x-full'); setTimeout(()=>el.classList.add('translate-x-full'),3000); 
-        };
+        const showToast = (m,t='success') => { const el=document.getElementById('toast'); document.getElementById('toast-msg').innerText=m; el.className=`fixed top-6 right-6 z-[60] px-6 py-4 rounded-lg shadow-xl text-white font-bold flex items-center gap-3 ${t==='success'?'bg-green-600':'bg-red-600'}`; el.classList.remove('hidden','translate-x-full'); setTimeout(()=>el.classList.add('translate-x-full'),3000); };
         const openImageModal = (s) => { if(s){ document.getElementById('modal-img-content').src=s; document.getElementById('image-modal').classList.remove('hidden'); }};
         const closeImageModal = () => document.getElementById('image-modal').classList.add('hidden');
         
-        const switchLogin = (r) => {
-            document.getElementById('form-student').classList.toggle('hidden',r!=='student');
-            document.getElementById('form-lecturer').classList.toggle('hidden',r!=='lecturer');
-            document.getElementById('tab-student').className = r==='student' ? 'flex-1 pb-2 font-bold text-green-600 border-b-2 border-green-600' : 'flex-1 pb-2 font-bold text-gray-400 border-b-2 border-transparent';
-            document.getElementById('tab-lecturer').className = r==='lecturer' ? 'flex-1 pb-2 font-bold text-blue-600 border-b-2 border-blue-600' : 'flex-1 pb-2 font-bold text-gray-400 border-b-2 border-transparent';
-        };
+        const switchLogin = (r) => { document.getElementById('form-student').classList.toggle('hidden',r!=='student'); document.getElementById('form-lecturer').classList.toggle('hidden',r!=='lecturer'); document.getElementById('tab-student').className = r==='student' ? 'flex-1 pb-2 font-bold text-green-600 border-b-2 border-green-600' : 'flex-1 pb-2 font-bold text-gray-400 border-b-2 border-transparent'; document.getElementById('tab-lecturer').className = r==='lecturer' ? 'flex-1 pb-2 font-bold text-blue-600 border-b-2 border-blue-600' : 'flex-1 pb-2 font-bold text-gray-400 border-b-2 border-transparent'; };
         const logout = () => location.reload();
 
         const da=document.getElementById('drop-area');
@@ -214,143 +231,24 @@
         ['dragenter','dragover'].forEach(e=>da.addEventListener(e,()=>da.classList.add('bg-blue-50','border-blue-400'),false));
         ['dragleave','drop'].forEach(e=>da.addEventListener(e,()=>da.classList.remove('bg-blue-50','border-blue-400'),false));
         da.addEventListener('drop',e=>handleFiles(e.dataTransfer.files),false);
-        function handleFiles(f){
-            if(f.length){
-                const r=new FileReader(); r.onload=e=>{
-                    const i=new Image(); i.src=e.target.result; i.onload=()=>{
-                        const c=document.createElement('canvas'), ctx=c.getContext('2d'), max=600;
-                        let w=i.width, h=i.height; if(w>max){ h*=max/w; w=max; }
-                        c.width=w; c.height=h; ctx.drawImage(i,0,0,w,h);
-                        const b64=c.toDataURL('image/jpeg',0.6);
-                        document.getElementById('std-img').src=b64; document.getElementById('std-img').classList.remove('hidden');
-                        pendingImageBase64=b64; document.getElementById('img-status').innerText="Sedia disimpan";
-                    }
-                }; r.readAsDataURL(f[0]);
-            }
-        }
+        function handleFiles(f){ if(f.length){ const r=new FileReader(); r.onload=e=>{ const i=new Image(); i.src=e.target.result; i.onload=()=>{ const c=document.createElement('canvas'), ctx=c.getContext('2d'), max=600; let w=i.width, h=i.height; if(w>max){ h*=max/w; w=max; } c.width=w; c.height=h; ctx.drawImage(i,0,0,w,h); const b64=c.toDataURL('image/jpeg',0.6); document.getElementById('std-img').src=b64; document.getElementById('std-img').classList.remove('hidden'); pendingImageBase64=b64; document.getElementById('img-status').innerText="Sedia disimpan"; } }; r.readAsDataURL(f[0]); } }
 
-        function loginStudent(e){
-            e.preventDefault(); showLoader(true);
-            fetch(WEB_APP_URL,{method:"POST",body:JSON.stringify({action:"login_student",no_kp:document.getElementById('login-ic').value})})
-            .then(r=>r.json()).then(res=>{ showLoader(false); if(res.result==='success'){ currentStudent=res.data; loadStudentView(res.data); } else showToast(res.message,'error'); });
-        }
-        function loadStudentView(d){
-            document.getElementById('view-login').classList.add('hidden'); document.getElementById('view-student').classList.remove('hidden');
-            document.getElementById('std-name').innerText=d.nama; document.getElementById('std-id').innerText="ID: "+d.id;
-            document.getElementById('std-kp').innerText="KP: "+d.no_kp; document.getElementById('std-class').innerText=d.kelas;
-            document.getElementById('std-siri').innerText=d.siri||"-"; document.getElementById('std-group').innerText=d.kumpulan||"-";
-            document.getElementById('std-alahan').value=d.alahan||""; document.getElementById('std-ubat').value=d.ubat||""; document.getElementById('std-tel').value=d.tel_kecemasan||"";
-            if(d.url_gambar){ document.getElementById('std-img').src=d.url_gambar; document.getElementById('std-img').classList.remove('hidden'); document.getElementById('img-status').innerText="Profil Semasa"; }
-        }
-        function updateStudentData(){
-            showLoader(true); const b={action:"update_student_info",no_kp:currentStudent.no_kp,nama:currentStudent.nama,alahan:document.getElementById('std-alahan').value,ubat:document.getElementById('std-ubat').value,tel_kecemasan:document.getElementById('std-tel').value};
-            if(pendingImageBase64){ b.image_base64=pendingImageBase64; b.image_mime="image/jpeg"; }
-            fetch(WEB_APP_URL,{method:"POST",body:JSON.stringify(b)}).then(r=>r.json()).then(res=>{ 
-                showLoader(false); 
-                if(res.result === 'success'){
-                    showToast(res.message,'success');
-                    if(res.new_url) { currentStudent.url_gambar = res.new_url; document.getElementById('std-img').src = res.new_url; }
-                } else showToast(res.message,'error'); 
-            });
-        }
+        function loginStudent(e){ e.preventDefault(); showLoader(true); fetch(WEB_APP_URL,{method:"POST",body:JSON.stringify({action:"login_student",no_kp:document.getElementById('login-ic').value})}).then(r=>r.json()).then(res=>{ showLoader(false); if(res.result==='success'){ currentStudent=res.data; loadStudentView(res.data); } else showToast(res.message,'error'); }); }
+        function loadStudentView(d){ document.getElementById('view-login').classList.add('hidden'); document.getElementById('view-student').classList.remove('hidden'); document.getElementById('std-name').innerText=d.nama; document.getElementById('std-id').innerText="ID: "+d.id; document.getElementById('std-kp').innerText="KP: "+d.no_kp; document.getElementById('std-class').innerText=d.kelas; document.getElementById('std-siri').innerText=d.siri||"-"; document.getElementById('std-group').innerText=d.kumpulan||"-"; document.getElementById('std-alahan').value=d.alahan||""; document.getElementById('std-ubat').value=d.ubat||""; document.getElementById('std-tel').value=d.tel_kecemasan||""; if(d.url_gambar){ document.getElementById('std-img').src=d.url_gambar; document.getElementById('std-img').classList.remove('hidden'); document.getElementById('img-status').innerText="Profil Semasa"; } }
+        function updateStudentData(){ showLoader(true); const b={action:"update_student_info",no_kp:currentStudent.no_kp,nama:currentStudent.nama,alahan:document.getElementById('std-alahan').value,ubat:document.getElementById('std-ubat').value,tel_kecemasan:document.getElementById('std-tel').value}; if(pendingImageBase64){ b.image_base64=pendingImageBase64; b.image_mime="image/jpeg"; } fetch(WEB_APP_URL,{method:"POST",body:JSON.stringify(b)}).then(r=>r.json()).then(res=>{ showLoader(false); if(res.result==='success'){ showToast(res.message,'success'); if(res.new_url){ currentStudent.url_gambar=res.new_url; document.getElementById('std-img').src=res.new_url; } } else showToast(res.message,'error'); }); }
 
-        function loginLecturer(e){
-            e.preventDefault(); showLoader(true);
-            fetch(WEB_APP_URL,{method:"POST",body:JSON.stringify({action:"login_lecturer",email:document.getElementById('login-email').value,password:document.getElementById('login-pass').value})})
-            .then(r=>r.json()).then(res=>{ showLoader(false); if(res.result==='success'){ allStudentsCache=res.students_list; document.getElementById('lec-name').innerText=res.nama; document.getElementById('view-login').classList.add('hidden'); document.getElementById('view-lecturer').classList.remove('hidden'); initLecDashboard(); } else showToast(res.message,'error'); });
-        }
-        function initLecDashboard(){
-            const c=[...new Set(allStudentsCache.map(s=>s.kelas.trim()))].sort(), s=document.getElementById('sel-class'), s2=document.getElementById('sel-class-summary');
-            s.innerHTML='<option value="">-- Pilih Kelas --</option>'; s2.innerHTML='<option value="">-- Pilih Kelas --</option>';
-            s2.innerHTML+='<option value="SEMUA">--- SEMUA KELAS ---</option>';
-            c.forEach(x=>{ s.innerHTML+=`<option value="${x}">${x}</option>`; s2.innerHTML+=`<option value="${x}">${x}</option>`; });
-        }
-        function filterStudents(){
-            const c=document.getElementById('sel-class').value, s=document.getElementById('sel-student');
-            s.innerHTML='<option value="">-- Pilih Pelajar --</option>'; s.disabled=!c; resetLecImg();
-            if(c) {
-                const clean = t => String(t).trim();
-                const filtered = allStudentsCache.filter(x=>clean(x.kelas)===clean(c));
-                filtered.sort((a,b)=>a.nama.localeCompare(b.nama));
-                filtered.forEach(x=>{ s.innerHTML+=`<option value="${x.id}">${x.nama}</option>`; });
-            }
-        }
-        function previewStudentImage(){
-            const id=document.getElementById('sel-student').value, img=document.getElementById('lec-view-img'), ph=document.getElementById('lec-view-placeholder');
-            if(!id){ resetLecImg(); return; }
-            const st=allStudentsCache.find(x=>x.id==id);
-            if(st&&st.url_gambar){ img.src=st.url_gambar; img.classList.remove('hidden'); ph.classList.add('hidden'); } else resetLecImg();
-        }
+        function loginLecturer(e){ e.preventDefault(); showLoader(true); fetch(WEB_APP_URL,{method:"POST",body:JSON.stringify({action:"login_lecturer",email:document.getElementById('login-email').value,password:document.getElementById('login-pass').value})}).then(r=>r.json()).then(res=>{ showLoader(false); if(res.result==='success'){ allStudentsCache=res.students_list; document.getElementById('lec-name').innerText=res.nama; document.getElementById('view-login').classList.add('hidden'); document.getElementById('view-lecturer').classList.remove('hidden'); initLecDashboard(); } else showToast(res.message,'error'); }); }
+        function initLecDashboard(){ const c=[...new Set(allStudentsCache.map(s=>s.kelas.trim()))].sort(), s=document.getElementById('sel-class'), s2=document.getElementById('sel-class-summary'); s.innerHTML='<option value="">-- Pilih Kelas --</option>'; s2.innerHTML='<option value="">-- Pilih Kelas --</option>'; s2.innerHTML+='<option value="SEMUA">--- SEMUA KELAS ---</option>'; c.forEach(x=>{ s.innerHTML+=`<option value="${x}">${x}</option>`; s2.innerHTML+=`<option value="${x}">${x}</option>`; }); }
+        function filterStudents(){ const c=document.getElementById('sel-class').value, s=document.getElementById('sel-student'); s.innerHTML='<option value="">-- Pilih Pelajar --</option>'; s.disabled=!c; resetLecImg(); if(c) { const clean=t=>String(t).trim(); const f=allStudentsCache.filter(x=>clean(x.kelas)===clean(c)); f.sort((a,b)=>a.nama.localeCompare(b.nama)); f.forEach(x=>{ s.innerHTML+=`<option value="${x.id}">${x.nama}</option>`; }); } }
+        function previewStudentImage(){ const id=document.getElementById('sel-student').value, img=document.getElementById('lec-view-img'), ph=document.getElementById('lec-view-placeholder'); if(!id){ resetLecImg(); return; } const st=allStudentsCache.find(x=>x.id==id); if(st&&st.url_gambar){ img.src=st.url_gambar; img.classList.remove('hidden'); ph.classList.add('hidden'); } else resetLecImg(); }
         function resetLecImg(){ document.getElementById('lec-view-img').classList.add('hidden'); document.getElementById('lec-view-placeholder').classList.remove('hidden'); }
         
-        function loadGradingForm(){ 
-            const stdId = document.getElementById('sel-student').value;
-            if(!stdId) return showToast('Pilih pelajar!','error'); 
-            showLoader(true);
-            fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify({ action: "get_student_marks", student_id: stdId }) })
-            .then(r => r.json())
-            .then(res => {
-                showLoader(false);
-                if(res.result === 'success') {
-                    const d = res.data;
-                    ['t1_m1','t1_m2','t2_m1','t2_m2','t2_m3','t3_hp3_1','t3_hp3_2','t3_hp3_3','t3_hp3_4','t3_hp3_5','t3_hp8_1','t3_hp8_2','t3_hp8_3','t3_hp8_4','t3_hp8_5','t3_hp8_6','t3_hp8_7'].forEach(id => {
-                        document.getElementById(id).value = d[id] || "";
-                    });
-                    document.getElementById('grading-area').classList.remove('hidden'); 
-                    switchMarkTab('t1');
-                    ['kuiz','hp4','hp5','hp3','hp8i','hp8k'].forEach(calcTotal);
-                } else showToast("Gagal muat markah", 'error');
-            });
-        }
-
-        function switchMarkTab(id){
-            document.querySelectorAll('.mark-form').forEach(e=>e.classList.add('hidden')); 
-            document.getElementById('form-'+id).classList.remove('hidden'); 
-            ['t1','t2','t3'].forEach(x => {
-                const btn = document.getElementById('tab-mark-'+x);
-                btn.className = x===id ? "flex-1 py-2 px-4 rounded-lg text-xs font-bold border transition tab-active shadow-md" : "flex-1 py-2 px-4 rounded-lg text-xs font-bold border transition tab-inactive hover:bg-gray-50";
-            });
-        }
-
-        function calcTotal(group) {
-            let total = 0, max = 0;
-            const fields = document.querySelectorAll('.cal-' + group);
-            fields.forEach(f => {
-                total += parseFloat(f.value || 0);
-                max += parseFloat(f.getAttribute('max'));
-            });
-            document.getElementById('total_' + group).innerText = `${total.toFixed(1)} / ${max}`;
-        }
-
-        function showLecSection(sec){
-            document.getElementById('sec-entry').classList.toggle('hidden',sec!=='entry'); document.getElementById('sec-summary').classList.toggle('hidden',sec!=='summary');
-            document.getElementById('btn-sec-entry').className=sec==='entry'?'bg-blue-600 text-white px-6 py-2 rounded-lg font-bold text-sm shadow transition':'bg-white text-gray-600 px-6 py-2 rounded-lg font-bold text-sm shadow border hover:bg-gray-50 transition';
-            document.getElementById('btn-sec-summary').className=sec==='summary'?'bg-blue-600 text-white px-6 py-2 rounded-lg font-bold text-sm shadow transition':'bg-white text-gray-600 px-6 py-2 rounded-lg font-bold text-sm shadow border hover:bg-gray-50 transition';
-        }
-        function submitMark(sn){
-            if(!confirm("Simpan markah?"))return; showLoader(true);
-            let p={action:"save_mark",sheet_name:sn,student_id:document.getElementById('sel-student').value};
-            if(sn==='MARKAH_TUGASAN1'){ p.m1=document.getElementById('t1_m1').value; p.m2=document.getElementById('t1_m2').value; }
-            else if(sn==='MARKAH_TUGASAN2'){ p.m1=document.getElementById('t2_m1').value; p.m2=document.getElementById('t2_m2').value; p.m3=document.getElementById('t2_m3').value; }
-            else { for(let i=1;i<=5;i++)p[`hp3_${i}`]=document.getElementById(`t3_hp3_${i}`).value; for(let i=1;i<=7;i++)p[`hp8_${i}`]=document.getElementById(`t3_hp8_${i}`).value; }
-            fetch(WEB_APP_URL,{method:"POST",body:JSON.stringify(p)}).then(r=>r.json()).then(res=>{ showLoader(false); showToast(res.message,res.result); });
-        }
-        function loadSummaryData(){
-            const c=document.getElementById('sel-class-summary').value; if(!c)return showToast('Pilih kelas!','error');
-            showLoader(true);
-            fetch(WEB_APP_URL,{method:"POST",body:JSON.stringify({action:"get_summary_data",kelas:c})})
-            .then(r=>r.json()).then(res=>{
-                showLoader(false);
-                if(res.result==='success'){
-                    const tb=document.getElementById('summary-body'); tb.innerHTML='';
-                    if(res.data.length===0) tb.innerHTML='<tr><td colspan="9" class="text-center py-8 text-gray-400">Tiada data.</td></tr>';
-                    else res.data.forEach(d=>{
-                        let cl='text-gray-600'; if(d.gred.startsWith('A'))cl='text-green-600'; else if(d.gred.startsWith('B'))cl='text-blue-600'; else if(d.gred==='F')cl='text-red-600';
-                        tb.innerHTML+=`<tr class="hover:bg-gray-50"><td class="text-left font-bold text-gray-700 py-3 pl-4">${d.nama}</td><td class="text-center text-xs font-mono font-bold text-gray-500">${d.kuiz}</td><td class="text-center text-xs font-mono">${d.hp4}</td><td class="text-center text-xs font-mono">${d.hp5}</td><td class="text-center text-xs font-mono">${d.hp3}</td><td class="text-center text-xs font-mono">${d.hp8i}</td><td class="text-center text-xs font-mono">${d.hp8k}</td><td class="text-center font-extrabold text-white bg-slate-700 text-sm shadow-sm rounded">${d.total}</td><td class="text-center font-extrabold ${cl} text-sm">${d.gred}</td></tr>`;
-                    });
-                } else showToast(res.message,'error');
-            });
-        }
+        function loadGradingForm(){ const stdId=document.getElementById('sel-student').value; if(!stdId)return showToast('Pilih pelajar!','error'); showLoader(true); fetch(WEB_APP_URL,{method:"POST",body:JSON.stringify({action:"get_student_marks",student_id:stdId})}).then(r=>r.json()).then(res=>{ showLoader(false); if(res.result==='success'){ const d=res.data; ['t1_m1','t1_m2','t2_m1','t2_m2','t2_m3','t3_hp3_1','t3_hp3_2','t3_hp3_3','t3_hp3_4','t3_hp3_5','t3_hp8_1','t3_hp8_2','t3_hp8_3','t3_hp8_4','t3_hp8_5','t3_hp8_6','t3_hp8_7'].forEach(id=>{ document.getElementById(id).value=d[id]||""; }); document.getElementById('grading-area').classList.remove('hidden'); switchMarkTab('t1'); ['kuiz','hp4','hp5','hp3','hp8i','hp8k'].forEach(calcTotal); } else showToast("Gagal muat markah",'error'); }); }
+        function switchMarkTab(id){ document.querySelectorAll('.mark-form').forEach(e=>e.classList.add('hidden')); document.getElementById('form-'+id).classList.remove('hidden'); ['t1','t2','t3'].forEach(x=>{ const btn=document.getElementById('tab-mark-'+x); btn.className=x===id?"flex-1 py-2 px-4 rounded-lg text-xs font-bold border transition tab-active shadow-md":"flex-1 py-2 px-4 rounded-lg text-xs font-bold border transition tab-inactive hover:bg-gray-50"; }); }
+        function calcTotal(g){ let t=0, m=0; document.querySelectorAll('.cal-'+g).forEach(f=>{ t+=parseFloat(f.value||0); m+=parseFloat(f.getAttribute('max')); }); document.getElementById('total_'+g).innerText=`${t.toFixed(1)} / ${m}`; }
+        function showLecSection(s){ document.getElementById('sec-entry').classList.toggle('hidden',s!=='entry'); document.getElementById('sec-summary').classList.toggle('hidden',s!=='summary'); document.getElementById('btn-sec-entry').className=s==='entry'?'bg-blue-600 text-white px-6 py-2 rounded-lg font-bold text-sm shadow transition':'bg-white text-gray-600 px-6 py-2 rounded-lg font-bold text-sm shadow border hover:bg-gray-50 transition'; document.getElementById('btn-sec-summary').className=s==='summary'?'bg-blue-600 text-white px-6 py-2 rounded-lg font-bold text-sm shadow transition':'bg-white text-gray-600 px-6 py-2 rounded-lg font-bold text-sm shadow border hover:bg-gray-50 transition'; }
+        function submitMark(sn){ if(!confirm("Simpan?"))return; showLoader(true); let p={action:"save_mark",sheet_name:sn,student_id:document.getElementById('sel-student').value}; if(sn==='MARKAH_TUGASAN1'){ p.m1=document.getElementById('t1_m1').value; p.m2=document.getElementById('t1_m2').value; } else if(sn==='MARKAH_TUGASAN2'){ p.m1=document.getElementById('t2_m1').value; p.m2=document.getElementById('t2_m2').value; p.m3=document.getElementById('t2_m3').value; } else { for(let i=1;i<=5;i++)p[`hp3_${i}`]=document.getElementById(`t3_hp3_${i}`).value; for(let i=1;i<=7;i++)p[`hp8_${i}`]=document.getElementById(`t3_hp8_${i}`).value; } fetch(WEB_APP_URL,{method:"POST",body:JSON.stringify(p)}).then(r=>r.json()).then(res=>{ showLoader(false); showToast(res.message,res.result); }); }
+        function loadSummaryData(){ const c=document.getElementById('sel-class-summary').value; if(!c)return showToast('Pilih kelas!','error'); showLoader(true); fetch(WEB_APP_URL,{method:"POST",body:JSON.stringify({action:"get_summary_data",kelas:c})}).then(r=>r.json()).then(res=>{ showLoader(false); if(res.result==='success'){ document.getElementById('summary-stats').classList.remove('hidden'); document.getElementById('stat-mean').innerText=res.stats.mean; document.getElementById('stat-std').innerText=res.stats.stdDev; const tb=document.getElementById('summary-body'); tb.innerHTML=''; if(res.data.length===0)tb.innerHTML='<tr><td colspan="10" class="text-center py-8 text-gray-400">Tiada data.</td></tr>'; else res.data.forEach(d=>{ let cl='text-gray-600'; if(d.gred.startsWith('A'))cl='text-green-600'; else if(d.gred.startsWith('B'))cl='text-blue-600'; else if(d.gred==='F')cl='text-red-600'; tb.innerHTML+=`<tr class="hover:bg-gray-50 border-b"><td class="py-3 pl-4 font-bold text-gray-700 text-xs text-left">${d.nama}</td><td class="hidden md:table-cell text-center text-xs text-gray-500">${d.kelas}</td><td class="text-center font-mono text-purple-700 bg-purple-50/30 font-bold border-l">${d.kuiz}</td><td class="text-center font-mono text-orange-700 border-l">${d.hp4}</td><td class="text-center font-mono text-orange-700 border-r">${d.hp5}</td><td class="text-center font-mono text-green-700 border-l">${d.hp3}</td><td class="text-center font-mono text-green-700">${d.hp8i}</td><td class="text-center font-mono text-green-700 border-r">${d.hp8k}</td><td class="text-center font-black text-white bg-slate-700 text-sm shadow-inner">${d.total}</td><td class="text-center font-black ${cl} text-sm bg-gray-100 border-l">${d.gred}</td></tr>`; }); } else showToast(res.message,'error'); }); }
     </script>
 </body>
 </html>
