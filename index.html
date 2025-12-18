@@ -101,7 +101,7 @@
 
         <div class="flex mb-6 space-x-2">
             <button onclick="showLecSection('entry')" id="btn-sec-entry" class="px-6 py-2 bg-blue-600 text-white rounded shadow font-bold text-sm">ISI MARKAH</button>
-            <button onclick="showLecSection('summary')" id="btn-sec-summary" class="px-6 py-2 bg-white text-gray-600 border rounded shadow font-bold text-sm hover:bg-gray-50">RUMUSAN KELAS</button>
+            <button onclick="showLecSection('summary')" id="btn-sec-summary" class="px-6 py-2 bg-white text-gray-600 border rounded shadow font-bold text-sm hover:bg-gray-50">RUMUSAN</button>
         </div>
 
         <div id="sec-entry">
@@ -254,8 +254,8 @@
             .then(r=>r.json()).then(res=>{ showLoader(false); if(res.result==='success'){ allStudentsCache=res.students_list; document.getElementById('lec-name').innerText=res.nama; document.getElementById('view-login').classList.add('hidden'); document.getElementById('view-lecturer').classList.remove('hidden'); initLecDashboard(); } else showToast(res.message,'error'); });
         }
         function initLecDashboard(){
-            // MAP KELAS (BUANG SPACE DENGAN TRIM)
-            const c=[...new Set(allStudentsCache.map(s=>s.kelas.trim()))].sort(); 
+            // MAP KELAS (BUANG SPACE DENGAN TRIM & SORT)
+            const c = [...new Set(allStudentsCache.map(s => String(s.kelas).replace(/\s+/g, ' ').trim()))].sort();
             const s=document.getElementById('sel-class'), s2=document.getElementById('sel-class-summary');
             s.innerHTML='<option value="">-- Pilih Kelas --</option>'; 
             s2.innerHTML='<option value="">-- Pilih Kelas --</option>';
@@ -263,30 +263,26 @@
             c.forEach(x=>{ s.innerHTML+=`<option value="${x}">${x}</option>`; s2.innerHTML+=`<option value="${x}">${x}</option>`; });
         }
         
-        // --- FILTER YANG DIBETULKAN UNTUK MASALAH ANDA ---
-        // Fungsi ini membersihkan semua teks sebelum membandingkan
+        // --- FILTER YANG DIBETULKAN (KEBAL SPACE/TRIM) ---
         function filterStudents(){
-            const c=document.getElementById('sel-class').value;
-            const s=document.getElementById('sel-student');
+            const c = document.getElementById('sel-class').value;
+            const s = document.getElementById('sel-student');
             
             s.innerHTML='<option value="">-- Pilih Pelajar --</option>'; 
             s.disabled = !c; 
             resetLecImg();
 
             if(c) {
-                // Logik Penapisan 'Kebal' (Buang space, tukar jadi string)
-                const filtered = allStudentsCache.filter(x => {
-                    const kelasData = String(x.kelas).trim();
-                    const kelasPilih = String(c).trim();
-                    return kelasData === kelasPilih;
-                });
+                const normalize = (str) => String(str).replace(/\s+/g, ' ').trim();
+                const selectedClass = normalize(c);
 
+                const filtered = allStudentsCache.filter(x => normalize(x.kelas) === selectedClass);
+
+                // DIAGNOSIS (Boleh padam alert ini jika sudah ok)
                 if(filtered.length === 0) {
-                    // Jika masih 0, cuba debug di console
-                    console.warn("Tiada padanan. Kelas Data:", allStudentsCache.map(x=>x.kelas), "Kelas Pilih:", c);
+                    console.log("Debug: Tiada pelajar.", "Pilih:", selectedClass, "Data:", allStudentsCache.map(x=>normalize(x.kelas)));
                 }
 
-                // Susun ikut nama
                 filtered.sort((a,b) => a.nama.localeCompare(b.nama));
                 
                 filtered.forEach(x => {
