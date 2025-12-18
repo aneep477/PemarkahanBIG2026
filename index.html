@@ -254,44 +254,17 @@
             .then(r=>r.json()).then(res=>{ showLoader(false); if(res.result==='success'){ allStudentsCache=res.students_list; document.getElementById('lec-name').innerText=res.nama; document.getElementById('view-login').classList.add('hidden'); document.getElementById('view-lecturer').classList.remove('hidden'); initLecDashboard(); } else showToast(res.message,'error'); });
         }
         function initLecDashboard(){
-            // MAP KELAS (BUANG SPACE DENGAN TRIM & SORT)
-            const c = [...new Set(allStudentsCache.map(s => String(s.kelas).replace(/\s+/g, ' ').trim()))].sort();
-            const s=document.getElementById('sel-class'), s2=document.getElementById('sel-class-summary');
-            s.innerHTML='<option value="">-- Pilih Kelas --</option>'; 
-            s2.innerHTML='<option value="">-- Pilih Kelas --</option>';
-            s2.innerHTML+='<option value="SEMUA">--- SEMUA KELAS (KESELURUHAN) ---</option>'; 
+            const c=[...new Set(allStudentsCache.map(s=>s.kelas))].sort(), s=document.getElementById('sel-class'), s2=document.getElementById('sel-class-summary');
+            s.innerHTML='<option value="">-- Pilih Kelas --</option>'; s2.innerHTML='<option value="">-- Pilih Kelas --</option>';
+            s2.innerHTML+='<option value="SEMUA">--- SEMUA KELAS (KESELURUHAN) ---</option>'; // New Option
             c.forEach(x=>{ s.innerHTML+=`<option value="${x}">${x}</option>`; s2.innerHTML+=`<option value="${x}">${x}</option>`; });
         }
         
-        // --- FILTER YANG DIBETULKAN (KEBAL SPACE/TRIM) ---
+        // --- FILTER (FRONTEND FIX) ---
         function filterStudents(){
-            const c = document.getElementById('sel-class').value;
-            const s = document.getElementById('sel-student');
-            
-            s.innerHTML='<option value="">-- Pilih Pelajar --</option>'; 
-            s.disabled = !c; 
-            resetLecImg();
-
-            if(c) {
-                const normalize = (str) => String(str).replace(/\s+/g, ' ').trim();
-                const selectedClass = normalize(c);
-
-                const filtered = allStudentsCache.filter(x => normalize(x.kelas) === selectedClass);
-
-                // DIAGNOSIS (Boleh padam alert ini jika sudah ok)
-                if(filtered.length === 0) {
-                    console.log("Debug: Tiada pelajar.", "Pilih:", selectedClass, "Data:", allStudentsCache.map(x=>normalize(x.kelas)));
-                }
-
-                filtered.sort((a,b) => a.nama.localeCompare(b.nama));
-                
-                filtered.forEach(x => {
-                    let opt = document.createElement('option');
-                    opt.value = x.id;
-                    opt.innerText = x.nama;
-                    s.appendChild(opt);
-                });
-            }
+            const c=document.getElementById('sel-class').value, s=document.getElementById('sel-student');
+            s.innerHTML='<option value="">-- Pilih Pelajar --</option>'; s.disabled=!c; resetLecImg();
+            if(c) allStudentsCache.filter(x=>x.kelas===c).forEach(x=>s.innerHTML+=`<option value="${x.id}">${x.nama}</option>`);
         }
 
         function previewStudentImage(){
