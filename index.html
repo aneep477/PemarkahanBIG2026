@@ -254,22 +254,48 @@
             .then(r=>r.json()).then(res=>{ showLoader(false); if(res.result==='success'){ allStudentsCache=res.students_list; document.getElementById('lec-name').innerText=res.nama; document.getElementById('view-login').classList.add('hidden'); document.getElementById('view-lecturer').classList.remove('hidden'); initLecDashboard(); } else showToast(res.message,'error'); });
         }
         function initLecDashboard(){
-            const c=[...new Set(allStudentsCache.map(s=>s.kelas))].sort(), s=document.getElementById('sel-class'), s2=document.getElementById('sel-class-summary');
+            // Map kelas, bersihkan, unikkan
+            const c=[...new Set(allStudentsCache.map(s=>s.kelas.trim()))].sort(); 
+            const s=document.getElementById('sel-class'), s2=document.getElementById('sel-class-summary');
             s.innerHTML='<option value="">-- Pilih Kelas --</option>'; 
             s2.innerHTML='<option value="">-- Pilih Kelas --</option>';
-            s2.innerHTML+='<option value="SEMUA">--- SEMUA KELAS (KESELURUHAN) ---</option>';
+            s2.innerHTML+='<option value="SEMUA">--- SEMUA KELAS (KESELURUHAN) ---</option>'; 
             c.forEach(x=>{ s.innerHTML+=`<option value="${x}">${x}</option>`; s2.innerHTML+=`<option value="${x}">${x}</option>`; });
         }
         
-        // --- FIX PENTING: PENAPIS NAMA PELAJAR ---
+        // --- FILTER YANG DIBETULKAN (TRIM + CLEAN) ---
         function filterStudents(){
-            const c=document.getElementById('sel-class').value, s=document.getElementById('sel-student');
-            s.innerHTML='<option value="">-- Pilih Pelajar --</option>'; s.disabled=!c; resetLecImg();
+            const c=document.getElementById('sel-class').value;
+            const s=document.getElementById('sel-student');
+            
+            s.innerHTML='<option value="">-- Pilih Pelajar --</option>'; 
+            s.disabled = !c; 
+            resetLecImg();
+
             if(c) {
-                // Tukar kedua-duanya ke String dan Trim supaya "5 " == "5"
-                const filtered = allStudentsCache.filter(x => String(x.kelas).trim() == String(c).trim());
+                // Logik penapisan yang kebal terhadap simbol/jarak tersembunyi
+                const filtered = allStudentsCache.filter(x => {
+                    const kelasData = String(x.kelas).replace(/\s+/g, ' ').trim();
+                    const kelasPilih = String(c).replace(/\s+/g, ' ').trim();
+                    return kelasData === kelasPilih;
+                });
+
+                // DIAGNOSIS: Jika 0 pelajar dijumpai, beritahu pengguna
+                if(filtered.length === 0) {
+                    alert("Amaran: Tiada pelajar dijumpai untuk kelas ini. Sila semak ejaan kelas di Google Sheet.");
+                }
+
+                // Susun ikut nama
                 filtered.sort((a,b) => a.nama.localeCompare(b.nama));
-                filtered.forEach(x => s.innerHTML += `<option value="${x.id}">${x.nama}</option>`);
+                
+                // Masukkan dalam dropdown
+                filtered.forEach(x => {
+                    // Buat element option baru (cara lebih selamat daripada innerHTML +=)
+                    let opt = document.createElement('option');
+                    opt.value = x.id;
+                    opt.innerText = x.nama;
+                    s.appendChild(opt);
+                });
             }
         }
 
