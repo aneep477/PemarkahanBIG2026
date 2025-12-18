@@ -16,8 +16,8 @@
         @keyframes spinner { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .tab-active { background-color: #10b981; color: white; border-color: #10b981; }
         .tab-inactive { background-color: white; color: #6b7280; border-color: #e5e7eb; }
-        .input-mark { text-align: center; border: 1px solid #d1d5db; border-radius: 0.5rem; padding: 0.5rem; width: 100%; transition: all 0.2s; }
-        .input-mark:focus { border-color: #10b981; outline: none; ring: 2px solid #a7f3d0; }
+        .input-mark { text-align: center; border: 1px solid #d1d5db; border-radius: 0.5rem; padding: 0.5rem; width: 100%; transition: all 0.2s; font-weight: bold; }
+        .input-mark:focus { border-color: #10b981; outline: none; ring: 2px solid #a7f3d0; background-color: #f0fdf4; }
         .styled-table th { background-color: #f3f4f6; padding: 12px; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: #374151; }
         .styled-table td { padding: 12px; border-bottom: 1px solid #e5e7eb; font-size: 0.85rem; }
     </style>
@@ -107,9 +107,9 @@
                     <div class="md:col-span-2"><button onclick="loadGradingForm()" class="w-full bg-blue-600 text-white py-3 rounded font-bold text-sm shadow hover:bg-blue-700">MULA MENILAI</button></div>
                 </div>
                 <div class="w-full md:w-1/4 flex justify-center">
-                    <div class="w-32 aspect-[3/4] bg-gray-200 rounded-lg overflow-hidden relative cursor-zoom-in group" onclick="if(this.querySelector('img').src) openImageModal(this.querySelector('img').src)">
+                    <div class="w-56 aspect-[3/4] bg-gray-200 rounded-lg overflow-hidden relative cursor-zoom-in group shadow-lg" onclick="if(this.querySelector('img').src) openImageModal(this.querySelector('img').src)">
                         <img id="lec-view-img" class="w-full h-full object-cover hidden">
-                        <div id="lec-view-placeholder" class="w-full h-full flex flex-col items-center justify-center text-gray-400"><i class="fas fa-user text-4xl mb-1"></i><span class="text-[10px] font-bold">FOTO</span></div>
+                        <div id="lec-view-placeholder" class="w-full h-full flex flex-col items-center justify-center text-gray-400"><i class="fas fa-user text-5xl mb-1"></i><span class="text-xs font-bold">FOTO</span></div>
                     </div>
                 </div>
             </div>
@@ -281,13 +281,11 @@
             .then(r=>r.json()).then(res=>{ showLoader(false); if(res.result==='success'){ allStudentsCache=res.students_list; document.getElementById('lec-name').innerText=res.nama; document.getElementById('view-login').classList.add('hidden'); document.getElementById('view-lecturer').classList.remove('hidden'); initLecDashboard(); } else showToast(res.message,'error'); });
         }
         function initLecDashboard(){
-            const c=[...new Set(allStudentsCache.map(s=>s.kelas.trim()))].sort(), s=document.getElementById('sel-class'), s2=document.getElementById('sel-class-summary');
+            const c=[...new Set(allStudentsCache.map(s=>s.kelas))].sort(), s=document.getElementById('sel-class'), s2=document.getElementById('sel-class-summary');
             s.innerHTML='<option value="">-- Pilih Kelas --</option>'; s2.innerHTML='<option value="">-- Pilih Kelas --</option>';
             s2.innerHTML+='<option value="SEMUA">--- SEMUA KELAS (KESELURUHAN) ---</option>';
             c.forEach(x=>{ s.innerHTML+=`<option value="${x}">${x}</option>`; s2.innerHTML+=`<option value="${x}">${x}</option>`; });
         }
-        
-        // --- FILTER ---
         function filterStudents(){
             const c=document.getElementById('sel-class').value, s=document.getElementById('sel-student');
             s.innerHTML='<option value="">-- Pilih Pelajar --</option>'; s.disabled=!c; resetLecImg();
@@ -306,18 +304,35 @@
         }
         function resetLecImg(){ document.getElementById('lec-view-img').classList.add('hidden'); document.getElementById('lec-view-placeholder').classList.remove('hidden'); }
         
-        // --- UX BARU: TAB NAVIGATION ---
+        // --- FUNGSI FETCHER BARU (UNTUK TARIK MARKAH) ---
         function loadGradingForm(){ 
-            if(!document.getElementById('sel-student').value)return showToast('Pilih pelajar!','error'); 
-            document.getElementById('grading-area').classList.remove('hidden'); 
-            switchMarkTab('t1'); // Default buka tab pertama
+            const stdId = document.getElementById('sel-student').value;
+            if(!stdId) return showToast('Pilih pelajar!','error'); 
+            
+            showLoader(true, "Memuat turun markah...");
+            
+            // Panggil API untuk dapatkan markah
+            fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify({ action: "get_student_marks", student_id: stdId }) })
+            .then(r => r.json())
+            .then(res => {
+                showLoader(false);
+                if(res.result === 'success') {
+                    // Isi markah ke dalam borang
+                    const d = res.data;
+                    ['t1_m1','t1_m2','t2_m1','t2_m2','t2_m3','t3_hp3_1','t3_hp3_2','t3_hp3_3','t3_hp3_4','t3_hp3_5','t3_hp8_1','t3_hp8_2','t3_hp8_3','t3_hp8_4','t3_hp8_5','t3_hp8_6','t3_hp8_7'].forEach(id => {
+                        document.getElementById(id).value = d[id] || "";
+                    });
+                    document.getElementById('grading-area').classList.remove('hidden'); 
+                    switchMarkTab('t1');
+                } else {
+                    showToast("Gagal muat markah", 'error');
+                }
+            });
         }
+
         function switchMarkTab(id){
-            // Hide all forms
-            document.querySelectorAll('.mark-form').forEach(e=>e.classList.add('hidden'));
-            // Show selected form
-            document.getElementById('form-'+id).classList.remove('hidden');
-            // Reset button styles
+            document.querySelectorAll('.mark-form').forEach(e=>e.classList.add('hidden')); 
+            document.getElementById('form-'+id).classList.remove('hidden'); 
             ['t1','t2','t3'].forEach(x => {
                 const btn = document.getElementById('tab-mark-'+x);
                 if(x===id) {
