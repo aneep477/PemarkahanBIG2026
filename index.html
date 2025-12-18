@@ -60,6 +60,38 @@
         </form>
     </div>
 
+    <div id="view-student" class="glass w-full max-w-5xl p-6 hidden fade-in relative min-h-[85vh]">
+        <button onclick="logout()" class="absolute top-4 right-4 bg-red-100 text-red-600 px-4 py-2 rounded-lg hover:bg-red-200 font-bold text-xs"><i class="fas fa-sign-out-alt"></i> KELUAR</button>
+        <div class="flex flex-col md:flex-row gap-8 mt-6">
+            <div class="md:w-1/3 flex flex-col items-center">
+                <h3 class="font-bold text-gray-700 mb-3 text-sm">GAMBAR PROFIL</h3>
+                <div id="drop-area" class="drop-zone w-full aspect-[3/4] rounded-xl flex flex-col items-center justify-center relative cursor-pointer group shadow-inner bg-white">
+                    <img id="std-img" src="" class="w-full h-full object-cover rounded-xl hidden absolute inset-0 z-10" onclick="openImageModal(this.src); event.stopPropagation();">
+                    <div id="std-img-placeholder" class="text-center p-4 z-0"><i class="fas fa-cloud-upload-alt text-4xl text-gray-300 mb-2"></i><p class="text-xs text-gray-500 font-bold">Tarik Gambar</p></div>
+                    <input type="file" id="file-input" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20" accept="image/*" onchange="handleFiles(this.files)">
+                </div>
+                <div class="mt-3 text-center"><span id="img-status" class="text-[10px] font-bold text-gray-400 bg-gray-100 px-2 py-1 rounded">Tiada gambar baru</span></div>
+            </div>
+            <div class="md:w-2/3">
+                <div class="mb-6"><h2 class="text-3xl font-bold text-gray-800" id="std-name">...</h2><div class="flex gap-2 mt-1"><span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded font-bold" id="std-id">ID: -</span><span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded font-bold" id="std-class">-</span></div></div>
+                <div class="grid grid-cols-3 gap-3 mb-6">
+                    <div class="bg-white/60 p-3 rounded border"><p class="text-[10px] font-bold text-gray-400">NO. KP</p><p class="font-bold text-sm" id="std-kp">-</p></div>
+                    <div class="bg-white/60 p-3 rounded border"><p class="text-[10px] font-bold text-gray-400">SIRI</p><p class="font-bold text-sm" id="std-siri">-</p></div>
+                    <div class="bg-white/60 p-3 rounded border"><p class="text-[10px] font-bold text-gray-400">KUMP</p><p class="font-bold text-sm" id="std-group">-</p></div>
+                </div>
+                <div class="bg-white p-5 rounded-xl border-l-4 border-yellow-400 shadow-sm">
+                    <h3 class="font-bold text-gray-800 mb-4 flex items-center"><i class="fas fa-file-medical text-yellow-500 mr-2"></i> MAKLUMAT KESIHATAN</h3>
+                    <div class="space-y-4">
+                        <div><label class="text-xs font-bold text-gray-600">ALAHAN</label><input type="text" id="std-alahan" class="w-full p-2 border rounded text-sm"></div>
+                        <div><label class="text-xs font-bold text-gray-600">UBAT</label><input type="text" id="std-ubat" class="w-full p-2 border rounded text-sm"></div>
+                        <div><label class="text-xs font-bold text-gray-600">WARIS</label><input type="text" id="std-tel" class="w-full p-2 border rounded text-sm"></div>
+                        <button onclick="updateStudentData()" class="w-full bg-slate-800 text-white py-3 rounded-lg font-bold text-sm shadow hover:bg-slate-900"><i class="fas fa-save mr-2"></i> SIMPAN</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="view-lecturer" class="glass w-full max-w-7xl p-6 hidden fade-in relative min-h-[90vh]">
         <div class="flex justify-between items-center border-b border-gray-300 pb-4 mb-6">
             <div class="flex items-center gap-3"><div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-bold"><i class="fas fa-chalkboard-teacher"></i></div><div><h1 class="text-lg font-bold text-gray-800">Panel Penilaian</h1><p class="text-xs text-gray-500">Selamat datang, <span id="lec-name" class="font-bold text-blue-600">-</span></p></div></div>
@@ -154,69 +186,6 @@
         </div>
     </div>
 
-    <div id="view-student" class="glass w-full max-w-5xl p-6 hidden fade-in relative min-h-[85vh]">
-        <button onclick="logout()" class="absolute top-4 right-4 bg-red-100 text-red-600 px-4 py-2 rounded-lg hover:bg-red-200 font-bold text-xs"><i class="fas fa-sign-out-alt"></i> KELUAR</button>
-        
-        <div class="flex flex-col md:flex-row gap-8 mt-6">
-            <div class="md:w-1/3 flex flex-col items-center">
-                <h3 class="font-bold text-gray-700 mb-3 text-sm">GAMBAR PROFIL</h3>
-                
-                <div id="drop-area" class="drop-zone w-full aspect-[3/4] rounded-xl flex flex-col items-center justify-center relative cursor-pointer group shadow-inner bg-white">
-                    <img id="std-img" src="" class="w-full h-full object-cover rounded-xl hidden absolute inset-0 z-10" onclick="openImageModal(this.src); event.stopPropagation();" title="Klik untuk zoom">
-                    
-                    <div id="std-img-placeholder" class="text-center p-4 z-0">
-                        <i class="fas fa-cloud-upload-alt text-4xl text-gray-300 mb-2 group-hover:text-green-500 transition"></i>
-                        <p class="text-xs text-gray-500 font-bold">Tarik Gambar Ke Sini</p>
-                        <p class="text-[10px] text-gray-400">atau klik untuk cari fail</p>
-                    </div>
-
-                    <input type="file" id="file-input" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20" accept="image/*" onchange="handleFiles(this.files)">
-                </div>
-                
-                <div class="mt-3 text-center">
-                    <span id="img-status" class="text-[10px] font-bold text-gray-400 bg-gray-100 px-2 py-1 rounded">Tiada gambar baru dipilih</span>
-                </div>
-            </div>
-
-            <div class="md:w-2/3">
-                <div class="mb-6">
-                    <h2 class="text-3xl font-bold text-gray-800" id="std-name">...</h2>
-                    <div class="flex items-center gap-2 mt-1">
-                        <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded font-mono font-bold" id="std-id">ID: -</span>
-                        <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded font-bold" id="std-class">-</span>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-6">
-                    <div class="bg-white/60 p-3 rounded border"><p class="text-[10px] font-bold text-gray-400">NO. KP</p><p class="font-bold text-sm" id="std-kp">-</p></div>
-                    <div class="bg-white/60 p-3 rounded border"><p class="text-[10px] font-bold text-gray-400">SIRI BIG</p><p class="font-bold text-sm" id="std-siri">-</p></div>
-                    <div class="bg-white/60 p-3 rounded border"><p class="text-[10px] font-bold text-gray-400">KUMPULAN</p><p class="font-bold text-sm" id="std-group">-</p></div>
-                </div>
-
-                <div class="bg-white p-5 rounded-xl border-l-4 border-yellow-400 shadow-sm">
-                    <h3 class="font-bold text-gray-800 mb-4 flex items-center"><i class="fas fa-file-medical text-yellow-500 mr-2"></i> KEMASKINI MAKLUMAT</h3>
-                    <div class="space-y-4">
-                        <div>
-                            <label class="text-xs font-bold text-gray-600">ALAHAN (Contoh: Makanan Laut, Habuk)</label>
-                            <input type="text" id="std-alahan" class="w-full p-2 border rounded bg-gray-50 focus:bg-white focus:ring-1 focus:ring-yellow-400 outline-none text-sm transition">
-                        </div>
-                        <div>
-                            <label class="text-xs font-bold text-gray-600">UBAT-UBATAN (Jika ada)</label>
-                            <input type="text" id="std-ubat" class="w-full p-2 border rounded bg-gray-50 focus:bg-white focus:ring-1 focus:ring-yellow-400 outline-none text-sm transition">
-                        </div>
-                        <div>
-                            <label class="text-xs font-bold text-gray-600">NO. TELEFON WARIS (Kecemasan)</label>
-                            <input type="text" id="std-tel" class="w-full p-2 border rounded bg-gray-50 focus:bg-white focus:ring-1 focus:ring-yellow-400 outline-none text-sm transition" placeholder="Contoh: 0123456789">
-                        </div>
-                        <button onclick="updateStudentData()" class="w-full bg-slate-800 text-white py-3 rounded-lg font-bold text-sm shadow hover:bg-slate-900 transition flex justify-center items-center gap-2">
-                            <i class="fas fa-save"></i> SIMPAN MAKLUMAT & GAMBAR
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <script>
         // ============================================
         // PASTE URL WEB APP ANDA DI SINI
@@ -281,30 +250,71 @@
         function loginLecturer(e){
             e.preventDefault(); showLoader(true);
             fetch(WEB_APP_URL,{method:"POST",body:JSON.stringify({action:"login_lecturer",email:document.getElementById('login-email').value,password:document.getElementById('login-pass').value})})
-            .then(r=>r.json()).then(res=>{ showLoader(false); 
+            .then(r=>r.json()).then(res=>{ 
+                showLoader(false); 
                 if(res.result==='success'){ 
-                    allStudentsCache=res.students_list;
-                    if(allStudentsCache.length === 0) alert("AMARAN: Tiada data pelajar diterima. Sila semak Google Sheet.");
-                    document.getElementById('lec-name').innerText=res.nama; document.getElementById('view-login').classList.add('hidden'); document.getElementById('view-lecturer').classList.remove('hidden'); initLecDashboard(); 
+                    allStudentsCache = res.students_list; 
+                    
+                    // --- DEBUGGER ALERT ---
+                    // Jika data kosong, beritahu pengguna SEGERA
+                    if(!allStudentsCache || allStudentsCache.length === 0) {
+                        alert("RALAT DATA: Login berjaya, tetapi TIADA DATA PELAJAR diterima dari Server. Sila semak Apps Script.");
+                    } else {
+                        // Jika berjaya, tunjuk dashboard
+                        document.getElementById('lec-name').innerText=res.nama; 
+                        document.getElementById('view-login').classList.add('hidden'); 
+                        document.getElementById('view-lecturer').classList.remove('hidden'); 
+                        initLecDashboard(); 
+                    }
                 } else showToast(res.message,'error'); 
             });
         }
+
         function initLecDashboard(){
-            const c=[...new Set(allStudentsCache.map(s=>String(s.kelas).replace(/\s+/g,' ').trim()))].sort(), s=document.getElementById('sel-class'), s2=document.getElementById('sel-class-summary');
-            s.innerHTML='<option value="">-- Pilih Kelas --</option>'; s2.innerHTML='<option value="">-- Pilih Kelas --</option>';
-            s2.innerHTML+='<option value="SEMUA">--- SEMUA KELAS (KESELURUHAN) ---</option>';
-            c.forEach(x=>{ s.innerHTML+=`<option value="${x}">${x}</option>`; s2.innerHTML+=`<option value="${x}">${x}</option>`; });
+            // Map kelas & bersihkan
+            const c = [...new Set(allStudentsCache.map(s => String(s.kelas).replace(/\s+/g, ' ').trim()))].sort();
+            
+            const s = document.getElementById('sel-class');
+            const s2 = document.getElementById('sel-class-summary');
+            
+            s.innerHTML='<option value="">-- Pilih Kelas --</option>'; 
+            s2.innerHTML='<option value="">-- Pilih Kelas --</option>';
+            s2.innerHTML+='<option value="SEMUA">--- SEMUA KELAS (KESELURUHAN) ---</option>'; 
+            
+            c.forEach(x => { 
+                s.innerHTML += `<option value="${x}">${x}</option>`; 
+                s2.innerHTML += `<option value="${x}">${x}</option>`; 
+            });
         }
+        
+        // --- FILTER YANG SANGAT KUAT (ROBUST FILTER) ---
         function filterStudents(){
-            const c=document.getElementById('sel-class').value, s=document.getElementById('sel-student');
-            s.innerHTML='<option value="">-- Pilih Pelajar --</option>'; s.disabled=!c; resetLecImg();
+            const c = document.getElementById('sel-class').value;
+            const s = document.getElementById('sel-student');
+            
+            s.innerHTML = '<option value="">-- Pilih Pelajar --</option>'; 
+            s.disabled = !c; 
+            resetLecImg();
+
             if(c) {
-                const norm = t => String(t).replace(/\s+/g,' ').trim();
-                const filtered = allStudentsCache.filter(x=>norm(x.kelas)===norm(c));
-                filtered.sort((a,b)=>a.nama.localeCompare(b.nama));
-                filtered.forEach(x=>{ s.innerHTML+=`<option value="${x.id}">${x.nama}</option>`; });
+                // Fungsi penormalan (buang space, huruf besar)
+                const normalize = str => String(str).replace(/\s+/g, '').toUpperCase();
+                const target = normalize(c);
+
+                const filtered = allStudentsCache.filter(x => normalize(x.kelas) === target);
+
+                // --- DEBUGGER ALERT 2 ---
+                if (filtered.length === 0) {
+                    alert(`RALAT PENAPISAN: Kelas dipilih '${c}', tetapi tiada pelajar ditemui. Sila semak ejaan Kelas dalam Data Pelajar.`);
+                }
+
+                filtered.sort((a,b) => a.nama.localeCompare(b.nama));
+                filtered.forEach(x => {
+                    s.innerHTML += `<option value="${x.id}">${x.nama}</option>`;
+                });
             }
         }
+
         function previewStudentImage(){
             const id=document.getElementById('sel-student').value, img=document.getElementById('lec-view-img'), ph=document.getElementById('lec-view-placeholder'), hint=document.getElementById('lec-img-hint');
             if(!id){ resetLecImg(); return; }
