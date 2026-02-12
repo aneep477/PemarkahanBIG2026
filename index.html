@@ -3,78 +3,221 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sistem e-BIG IPGKDA 30.0</title>
+<title>e-BIG IPGKDA 32.0</title>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
-body { font-family: Arial, sans-serif; margin: 20px; }
-button { padding: 8px 12px; margin: 5px; cursor: pointer; }
-#loader {
-    display: none;
-    font-weight: bold;
-    color: blue;
+body {
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0;
+    background: #f4f6f9;
+}
+header {
+    background: #0d47a1;
+    color: white;
+    padding: 15px;
+    text-align: center;
+}
+.container { padding: 20px; }
+
+.card {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+button {
+    background: #1976d2;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+button:hover { background: #0d47a1; }
+
+input {
+    padding: 6px;
+    margin: 3px;
+    width: 60px;
+}
+
+.student-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(220px,1fr));
+    gap: 15px;
+}
+
+.student-card {
+    background: white;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.student-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.hidden { display:none; }
+
+.stat-box {
+    display:inline-block;
+    margin-right:20px;
+    font-weight:bold;
 }
 </style>
 </head>
-
 <body>
 
-<h2>Sistem e-BIG IPGKDA 30.0</h2>
+<header>
+<h2>Sistem e-BIG IPGKDA 32.0</h2>
+</header>
 
-<div id="loginSection">
-    <button onclick="login('lecturer')">Login Pensyarah</button>
+<div class="container">
+
+<div id="loginCard" class="card">
+<h3>Login Pensyarah</h3>
+<input type="email" id="email" placeholder="E-mel">
+<input type="password" id="password" placeholder="Kata Laluan">
+<button onclick="loginLecturer()">Login</button>
+<p id="loginMsg"></p>
 </div>
 
-<div id="loader">Menyusun Data Analisis...</div>
+<div id="dashboard" class="hidden">
 
-<div id="content"></div>
+<div class="card">
+<h3>Dashboard Analisis</h3>
+<div class="stat-box" id="sdBox"></div>
+<div class="stat-box" id="countA"></div>
+<div class="stat-box" id="countB"></div>
+<div class="stat-box" id="countC"></div>
+<div class="stat-box" id="countD"></div>
+<canvas id="gradeChart"></canvas>
+</div>
+
+<div class="card">
+<h3>Senarai Pelajar</h3>
+<div class="student-grid" id="studentList"></div>
+</div>
+
+<div class="card hidden" id="markFormCard">
+<h3>Borang Pemarkahan Tugasan 3</h3>
+<div id="markInputs"></div>
+<button onclick="saveMark()">Simpan Markah</button>
+<p id="saveMsg"></p>
+</div>
+
+</div>
+
+</div>
 
 <script>
 
-// ✅ URL telah diperbetulkan
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzQrapAeIyyzEOFzJEBtdfP2PN1iAd3wki-SPnzrPr5zRotSd0EgOh3YGDuE_Bszhob/exec";
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwvpcTKHK95yqLhTnyNkdDlui4AIIweP4k4Bv_u7Mdl-YP_GN8CinOXQJZOKIhpRsw8/exec";
 
-function showLoader(status) {
-    document.getElementById("loader").style.display = status ? "block" : "none";
+let currentStudent = null;
+let gradeChart = null;
+
+function postData(data){
+    return fetch(WEB_APP_URL,{
+        method:"POST",
+        body:JSON.stringify(data)
+    }).then(r=>r.json());
 }
 
-function login(mode) {
-
-    showLoader(true);
-
-    const bodyData = {
-        action: "login",
-        role: mode
-    };
-
-    fetch(WEB_APP_URL, {
-        method: "POST",
-        body: JSON.stringify(bodyData)
-    })
-    .then(response => response.json())
-    .then(res => {
-        showLoader(false);
-
-        if (res.result === "success") {
-            loadLecturerView(res);
-        } else {
-            alert(res.message || "Login gagal.");
-        }
-    })
-    .catch(error => {
-        showLoader(false);
-        alert("Ralat sambungan ke server.");
-        console.error(error);
+function loginLecturer(){
+    postData({
+        action:"login_lecturer",
+        email:email.value,
+        password:password.value
+    }).then(res=>{
+        if(res.result==="success"){
+            loginCard.classList.add("hidden");
+            dashboard.classList.remove("hidden");
+            renderStudents(res.students_list);
+            loadSummary();
+        } else loginMsg.innerText=res.message;
     });
 }
 
-function loadLecturerView(data) {
-    document.getElementById("content").innerHTML =
-        "<h3>Selamat Datang Pensyarah</h3><p>Data berjaya dimuatkan.</p>";
+function renderStudents(list){
+    studentList.innerHTML="";
+    list.forEach(s=>{
+        studentList.innerHTML+=`
+        <div class="student-card">
+            <img src="${s.url_gambar || 'https://via.placeholder.com/200'}">
+            <h4>${s.nama}</h4>
+            <p>${s.kelas}</p>
+            <button onclick="openMarkForm('${s.id}')">Nilai</button>
+        </div>`;
+    });
+}
+
+function openMarkForm(id){
+    currentStudent=id;
+    markFormCard.classList.remove("hidden");
+    markInputs.innerHTML="";
+    for(let i=1;i<=12;i++){
+        markInputs.innerHTML+=`Kriteria ${i}: <input type="number" id="k${i}" min="0" max="10"><br>`;
+    }
+}
+
+function saveMark(){
+    let data={
+        action:"save_mark",
+        sheet_name:"MARKAH_TUGASAN3",
+        student_id:currentStudent
+    };
+    for(let i=1;i<=12;i++){
+        data["k"+i]=Number(document.getElementById("k"+i).value)||0;
+    }
+
+    postData(data).then(res=>{
+        saveMsg.innerText=res.message;
+        loadSummary();
+    });
+}
+
+function loadSummary(){
+    postData({
+        action:"get_summary_data",
+        kelas:"SEMUA"
+    }).then(res=>{
+        if(res.result==="success"){
+            sdBox.innerText="Sisihan Piawai: "+res.stats.sd;
+            countA.innerText="A: "+res.stats.counts.A;
+            countB.innerText="B: "+res.stats.counts.B;
+            countC.innerText="C: "+res.stats.counts.C;
+            countD.innerText="D: "+res.stats.counts.D;
+
+            renderChart(res.stats.counts);
+        }
+    });
+}
+
+function renderChart(counts){
+    const ctx=document.getElementById("gradeChart");
+    if(gradeChart) gradeChart.destroy();
+    gradeChart=new Chart(ctx,{
+        type:"bar",
+        data:{
+            labels:["A","B","C","D"],
+            datasets:[{
+                label:"Bilangan Pelajar",
+                data:[counts.A,counts.B,counts.C,counts.D]
+            }]
+        }
+    });
 }
 
 </script>
-
 </body>
 </html>
