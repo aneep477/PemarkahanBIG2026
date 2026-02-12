@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem e-BIG IPGKDA 47.0</title>
+    <title>Sistem e-BIG IPGKDA 48.0</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -16,7 +16,7 @@
         .loader { border-top-color: #3b82f6; animation: spinner 1s linear infinite; }
         @keyframes spinner { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .input-mark { text-align: center; border: 1px solid #d1d5db; border-radius: 0.75rem; padding: 0.5rem; width: 100%; font-weight: bold; background: #f9fafb; outline: none; transition: 0.2s; }
-        .input-mark:focus { border-color: #3b82f6; background: white; }
+        .input-mark:focus { border-color: #3b82f6; background: white; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
         .avatar-main { width: 150px; height: 200px; border-radius: 20px; object-fit: cover; border: 5px solid white; box-shadow: 0 10px 20px rgba(0,0,0,0.1); background: #f3f4f6; }
         .avatar-peer { width: 45px; height: 45px; border-radius: 12px; object-fit: cover; background: #eef2ff; }
         .section-header { font-size: 10px; font-weight: 800; color: #1e3a8a; margin-bottom: 10px; border-left: 4px solid #1e3a8a; padding-left: 10px; text-transform: uppercase; }
@@ -28,7 +28,7 @@
 
     <div id="loader" class="fixed inset-0 bg-black/50 z-[100] hidden flex flex-col items-center justify-center backdrop-blur-sm">
         <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12 mb-4"></div>
-        <p class="text-white font-bold animate-pulse">Menyusun Data...</p>
+        <p class="text-white font-bold animate-pulse">Menghubungkan Database...</p>
     </div>
     <div id="toast" class="fixed top-6 right-6 z-[90] hidden px-8 py-4 rounded-2xl text-white font-black shadow-2xl transition-all"><span id="toast-msg"></span></div>
 
@@ -40,12 +40,12 @@
             <button onclick="switchLoginMode('lecturer')" id="l-lec" class="flex-1 py-2 text-xs font-bold bg-gray-50 text-gray-400">PENSYARAH</button>
         </div>
         <form id="form-lecturer" onsubmit="handleLogin(event, 'lecturer')" class="space-y-6 hidden w-full">
-            <input type="email" id="login-email" class="w-full p-4 border rounded-2xl font-bold text-center" placeholder="Emel Pensyarah" required>
-            <input type="password" id="login-pass" class="w-full p-4 border rounded-2xl font-bold text-center" placeholder="Kata Laluan" required>
+            <input type="email" id="login-email" class="w-full p-4 border rounded-2xl font-bold text-center shadow-inner" placeholder="Emel Pensyarah" required>
+            <input type="password" id="login-pass" class="w-full p-4 border rounded-2xl font-bold text-center shadow-inner" placeholder="Kata Laluan" required>
             <button class="w-full bg-indigo-800 text-white font-black py-4 rounded-2xl shadow-lg uppercase">Log Masuk Penilai</button>
         </form>
         <form id="form-student" onsubmit="handleLogin(event, 'student')" class="space-y-6 w-full">
-            <input type="text" id="login-ic" class="w-full p-4 border rounded-2xl text-center font-bold" placeholder="NO. KAD PENGENALAN" required>
+            <input type="text" id="login-ic" class="w-full p-4 border rounded-2xl text-center font-bold shadow-inner" placeholder="NO. KAD PENGENALAN" required>
             <button class="w-full bg-blue-700 text-white font-black py-4 rounded-2xl shadow-lg uppercase">Masuk</button>
         </form>
         <p class="footer-credit">Hakmilik Unit Kokurikulum IPG Kampus Darulaman<br>Disediakan oleh Haniff Faizal bin Chek Ani</p>
@@ -59,7 +59,7 @@
         </div>
         <div class="flex gap-2 mb-8 shadow-sm">
             <button onclick="switchTab('profil')" id="btn-profil" class="flex-1 py-3 rounded-xl font-bold text-[10px] uppercase shadow-md tab-active">1. Profil & Kumpulan</button>
-            <button onclick="switchTab('rakan')" id="btn-rakan" class="flex-1 py-3 rounded-xl font-bold text-[10px] uppercase border bg-gray-50 text-gray-400">2. Penilaian Rakan</button>
+            <button onclick="switchTab('rakan')" id="btn-rakan" class="flex-1 py-3 rounded-xl font-bold text-[10px] uppercase tab-inactive border bg-gray-50 text-gray-400">2. Penilaian Rakan</button>
         </div>
         <div id="tab-profil" class="flex flex-col lg:flex-row gap-10">
             <div class="lg:w-1/3 flex flex-col items-center">
@@ -80,7 +80,7 @@
             </div>
         </div>
         <div id="tab-rakan" class="hidden space-y-6"><div id="teammates-list" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div><button id="btn-submit-peer" onclick="submitPeerReviews()" class="w-full bg-indigo-600 text-white py-5 rounded-2xl font-black uppercase shadow-lg hidden">Hantar Penilaian</button></div>
-        <p class="footer-credit mt-10">Unit Kokurikulum IPG Kampus Darulaman | Haniff Faizal bin Chek Ani</p>
+        <p class="footer-credit mt-10">Unit Kokurikulum IPG Kampus Darulaman | Haniff Faizal</p>
     </div>
 
     <!-- 3. LECTURER DASHBOARD -->
@@ -89,7 +89,7 @@
         <div class="flex gap-2 mb-6 shadow-sm"><button onclick="showLecSection('entry')" id="btn-l-entry" class="px-6 py-2 rounded-lg font-bold text-xs bg-blue-900 text-white shadow transition-all">ISI MARKAH</button><button onclick="showLecSection('summary')" id="btn-l-summary" class="px-6 py-2 rounded-lg font-bold text-xs bg-gray-50 text-gray-400 border transition-all">RUMUSAN</button></div>
         
         <div id="sec-entry" class="space-y-6">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 bg-gray-50 p-6 rounded-[32px] border border-blue-50">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 bg-gray-50 p-6 rounded-[32px] border border-blue-50 shadow-inner">
                 <div class="md:col-span-2 space-y-4">
                     <div class="grid grid-cols-2 gap-2">
                         <div><label class="text-[10px] font-bold text-gray-400 uppercase">Siri BIG</label><select id="sel-siri" onchange="updateFilters()" class="w-full p-4 rounded-2xl border font-bold bg-white"></select></div>
@@ -154,7 +154,7 @@
     </div>
 
     <script>
-        // SILA PASTIKAN URL DI BAWAH TEPAT
+        // PASTIKAN URL DI BAWAH TEPAT (TIADA HURUF TAMBAHAN DI DEPAN)
         const WEB_APP_URL = "https://script.google.com/macros/s/AKfycby3nQyBtnUOrng8S-HcUIPFdXHn9VfxcZ0ixKyTr9TiVhULonuHItI-bpHi_9TwSFE5/exec"; 
         let currentStudent = null, teammates = [], allStudentsCache = [], myChart = null, radarChart = null;
 
@@ -185,10 +185,7 @@
                     if (mode === 'lecturer') loadLecturerView(res);
                     else { currentStudent = res.data; loadStudentView(res.data); }
                 } else alert(res.message);
-            }).catch(err => {
-                showLoader(false);
-                alert("Ralat sambungan: Sila pastikan URL Web App anda betul.");
-            });
+            }).catch(err => { showLoader(false); alert("Ralat sambungan: Sila semak pautan URL Web App anda."); });
         }
 
         function switchTab(t) {
@@ -197,7 +194,7 @@
             document.getElementById('tab-rakan').classList.toggle('hidden', isP);
             document.getElementById('btn-profil').className = isP ? "flex-1 py-3 rounded-xl font-bold text-[10px] uppercase shadow-md tab-active" : "flex-1 py-3 rounded-xl font-bold text-[10px] uppercase border bg-gray-50 text-gray-400";
             document.getElementById('btn-rakan').className = !isP ? "flex-1 py-3 rounded-xl font-bold text-[10px] uppercase shadow-md tab-active" : "flex-1 py-3 rounded-xl font-bold text-[10px] uppercase border bg-gray-50 text-gray-400";
-            if(!isP && teammates.length === 0) loadTeammates();
+            if(!isP) loadTeammates();
         }
 
         function loadStudentView(d) {
@@ -272,7 +269,21 @@
         function renderTeammates() {
             const list = document.getElementById('teammates-list'), btn = document.getElementById('btn-submit-peer');
             if(teammates.length === 0) { list.innerHTML = '<p class="col-span-2 text-center opacity-30">Tiada rakan dikesan.</p>'; return; }
-            list.innerHTML = teammates.map(m => `<div class="bg-gray-50 p-6 rounded-[28px] border shadow-sm"><div class="flex items-center gap-3 mb-4"><img src="${m.url_gambar}" class="avatar-peer shadow-sm"><p class="text-[10px] font-black uppercase text-blue-900">${m.nama}</p></div><div class="grid grid-cols-5 gap-1">${[1,2,3,4,5].map(i => `<div class="text-center"><label class="text-[8px] font-bold text-blue-900">K${i}</label><input type="number" id="m${i}_${m.id}" min="1" max="5" class="input-mark" placeholder="0"></div>`).join('')}</div></div>`).join('');
+            // FIX: Masukkan value markah sedia ada (m1-m5) dari database
+            list.innerHTML = teammates.map(m => `
+                <div class="bg-gray-50 p-6 rounded-[28px] border shadow-sm">
+                    <div class="flex items-center gap-3 mb-4">
+                        <img src="${m.url_gambar}" class="avatar-peer shadow-sm">
+                        <p class="text-[10px] font-black uppercase text-blue-900">${m.nama}</p>
+                    </div>
+                    <div class="grid grid-cols-5 gap-1">
+                        ${[1,2,3,4,5].map(i => `
+                            <div class="text-center">
+                                <label class="text-[8px] font-bold text-blue-900">K${i}</label>
+                                <input type="number" id="m${i}_${m.id}" value="${m['m'+i] || 0}" min="0" max="5" class="input-mark" placeholder="0">
+                            </div>`).join('')}
+                    </div>
+                </div>`).join('');
             btn.classList.remove('hidden');
         }
 
@@ -288,17 +299,11 @@
             showLoader(true);
             fetch(WEB_APP_URL, { 
                 method: "POST", 
-                body: JSON.stringify({ 
-                    action: "submit_bulk_peer", 
-                    reviewer_id: currentStudent.id, 
-                    siri: currentStudent.siri, 
-                    nama_kump: currentStudent.nama_kump, 
-                    reviews: reviews 
-                }) 
+                body: JSON.stringify({ action: "submit_bulk_peer", reviewer_id: currentStudent.id, siri: currentStudent.siri, nama_kump: currentStudent.nama_kump, reviews: reviews }) 
             }).then(r => r.json()).then(res => { 
-                showLoader(false); 
-                alert(res.message); 
-                location.reload(); 
+                showLoader(false); alert(res.message); 
+                // Segarkan data teammates selepas simpan
+                loadTeammates();
             });
         }
 
