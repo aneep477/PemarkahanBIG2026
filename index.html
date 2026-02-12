@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem e-BIG IPGKDA 30.0</title>
+    <title>Sistem e-BIG IPGKDA 39.0</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -17,6 +17,7 @@
         @keyframes spinner { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .input-mark { text-align: center; border: 1px solid #d1d5db; border-radius: 0.75rem; padding: 0.5rem; width: 100%; font-weight: bold; background: #f9fafb; outline: none; }
         .avatar-main { width: 150px; height: 200px; border-radius: 20px; object-fit: cover; border: 5px solid white; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .avatar-peer { width: 45px; height: 45px; border-radius: 12px; object-fit: cover; background: #eef2ff; }
         .section-header { font-size: 10px; font-weight: 800; color: #1e3a8a; margin-bottom: 10px; border-left: 4px solid #1e3a8a; padding-left: 10px; text-transform: uppercase; }
     </style>
 </head>
@@ -24,7 +25,7 @@
 
     <div id="loader" class="fixed inset-0 bg-black/50 z-[100] hidden flex flex-col items-center justify-center backdrop-blur-sm">
         <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12 mb-4"></div>
-        <p class="text-white font-bold animate-pulse">Menyusun Data Analisis...</p>
+        <p class="text-white font-bold animate-pulse">Menghubungkan Database...</p>
     </div>
     <div id="toast" class="fixed top-6 right-6 z-[90] hidden px-8 py-4 rounded-2xl text-white font-black shadow-2xl transition-all"><span id="toast-msg"></span></div>
 
@@ -37,21 +38,47 @@
         <form id="form-lecturer" onsubmit="handleLogin(event, 'lecturer')" class="space-y-6 hidden w-full">
             <input type="email" id="login-email" class="w-full p-4 border rounded-2xl font-bold text-center" placeholder="Emel Pensyarah" required>
             <input type="password" id="login-pass" class="w-full p-4 border rounded-2xl font-bold text-center" placeholder="Kata Laluan" required>
-            <button class="w-full bg-indigo-800 text-white font-black py-4 rounded-2xl shadow-lg uppercase">Log Masuk Penilai</button>
+            <button class="w-full bg-indigo-800 text-white font-black py-4 rounded-2xl shadow-lg uppercase">Masuk Penilai</button>
         </form>
         <form id="form-student" onsubmit="handleLogin(event, 'student')" class="space-y-6 w-full">
             <input type="text" id="login-ic" class="w-full p-4 border rounded-2xl text-center font-bold" placeholder="NO. KAD PENGENALAN" required>
-            <button class="w-full bg-blue-700 text-white font-black py-4 rounded-2xl shadow-lg uppercase">Masuk</button>
+            <button class="w-full bg-blue-700 text-white font-black py-4 rounded-2xl shadow-lg uppercase">Masuk Pelajar</button>
         </form>
+    </div>
+
+    <div id="view-student" class="glass w-full max-w-6xl p-8 hidden">
+        <div class="flex justify-between items-start mb-6 border-b pb-4">
+            <div><h2 class="text-2xl font-black text-blue-900 uppercase leading-none" id="std-name-display">...</h2><p class="text-blue-600 font-bold text-[10px] mt-1" id="header-info">...</p></div>
+            <button onclick="location.reload()" class="bg-red-50 text-red-500 font-bold text-[10px] px-4 py-2 rounded-xl border uppercase">Log Keluar</button>
+        </div>
+        <div class="flex gap-2 mb-8 shadow-sm">
+            <button onclick="switchTab('profil')" id="btn-profil" class="flex-1 py-3 rounded-xl font-bold text-[10px] uppercase shadow-md tab-active">1. Profil & Kumpulan</button>
+            <button onclick="switchTab('rakan')" id="btn-rakan" class="flex-1 py-3 rounded-xl font-bold text-[10px] uppercase tab-inactive border bg-gray-50 text-gray-400">2. Penilaian Rakan</button>
+        </div>
+        <div id="tab-profil" class="flex flex-col lg:flex-row gap-10">
+            <div class="lg:w-1/3 flex flex-col items-center">
+                <img id="std-img" class="avatar-main shadow-2xl hidden"><div id="img-ph" class="avatar-main bg-blue-50 flex items-center justify-center text-blue-200"><i class="fas fa-user-circle text-8xl"></i></div>
+            </div>
+            <div class="lg:w-2/3 space-y-6">
+                <div class="grid grid-cols-3 gap-4">
+                    <div><label class="text-[9px] font-bold uppercase text-gray-400">Siri BIG</label><input type="text" id="std-siri" class="w-full p-4 bg-gray-50 border rounded-2xl font-bold outline-none"></div>
+                    <div><label class="text-[9px] font-bold uppercase text-gray-400">Kumpulan</label><input type="text" id="std-kump" class="w-full p-4 bg-gray-50 border rounded-2xl font-bold outline-none"></div>
+                    <div><label class="text-[9px] font-bold uppercase text-gray-400">No. Ahli</label><input type="text" id="std-no" class="w-full p-4 bg-gray-50 border rounded-2xl font-bold outline-none"></div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div><label class="text-[9px] font-bold uppercase text-gray-400">Alahan Makanan</label><input type="text" id="std-alahan" class="w-full p-4 border rounded-2xl font-bold outline-none"></div>
+                    <div><label class="text-[9px] font-bold uppercase text-gray-400">Ubat-ubatan</label><input type="text" id="std-ubat" class="w-full p-4 border rounded-2xl font-bold outline-none"></div>
+                </div>
+                <div><label class="text-[9px] font-bold uppercase text-gray-400">Waris (Kecemasan)</label><input type="text" id="std-tel" class="w-full p-4 border rounded-2xl font-bold outline-none"></div>
+                <button onclick="updateStudentData()" class="w-full bg-blue-900 text-white py-5 rounded-2xl font-black uppercase shadow-lg transform hover:scale-[1.01]">Simpan Profil</button>
+            </div>
+        </div>
+        <div id="tab-rakan" class="hidden space-y-6"><div id="teammates-list" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div><button id="btn-submit-peer" onclick="submitPeerReviews()" class="w-full bg-indigo-600 text-white py-5 rounded-2xl font-black uppercase shadow-lg hidden">Hantar Penilaian</button></div>
     </div>
 
     <div id="view-lecturer" class="glass w-full max-w-7xl p-8 hidden">
         <div class="flex justify-between items-center border-b pb-4 mb-6 leading-none"><h1 class="text-lg font-black text-blue-900 uppercase italic">Penilai: <span id="lec-name">...</span></h1><button onclick="location.reload()" class="bg-red-50 text-red-500 font-bold text-xs px-4 py-2 rounded-xl border uppercase">Log Keluar</button></div>
-        
-        <div class="flex gap-2 mb-6 shadow-sm">
-            <button onclick="showLecSection('entry')" id="btn-l-entry" class="px-6 py-2 rounded-lg font-bold text-xs bg-blue-900 text-white shadow">ISI MARKAH</button>
-            <button onclick="showLecSection('summary')" id="btn-l-summary" class="px-6 py-2 rounded-lg font-bold text-xs bg-gray-50 text-gray-400 border">RUMUSAN</button>
-        </div>
+        <div class="flex gap-2 mb-6 shadow-sm"><button onclick="showLecSection('entry')" id="btn-l-entry" class="px-6 py-2 rounded-lg font-bold text-xs bg-blue-900 text-white shadow transition-all">ISI MARKAH</button><button onclick="showLecSection('summary')" id="btn-l-summary" class="px-6 py-2 rounded-lg font-bold text-xs bg-gray-50 text-gray-400 border transition-all">RUMUSAN</button></div>
         
         <div id="sec-entry" class="space-y-6">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-gray-50 p-6 rounded-[32px] border">
@@ -66,32 +93,32 @@
                 </div>
                 <div class="flex items-center justify-center"><img id="lec-preview-img" class="avatar-main border-4 border-white shadow-xl hidden"><div id="lec-preview-ph" class="avatar-main bg-blue-100 flex items-center justify-center text-blue-300 shadow-inner"><i class="fas fa-user-circle text-6xl"></i></div></div>
             </div>
-            
             <div id="grading-area" class="hidden space-y-8 animate-fade-in">
                 <div class="bg-white p-8 border rounded-[32px] space-y-8 shadow-sm">
                     <div><h3 class="section-header">1. HP3: Amali II (25%)</h3><div class="grid grid-cols-5 gap-2" id="hp3-inputs"></div></div>
                     <div><h3 class="section-header">2. HP8: Kepimpinan Individu (15%)</h3><div class="grid grid-cols-3 gap-2" id="hp8i-inputs"></div></div>
                     <div><h3 class="section-header">3. HP8: Kepimpinan Kumpulan (30%)</h3><div class="grid grid-cols-4 gap-2" id="hp8k-inputs"></div></div>
-                    <button onclick="submitMark()" class="w-full bg-purple-700 text-white py-4 font-bold rounded-2xl shadow-xl uppercase">Simpan Pemarkahan T3 (70%)</button>
+                    <button onclick="submitMark()" class="w-full bg-purple-700 text-white py-4 font-bold rounded-2xl shadow-xl uppercase">Simpan Markah</button>
                 </div>
             </div>
         </div>
 
         <div id="sec-summary" class="hidden space-y-6">
-            <div class="flex gap-2"><select id="sel-class-summary" class="p-2 border rounded text-xs bg-gray-50 outline-none"></select><button onclick="loadSummaryData()" class="bg-black text-white px-6 py-2 rounded text-[10px] font-black shadow uppercase">Analisis Sekarang</button></div>
+            <div class="flex gap-2"><select id="sel-class-summary" class="p-2 border rounded text-xs bg-gray-50 outline-none"></select><button onclick="loadSummaryData()" class="bg-black text-white px-6 py-2 rounded text-[10px] font-black shadow uppercase">Analisis</button></div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
-                <div class="bg-blue-900 text-white p-6 rounded-3xl shadow-lg"><p class="text-[10px] opacity-70 uppercase tracking-widest">Std Deviation</p><h4 class="text-4xl font-black" id="stat-sd">0.00</h4></div>
-                <div class="bg-white p-6 rounded-3xl border shadow-sm flex flex-col justify-center"><p class="text-[10px] text-gray-400 font-black mb-2 uppercase">GRED</p><div class="flex justify-around text-xs font-black uppercase"><div class="text-green-500">A:<span id="c-a">0</span></div><div class="text-blue-500">B:<span id="c-b">0</span></div><div class="text-orange-500">C:<span id="c-c">0</span></div><div class="text-red-500">D:<span id="c-d">0</span></div></div></div>
+                <div class="bg-blue-900 text-white p-6 rounded-3xl shadow-lg"><h4 class="text-4xl font-black" id="stat-sd">0.00</h4><p class="text-[10px] opacity-70 uppercase tracking-widest">Std Deviation</p></div>
+                <div class="bg-white p-6 rounded-3xl border shadow-sm flex flex-col justify-center text-center"><p class="text-[10px] text-gray-400 font-black mb-2 uppercase">GRED</p><div class="flex justify-around text-xs font-black uppercase"><div class="text-green-500">A:<span id="c-a">0</span></div><div class="text-blue-500">B:<span id="c-b">0</span></div><div class="text-orange-500">C:<span id="c-c">0</span></div><div class="text-red-500">D:<span id="c-d">0</span></div></div></div>
                 <div class="bg-white p-2 rounded-3xl border shadow-sm h-48 flex items-center justify-center"><canvas id="bellCurveChart"></canvas></div>
             </div>
-            <div class="overflow-x-auto bg-white rounded-3xl border shadow-sm"><table class="w-full text-center text-[11px]"><thead class="bg-gray-50 uppercase font-black text-gray-400 tracking-tighter"><tr class="border-b"><th class="p-4 text-left">PELAJAR</th><th class="p-4">KUMPULAN (NO)</th><th class="p-4">TOTAL (100%)</th><th class="p-4">GRED</th></tr></thead><tbody id="summary-body" class="divide-y divide-gray-50"></tbody></table></div>
+            <div class="overflow-x-auto bg-white rounded-3xl border shadow-sm"><table class="w-full text-center text-[11px]"><thead class="bg-gray-50 uppercase font-black text-gray-400 tracking-tighter"><tr class="border-b"><th class="p-4 text-left">PELAJAR</th><th class="p-4">KUMPULAN (NO)</th><th class="p-4">TOTAL</th><th class="p-4">GRED</th></tr></thead><tbody id="summary-body" class="divide-y divide-gray-50"></tbody></table></div>
         </div>
     </div>
 
     <script>
         const WEB_APP_URL = "https://script.google.com/macros/s/AKfycby3nQyBtnUOrng8S-HcUIPFdXHn9VfxcZ0ixKyTr9TiVhULonuHItI-bpHi_9TwSFE5/exec"; 
-        let allStudentsCache = [], myChart = null;
+        let currentStudent = null, teammates = [], allStudentsCache = [], myChart = null;
 
+        const peerK = ["Kerjasama", "Sumbangan Idea", "Tanggungjawab", "Kualiti Kerja", "Sikap & Etika"];
         const t3Items = {
             hp3: [{id:1, name:"Patriotik", max:5}, {id:2, name:"Makan", max:5}, {id:3, name:"Flying", max:5}, {id:4, name:"Tazkirah", max:5}, {id:5, name:"Refleksi", max:5}],
             hp8i: [{id:6, name:"Kembara Ind", max:5}, {id:8, name:"Air Ind", max:5}, {id:10, name:"Rakit Ind", max:5}],
@@ -113,8 +140,22 @@
             e.preventDefault(); showLoader(true);
             const b = mode === 'student' ? { action: "login_student", no_kp: document.getElementById('login-ic').value } : { action: "login_lecturer", email: document.getElementById('login-email').value, password: document.getElementById('login-pass').value };
             fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify(b) }).then(r => r.json()).then(res => {
-                showLoader(false); if (res.result === 'success') { if (mode === 'lecturer') loadLecturerView(res); } else alert(res.message);
+                showLoader(false);
+                if (res.result === 'success') {
+                    if (mode === 'lecturer') loadLecturerView(res);
+                    else { currentStudent = res.data; loadStudentView(res.data); } // FIX: Load Dashboard Pelajar
+                } else alert(res.message);
             });
+        }
+
+        function loadStudentView(d) {
+            document.getElementById('view-login').classList.add('hidden');
+            document.getElementById('view-student').classList.remove('hidden');
+            document.getElementById('std-name-display').innerText = d.nama;
+            document.getElementById('header-info').innerText = `SIRI: ${d.siri} | KUMP: ${d.nama_kump}${d.no_kump} | KELAS: ${d.kelas}`;
+            document.getElementById('std-siri').value = d.siri; document.getElementById('std-kump').value = d.nama_kump; document.getElementById('std-no').value = d.no_kump;
+            document.getElementById('std-alahan').value = d.alahan; document.getElementById('std-ubat').value = d.ubat; document.getElementById('std-tel').value = d.tel_waris;
+            if (d.url_gambar) { const im = document.getElementById('std-img'); im.src = d.url_gambar; im.classList.remove('hidden'); document.getElementById('img-ph').classList.add('hidden'); }
         }
 
         function loadLecturerView(res) {
@@ -122,11 +163,9 @@
             document.getElementById('view-lecturer').classList.remove('hidden');
             document.getElementById('lec-name').innerText = res.nama;
             allStudentsCache = res.students_list;
-            
             const sSet = [...new Set(allStudentsCache.map(s => s.siri))].filter(Boolean).sort();
             const cSet = [...new Set(allStudentsCache.map(s => s.kelas))].filter(Boolean).sort();
             const kSet = [...new Set(allStudentsCache.map(s => s.nama_kump))].filter(Boolean).sort();
-            
             document.getElementById('sel-siri').innerHTML = '<option value="">SEMUA SIRI</option>' + sSet.map(s => `<option value="${s}">SIRI ${s}</option>`).join('');
             document.getElementById('sel-class').innerHTML = '<option value="">SEMUA KELAS</option>' + cSet.map(c => `<option value="${c}">${c}</option>`).join('');
             document.getElementById('sel-kump').innerHTML = '<option value="">SEMUA KUMPULAN</option>' + kSet.map(k => `<option value="${k}">${k.toUpperCase()}</option>`).join('');
@@ -134,41 +173,47 @@
             updateFilters();
         }
 
-        // FUNGSI SORTING MUKTAMAD (Siri > Kump > No > Nama)
         function updateFilters() {
             const s = document.getElementById('sel-siri').value, c = document.getElementById('sel-class').value, k = document.getElementById('sel-kump').value, selStd = document.getElementById('sel-student');
             selStd.innerHTML = '<option value="">-- PILIH PELAJAR --</option>';
             let filtered = allStudentsCache.filter(st => (!s || st.siri === s) && (!c || st.kelas === c) && (!k || st.nama_kump === k));
-            
-            filtered.sort((a, b) => {
-                if (a.siri !== b.siri) return a.siri.localeCompare(b.siri, undefined, {numeric: true});
-                if (a.nama_kump !== b.nama_kump) return a.nama_kump.localeCompare(b.nama_kump);
-                return (parseInt(a.no_kump) || 0) - (parseInt(b.no_kump) || 0); // SORTING NO AHLI
-            });
-
+            filtered.sort((a, b) => a.siri.localeCompare(b.siri, undefined, {numeric: true}) || a.nama_kump.localeCompare(b.nama_kump) || (parseInt(a.no_kump) - parseInt(b.no_kump)));
             filtered.forEach(st => {
                 const no_display = st.no_kump && st.no_kump !== "undefined" ? st.no_kump : "0";
                 selStd.innerHTML += `<option value="${st.id}">${st.siri} | ${st.nama_kump.toUpperCase()} | No:${no_display} | ${st.nama}</option>`;
             });
         }
 
-        function loadSummaryData() {
+        function switchTab(t) {
+            const isP = t === 'profil';
+            document.getElementById('tab-profil').classList.toggle('hidden', !isP);
+            document.getElementById('tab-rakan').classList.toggle('hidden', isP);
+            document.getElementById('btn-profil').className = isP ? "flex-1 py-3 rounded-xl font-bold text-[10px] uppercase shadow-md tab-active" : "flex-1 py-3 rounded-xl font-bold text-[10px] uppercase tab-inactive border bg-gray-50 text-gray-400";
+            document.getElementById('btn-rakan').className = !isP ? "flex-1 py-3 rounded-xl font-bold text-[10px] uppercase shadow-md tab-active" : "flex-1 py-3 rounded-xl font-bold text-[10px] uppercase tab-inactive border bg-gray-50 text-gray-400";
+            if(!isP && teammates.length === 0) loadTeammates();
+        }
+
+        function loadTeammates() {
             showLoader(true);
-            const k = document.getElementById('sel-class-summary').value;
-            fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify({ action: "get_summary_data", kelas: k }) }).then(r => r.json()).then(res => {
+            fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify({ action: "get_teammates", reviewer_id: currentStudent.id, siri: currentStudent.siri, nama_kump: currentStudent.nama_kump }) }).then(r => r.json()).then(res => {
                 showLoader(false);
-                const b = document.getElementById('summary-body'); b.innerHTML = "";
-                res.data.forEach(r => { b.innerHTML += `<tr class="hover:bg-gray-50 border-b"><td class="p-4 text-left font-bold uppercase">${r.nama}</td><td class="p-4 font-bold text-blue-600 uppercase">${r.kump}</td><td class="p-4 font-black">${r.total}</td><td class="p-4 font-black text-indigo-700">${r.gred}</td></tr>`; });
-                document.getElementById('stat-sd').innerText = res.stats.sd;
-                document.getElementById('c-a').innerText = res.stats.counts.A; document.getElementById('c-b').innerText = res.stats.counts.B; document.getElementById('c-c').innerText = res.stats.counts.C; document.getElementById('c-d').innerText = res.stats.counts.D;
-                updateBellCurve(res.stats.counts);
+                if (res.result === 'success') { teammates = res.data; renderTeammates(); }
             });
         }
 
-        function updateBellCurve(counts) {
-            const ctx = document.getElementById('bellCurveChart').getContext('2d');
-            if(myChart) myChart.destroy();
-            myChart = new Chart(ctx, { type: 'line', data: { labels: ['D', 'C', 'B', 'A'], datasets: [{ data: [counts.D, counts.C, counts.B, counts.A], borderColor: '#1e3a8a', tension: 0.4, fill: true, backgroundColor: 'rgba(30, 58, 138, 0.1)' }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { grid: { display: false } } } } });
+        function renderTeammates() {
+            const list = document.getElementById('teammates-list'), btn = document.getElementById('btn-submit-peer');
+            if(teammates.length === 0) { list.innerHTML = '<p class="col-span-2 text-center opacity-30">Tiada rakan dijumpai.</p>'; return; }
+            list.innerHTML = teammates.map(m => `<div class="bg-gray-50 p-6 rounded-[28px] border shadow-sm"><div class="flex items-center gap-3 mb-4"><img src="${m.url_gambar}" class="avatar-peer shadow-sm"><p class="text-[10px] font-black uppercase text-blue-900">${m.nama}</p></div><div class="grid grid-cols-5 gap-1">${[1,2,3,4,5].map(i => `<div class="text-center"><label class="text-[8px] font-bold text-blue-900">K${i}</label><input type="number" id="m${i}_${m.id}" min="1" max="5" class="input-mark" placeholder="0"><span class="text-[6px] text-gray-300 block font-bold">${peerK[i-1]}</span></div>`).join('')}</div></div>`).join('');
+            btn.classList.remove('hidden');
+        }
+
+        function submitPeerReviews() {
+            const reviews = teammates.map(m => ({ target_id: m.id, m1: document.getElementById('m1_'+m.id).value || 0, m2: document.getElementById('m2_'+m.id).value || 0, m3: document.getElementById('m3_'+m.id).value || 0, m4: document.getElementById('m4_'+m.id).value || 0, m5: document.getElementById('m5_'+m.id).value || 0 }));
+            showLoader(true);
+            fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify({ action: "submit_bulk_peer", reviewer_id: currentStudent.id, siri: currentStudent.siri, nama_kump: currentStudent.nama_kump, reviews: reviews }) }).then(r => r.json()).then(res => {
+                showLoader(false); alert(res.message); location.reload();
+            });
         }
 
         function loadGradingForm() {
@@ -183,13 +228,23 @@
             });
         }
 
-        function showLecSection(s) {
-            document.getElementById('sec-entry').classList.toggle('hidden', s !== 'entry');
-            document.getElementById('sec-summary').classList.toggle('hidden', s !== 'summary');
-            document.getElementById('btn-l-entry').className = s === 'entry' ? 'px-6 py-2 rounded-lg font-bold text-xs bg-blue-900 text-white shadow' : 'px-6 py-2 rounded-lg font-bold text-xs bg-gray-50 text-gray-400 border transition-all';
-            document.getElementById('btn-l-summary').className = s === 'summary' ? 'px-6 py-2 rounded-lg font-bold text-xs bg-blue-900 text-white shadow' : 'px-6 py-2 rounded-lg font-bold text-xs bg-gray-50 text-gray-400 border transition-all';
+        function loadSummaryData() {
+            showLoader(true); const k = document.getElementById('sel-class-summary').value;
+            fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify({ action: "get_summary_data", kelas: k }) }).then(r => r.json()).then(res => {
+                showLoader(false); const b = document.getElementById('summary-body'); b.innerHTML = "";
+                res.data.forEach(r => { b.innerHTML += `<tr class="hover:bg-gray-50 border-b"><td class="p-4 text-left font-bold uppercase">${r.nama}</td><td class="p-4 font-bold text-blue-600 uppercase">${r.kump}</td><td class="p-4 font-black">${r.total}</td><td class="p-4 font-black text-indigo-700">${r.gred}</td></tr>`; });
+                document.getElementById('stat-sd').innerText = res.stats.sd;
+                document.getElementById('c-a').innerText = res.stats.counts.A; document.getElementById('c-b').innerText = res.stats.counts.B; document.getElementById('c-c').innerText = res.stats.counts.C; document.getElementById('c-d').innerText = res.stats.counts.D;
+                updateBellCurve(res.stats.counts);
+            });
         }
 
+        function updateBellCurve(counts) {
+            const ctx = document.getElementById('bellCurveChart').getContext('2d'); if(myChart) myChart.destroy();
+            myChart = new Chart(ctx, { type: 'line', data: { labels: ['D', 'C', 'B', 'A'], datasets: [{ data: [counts.D, counts.C, counts.B, counts.A], borderColor: '#1e3a8a', tension: 0.4, fill: true, backgroundColor: 'rgba(30, 58, 138, 0.1)' }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { grid: { display: false } } } } });
+        }
+
+        function showLecSection(s) { document.getElementById('sec-entry').classList.toggle('hidden', s !== 'entry'); document.getElementById('sec-summary').classList.toggle('hidden', s !== 'summary'); document.getElementById('btn-l-entry').className = s === 'entry' ? 'px-6 py-2 rounded-lg font-bold text-xs bg-blue-900 text-white shadow' : 'px-6 py-2 rounded-lg font-bold text-xs bg-gray-50 text-gray-400 border transition-all'; document.getElementById('btn-l-summary').className = s === 'summary' ? 'px-6 py-2 rounded-lg font-bold text-xs bg-blue-900 text-white shadow' : 'px-6 py-2 rounded-lg font-bold text-xs bg-gray-50 text-gray-400 border transition-all'; }
         function submitMark() { const sid = document.getElementById('sel-student').value; if(!sid) return; let b = { action: "save_mark", sheet_name: "MARKAH_TUGASAN3", student_id: sid }; for(let i=1; i<=12; i++) b['k'+i] = document.getElementById('t3_k'+i).value; showLoader(true); fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify(b) }).then(r => r.json()).then(res => { showLoader(false); showToast(res.message, 'success'); }); }
         function showLoader(s) { document.getElementById('loader').classList.toggle('hidden', !s); }
         function showToast(m, t) { const el = document.getElementById('toast'); document.getElementById('toast-msg').innerText = m; el.className = 'fixed top-6 right-6 z-[90] px-8 py-4 rounded-2xl text-white font-black shadow-2xl transition-all ' + (t==='success'?'bg-green-500':'bg-red-500'); el.classList.remove('hidden'); setTimeout(() => el.classList.add('hidden'), 3500); }
