@@ -68,7 +68,23 @@
             <div class="lg:w-2/3 space-y-6">
                 <div class="grid grid-cols-3 gap-4">
                     <div><label class="text-[9px] font-bold uppercase text-gray-400">Siri BIG</label><input type="text" id="std-siri" class="w-full p-4 bg-gray-50 border rounded-2xl font-bold outline-none shadow-inner"></div>
-                    <div><label class="text-[9px] font-bold uppercase text-gray-400">Kumpulan</label><input type="text" id="std-kump" class="w-full p-4 bg-gray-50 border rounded-2xl font-bold outline-none shadow-inner"></div>
+                    <!-- DROP DOWN KUMPULAN -->
+                    <div>
+                        <label class="text-[9px] font-bold uppercase text-gray-400">Kumpulan</label>
+                        <select id="std-kump" class="w-full p-4 bg-gray-50 border rounded-2xl font-bold outline-none shadow-inner appearance-none cursor-pointer">
+                            <option value="">-- PILIH --</option>
+                            <option value="GREY">GREY</option>
+                            <option value="JINGGA">JINGGA</option>
+                            <option value="KUNING">KUNING</option>
+                            <option value="UNGU">UNGU</option>
+                            <option value="BIRU GELAP">BIRU GELAP</option>
+                            <option value="BIRU">BIRU</option>
+                            <option value="PINK">PINK</option>
+                            <option value="COKLAT">COKLAT</option>
+                            <option value="MERAH">MERAH</option>
+                            <option value="HIJAU">HIJAU</option>
+                        </select>
+                    </div>
                     <div><label class="text-[9px] font-bold uppercase text-gray-400">No. Ahli</label><input type="text" id="std-no" class="w-full p-4 bg-gray-50 border rounded-2xl font-bold outline-none shadow-inner"></div>
                 </div>
                 <div class="grid grid-cols-2 gap-4">
@@ -154,7 +170,7 @@
     </div>
 
     <script>
-        // PASTIKAN URL DI BAWAH TEPAT (TIADA HURUF TAMBAHAN DI DEPAN)
+        // PASTIKAN URL DI BAWAH TEPAT
         const WEB_APP_URL = "https://script.google.com/macros/s/AKfycby3nQyBtnUOrng8S-HcUIPFdXHn9VfxcZ0ixKyTr9TiVhULonuHItI-bpHi_9TwSFE5/exec"; 
         let currentStudent = null, teammates = [], allStudentsCache = [], myChart = null, radarChart = null;
 
@@ -239,7 +255,7 @@
             radarChart = new Chart(ctx, { 
                 type: 'radar', 
                 data: { labels: peerK, datasets: [{ label: 'Peer Assesment', data: averages, backgroundColor: 'rgba(30, 58, 138, 0.2)', borderColor: '#1e3a8a', pointBackgroundColor: '#1e3a8a', borderWidth: 2 }] }, 
-                options: { scales: { r: { min: 0, max: 5, ticks: { display: false }, pointLabels: { font: { size: 9, weight: 'bold' }, color: '#1e3a8a' } } }, plugins: { legend: { display: false } } } 
+                options: { scales: { r: { min: 0, max: 5, ticks: { display: false }, pointLabels: { font: { size: 9, weight: 'bold' } } } }, plugins: { legend: { display: false } } } 
             });
         }
 
