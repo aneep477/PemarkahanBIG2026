@@ -197,7 +197,23 @@
             <div class="flex gap-2"><select id="sel-class-summary" class="p-2 border rounded text-xs bg-gray-50 outline-none"></select><button onclick="loadSummaryData()" class="bg-black text-white px-6 py-2 rounded text-[10px] font-black shadow uppercase">Analisis</button></div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
                 <div class="bg-blue-900 text-white p-6 rounded-3xl shadow-lg"><h4 class="text-4xl font-black" id="stat-sd">0.00</h4><p class="text-[10px] opacity-70 uppercase tracking-widest">Std Deviation</p></div>
-                <div class="bg-white p-6 rounded-3xl border shadow-sm flex flex-col justify-center text-center"><p class="text-[10px] text-gray-400 font-black mb-2 uppercase">GRED</p><div class="flex justify-around text-xs font-black uppercase"><div class="text-green-500">A:<span id="c-a">0</span></div><div class="text-blue-500">B:<span id="c-b">0</span></div><div class="text-orange-500">C:<span id="c-c">0</span></div><div class="text-red-500">D:<span id="c-d">0</span></div></div></div>
+                <div class="bg-white p-6 rounded-3xl border shadow-sm flex flex-col justify-center text-center">
+                    <p class="text-[10px] text-gray-400 font-black mb-2 uppercase">BILANGAN GRED</p>
+                    <div class="grid grid-cols-4 gap-1 text-[10px] font-black uppercase">
+                        <div class="text-green-500">A+:<span id="c-ap">0</span></div>
+                        <div class="text-green-500">A:<span id="c-a">0</span></div>
+                        <div class="text-green-500">A-:<span id="c-am">0</span></div>
+                        <div class="text-blue-500">B+:<span id="c-bp">0</span></div>
+                        <div class="text-blue-500">B:<span id="c-b">0</span></div>
+                        <div class="text-blue-500">B-:<span id="c-bm">0</span></div>
+                        <div class="text-orange-500">C+:<span id="c-cp">0</span></div>
+                        <div class="text-orange-500">C:<span id="c-c">0</span></div>
+                        <div class="text-orange-500">C-:<span id="c-cm">0</span></div>
+                        <div class="text-red-500">D+:<span id="c-dp">0</span></div>
+                        <div class="text-red-500">D:<span id="c-d">0</span></div>
+                        <div class="text-red-500">F:<span id="c-f">0</span></div>
+                    </div>
+                </div>
                 <div class="bg-white p-2 rounded-3xl border shadow-sm h-48 flex items-center justify-center"><canvas id="bellCurveChart"></canvas></div>
             </div>
             <div class="overflow-x-auto bg-white rounded-3xl border shadow-sm"><table class="w-full text-center text-[11px]"><thead class="bg-gray-50 uppercase font-black text-gray-400 tracking-tighter"><tr class="border-b"><th class="p-4 text-left">PELAJAR</th><th class="p-4">KUMPULAN (NO)</th><th class="p-4">TOTAL</th><th class="p-4">GRED</th></tr></thead><tbody id="summary-body" class="divide-y divide-gray-50"></tbody></table></div>
@@ -211,7 +227,7 @@
 
         const peerK = ["Kepimpinan", "Kerjasama", "Komunikasi", "Komitmen", "Sahsiah"];
         const t3Items = {
-            hp3: [{id:1, name:"Patriotik", max:5}, {id:2, name:"Pemakanan Sihat", max:5}, {id:3, name:"Abseiling", max:5}, {id:4, name:"Tazkirah/Moral", max:5}, {id:5, name:"Refleksi", max:5}],
+            hp3: [{id:1, name:"Patriotik", max:5}, {id:2, name:"Adab Makan", max:5}, {id:3, name:"Flying Fox", max:5}, {id:4, name:"Tazkirah/Moral", max:5}, {id:5, name:"Refleksi", max:5}],
             hp8i: [{id:6, name:"Kembara Ind", max:5}, {id:8, name:"Air Ind", max:5}, {id:10, name:"Rakit Ind", max:5}],
             hp8k: [{id:7, name:"Kembara Kump", max:10}, {id:9, name:"Air Kump", max:5}, {id:11, name:"Rakit Kump", max:5}, {id:12, name:"Amalan Kump", max:10}]
         };
@@ -246,6 +262,21 @@
             for(let i=6; i<=12; i++) hp8 += parseFloat(document.getElementById('t3_k'+i).value) || 0;
             document.getElementById('total-hp3').innerText = hp3.toFixed(1);
             document.getElementById('total-hp8').innerText = hp8.toFixed(1);
+        }
+
+        function getGredIPG(score) {
+            if (score >= 90) return "A+";
+            if (score >= 80) return "A";
+            if (score >= 75) return "A-";
+            if (score >= 70) return "B+";
+            if (score >= 65) return "B";
+            if (score >= 60) return "B-";
+            if (score >= 55) return "C+";
+            if (score >= 50) return "C";
+            if (score >= 40) return "C-";
+            if (score >= 30) return "D+";
+            if (score >= 20) return "D";
+            return "F";
         }
 
         function handleLogin(e, mode) {
@@ -392,16 +423,58 @@
             showLoader(true); const k = document.getElementById('sel-class-summary').value;
             fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify({ action: "get_summary_data", kelas: k }) }).then(r => r.json()).then(res => {
                 showLoader(false); const b = document.getElementById('summary-body'); b.innerHTML = "";
-                res.data.forEach(r => { b.innerHTML += `<tr class="hover:bg-gray-50 border-b"><td class="p-4 text-left font-bold uppercase">${r.nama}</td><td class="p-4 font-bold text-blue-600 uppercase">${r.kump}</td><td class="p-4 font-black">${r.total}</td><td class="p-4 font-black text-indigo-700">${r.gred}</td></tr>`; });
+                
+                // Objek untuk mengumpul statistik gred yang betul
+                let stats = { AP:0, A:0, AM:0, BP:0, B:0, BM:0, CP:0, C:0, CM:0, DP:0, D:0, F:0 };
+                let allScores = [];
+
+                res.data.forEach(r => { 
+                    const score = parseFloat(r.total);
+                    const gred = getGredIPG(score);
+                    allScores.push(score);
+
+                    // Update statistik gred
+                    if(gred === "A+") stats.AP++; else if(gred === "A") stats.A++; else if(gred === "A-") stats.AM++;
+                    else if(gred === "B+") stats.BP++; else if(gred === "B") stats.B++; else if(gred === "B-") stats.BM++;
+                    else if(gred === "C+") stats.CP++; else if(gred === "C") stats.C++; else if(gred === "C-") stats.CM++;
+                    else if(gred === "D+") stats.DP++; else if(gred === "D") stats.D++; else stats.F++;
+
+                    b.innerHTML += `<tr class="hover:bg-gray-50 border-b"><td class="p-4 text-left font-bold uppercase">${r.nama}</td><td class="p-4 font-bold text-blue-600 uppercase">${r.kump}</td><td class="p-4 font-black">${r.total}</td><td class="p-4 font-black text-indigo-700">${gred}</td></tr>`; 
+                });
+                
                 document.getElementById('stat-sd').innerText = res.stats.sd;
-                document.getElementById('c-a').innerText = res.stats.counts.A; document.getElementById('c-b').innerText = res.stats.counts.B; document.getElementById('c-c').innerText = res.stats.counts.C; document.getElementById('c-d').innerText = res.stats.counts.D;
-                updateBellCurve(res.stats.counts);
+                
+                // Update UI bilangan gred
+                document.getElementById('c-ap').innerText = stats.AP;
+                document.getElementById('c-a').innerText = stats.A;
+                document.getElementById('c-am').innerText = stats.AM;
+                document.getElementById('c-bp').innerText = stats.BP;
+                document.getElementById('c-b').innerText = stats.B;
+                document.getElementById('c-bm').innerText = stats.BM;
+                document.getElementById('c-cp').innerText = stats.CP;
+                document.getElementById('c-c').innerText = stats.C;
+                document.getElementById('c-cm').innerText = stats.CM;
+                document.getElementById('c-dp').innerText = stats.DP;
+                document.getElementById('c-d').innerText = stats.D;
+                document.getElementById('c-f').innerText = stats.F;
+
+                updateBellCurve(stats);
             });
         }
 
-        function updateBellCurve(counts) {
+        function updateBellCurve(stats) {
             const ctx = document.getElementById('bellCurveChart').getContext('2d'); if(myChart) myChart.destroy();
-            myChart = new Chart(ctx, { type: 'line', data: { labels: ['D', 'C', 'B', 'A'], datasets: [{ data: [counts.D, counts.C, counts.B, counts.A], borderColor: '#1e3a8a', tension: 0.4, fill: true, backgroundColor: 'rgba(30, 58, 138, 0.1)' }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { grid: { display: false } } } } });
+            const labels = ['F', 'D', 'D+', 'C-', 'C', 'C+', 'B-', 'B', 'B+', 'A-', 'A', 'A+'];
+            const data = [stats.F, stats.D, stats.DP, stats.CM, stats.C, stats.CP, stats.BM, stats.B, stats.BP, stats.AM, stats.A, stats.AP];
+            
+            myChart = new Chart(ctx, { 
+                type: 'line', 
+                data: { 
+                    labels: labels, 
+                    datasets: [{ data: data, borderColor: '#1e3a8a', tension: 0.4, fill: true, backgroundColor: 'rgba(30, 58, 138, 0.1)' }] 
+                }, 
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { grid: { display: false } } } } 
+            });
         }
 
         function showLecSection(s) { document.getElementById('sec-entry').classList.toggle('hidden', s !== 'entry'); document.getElementById('sec-summary').classList.toggle('hidden', s !== 'summary'); document.getElementById('btn-l-entry').className = (s === 'entry') ? 'px-6 py-2 rounded-lg font-bold text-xs bg-blue-900 text-white shadow' : 'px-6 py-2 rounded-lg font-bold text-xs bg-gray-50 text-gray-400 border transition-all'; document.getElementById('btn-l-summary').className = (s === 'summary') ? 'px-6 py-2 rounded-lg font-bold text-xs bg-blue-900 text-white shadow' : 'px-6 py-2 rounded-lg font-bold text-xs bg-gray-50 text-gray-400 border transition-all'; }
