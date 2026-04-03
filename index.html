@@ -19,9 +19,9 @@
         .input-mark:focus { border-color: #3b82f6; background: white; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
         .avatar-main { width: 150px; height: 200px; border-radius: 20px; object-fit: cover; border: 5px solid white; box-shadow: 0 10px 20px rgba(0,0,0,0.1); background: #f3f4f6; }
         .avatar-peer { width: 45px; height: 45px; border-radius: 12px; object-fit: cover; background: #eef2ff; }
+        .avatar-biodata { width: 100%; height: 180px; object-fit: cover; border-radius: 15px; background: #f3f4f6; }
         .section-header { font-size: 14px; font-weight: 800; color: #1e3a8a; margin-bottom: 15px; border-left: 5px solid #1e3a8a; padding-left: 12px; text-transform: uppercase; }
         .footer-credit { font-size: 8px; color: #9ca3af; font-weight: 600; margin-top: 30px; text-transform: uppercase; text-align: center; line-height: 1.5; }
-        .radar-container { width: 100%; max-width: 280px; margin: 0 auto; height: 260px; }
     </style>
 </head>
 <body class="min-h-screen flex items-center justify-center p-4">
@@ -70,16 +70,7 @@
                         <label class="text-[9px] font-bold uppercase text-gray-400">Kumpulan</label>
                         <select id="std-kump" class="w-full p-4 bg-gray-50 border rounded-2xl font-bold outline-none shadow-inner appearance-none cursor-pointer">
                             <option value="">-- PILIH --</option>
-                            <option value="GREY">GREY</option>
-                            <option value="JINGGA">JINGGA</option>
-                            <option value="KUNING">KUNING</option>
-                            <option value="UNGU">UNGU</option>
-                            <option value="BIRU GELAP">BIRU GELAP</option>
-                            <option value="BIRU">BIRU</option>
-                            <option value="PINK">PINK</option>
-                            <option value="COKLAT">COKLAT</option>
-                            <option value="MERAH">MERAH</option>
-                            <option value="HIJAU">HIJAU</option>
+                            <option value="GREY">GREY</option><option value="JINGGA">JINGGA</option><option value="KUNING">KUNING</option><option value="UNGU">UNGU</option><option value="BIRU GELAP">BIRU GELAP</option><option value="BIRU">BIRU</option><option value="PINK">PINK</option><option value="COKLAT">COKLAT</option><option value="MERAH">MERAH</option><option value="HIJAU">HIJAU</option>
                         </select>
                     </div>
                     <div><label class="text-[9px] font-bold uppercase text-gray-400">No. Ahli</label><input type="text" id="std-no" class="w-full p-4 bg-gray-50 border rounded-2xl font-bold outline-none shadow-inner"></div>
@@ -92,16 +83,11 @@
                 <button onclick="updateStudentData()" class="w-full bg-blue-900 text-white py-5 rounded-2xl font-black uppercase shadow-lg transform hover:scale-[1.01]">Simpan Profil</button>
             </div>
         </div>
-
         <div id="tab-rakan" class="hidden space-y-6">
-            <div class="bg-blue-900 text-white p-4 rounded-2xl shadow-lg">
+            <div class="bg-blue-900 text-white p-4 rounded-2xl shadow-lg text-center">
                 <p class="text-[10px] font-bold uppercase mb-2 opacity-80 italic">Petunjuk Kriteria (Skala 1-5):</p>
-                <div class="grid grid-cols-5 gap-1 text-[8px] font-black uppercase text-center">
-                    <div class="bg-blue-800 p-2 rounded-lg">K1: Kepimpinan</div>
-                    <div class="bg-blue-800 p-2 rounded-lg">K2: Kerjasama</div>
-                    <div class="bg-blue-800 p-2 rounded-lg">K3: Komunikasi</div>
-                    <div class="bg-blue-800 p-2 rounded-lg">K4: Komitmen</div>
-                    <div class="bg-blue-800 p-2 rounded-lg">K5: Sahsiah</div>
+                <div class="grid grid-cols-5 gap-1 text-[8px] font-black uppercase">
+                    <div class="bg-blue-800 p-2 rounded-lg">K1: Kepimpinan</div><div class="bg-blue-800 p-2 rounded-lg">K2: Kerjasama</div><div class="bg-blue-800 p-2 rounded-lg">K3: Komunikasi</div><div class="bg-blue-800 p-2 rounded-lg">K4: Komitmen</div><div class="bg-blue-800 p-2 rounded-lg">K5: Sahsiah</div>
                 </div>
             </div>
             <div id="teammates-list" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
@@ -112,34 +98,38 @@
 
     <div id="view-lecturer" class="glass w-full max-w-7xl p-8 hidden">
         <div class="flex justify-between items-center border-b pb-4 mb-6 leading-none"><h1 class="text-lg font-black text-blue-900 uppercase italic">Penilai: <span id="lec-name">...</span></h1><button onclick="location.reload()" class="bg-red-50 text-red-500 font-bold text-xs px-4 py-2 rounded-xl border uppercase">Log Keluar</button></div>
-        <div class="flex gap-2 mb-6 shadow-sm"><button onclick="showLecSection('entry')" id="btn-l-entry" class="px-6 py-2 rounded-lg font-bold text-xs bg-blue-900 text-white shadow transition-all">ISI MARKAH</button><button onclick="showLecSection('summary')" id="btn-l-summary" class="px-6 py-2 rounded-lg font-bold text-xs bg-gray-50 text-gray-400 border transition-all">RUMUSAN</button></div>
+        
+        <div class="flex gap-2 mb-6 overflow-x-auto pb-2">
+            <button onclick="showLecSection('entry')" id="btn-l-entry" class="px-6 py-2 rounded-lg font-bold text-xs bg-blue-900 text-white shadow min-w-fit">ISI MARKAH</button>
+            <button onclick="showLecSection('biodata')" id="btn-l-biodata" class="px-6 py-2 rounded-lg font-bold text-xs bg-gray-50 text-gray-400 border min-w-fit">BIODATA PELAJAR</button>
+            <button onclick="showLecSection('summary')" id="btn-l-summary" class="px-6 py-2 rounded-lg font-bold text-xs bg-gray-50 text-gray-400 border min-w-fit">RUMUSAN</button>
+        </div>
         
         <div id="sec-entry" class="space-y-6">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 bg-gray-50 p-6 rounded-[32px] border border-blue-50 shadow-inner">
                 <div class="md:col-span-2 space-y-4">
                     <div class="grid grid-cols-2 gap-2">
-                        <div><label class="text-[10px] font-bold text-gray-400 uppercase">Siri BIG</label><select id="sel-siri" onchange="updateFilters()" class="w-full p-4 rounded-2xl border font-bold bg-white"></select></div>
-                        <div><label class="text-[10px] font-bold text-gray-400 uppercase">Kelas</label><select id="sel-class" onchange="updateFilters()" class="w-full p-4 rounded-2xl border font-bold bg-white"></select></div>
+                        <div><label class="text-[10px] font-bold text-gray-400 uppercase">Siri BIG</label><select id="sel-siri" onchange="updateEntryFilters()" class="w-full p-4 rounded-2xl border font-bold bg-white"></select></div>
+                        <div><label class="text-[10px] font-bold text-gray-400 uppercase">Kelas</label><select id="sel-class" onchange="updateEntryFilters()" class="w-full p-4 rounded-2xl border font-bold bg-white"></select></div>
                     </div>
-                    <div><label class="text-[10px] font-bold text-gray-400 uppercase">Kumpulan BIG</label><select id="sel-kump" onchange="updateFilters()" class="w-full p-4 rounded-2xl border font-bold bg-white"></select></div>
+                    <div><label class="text-[10px] font-bold text-gray-400 uppercase">Kumpulan BIG</label><select id="sel-kump" onchange="updateEntryFilters()" class="w-full p-4 rounded-2xl border font-bold bg-white"></select></div>
                     <div><label class="text-[10px] font-bold text-gray-400 uppercase">Pilih Pelajar</label><select id="sel-student" class="w-full p-4 rounded-2xl border font-bold bg-white"></select></div>
                     <button onclick="loadGradingForm()" class="w-full bg-blue-700 text-white py-4 rounded-2xl font-bold shadow uppercase transform hover:scale-[1.01]">Mula Menilai</button>
                 </div>
                 <div class="flex flex-col items-center justify-center space-y-4">
                     <img id="lec-preview-img" class="avatar-main border-4 border-white shadow-xl hidden">
                     <div id="lec-preview-ph" class="avatar-main bg-blue-100 flex items-center justify-center text-blue-300 shadow-inner"><i class="fas fa-user-circle text-6xl"></i></div>
-                    <div class="radar-container"><canvas id="peerRadarChart"></canvas></div>
+                    <div class="w-full max-w-[280px] h-[260px]"><canvas id="peerRadarChart"></canvas></div>
                 </div>
             </div>
             
-            <div id="grading-area" class="hidden space-y-8 animate-fade-in">
+            <div id="grading-area" class="hidden space-y-8">
                 <div class="flex gap-1 bg-gray-100 p-1 rounded-2xl shadow-inner">
                     <button onclick="switchMarkTab('t1')" id="tab-t1" class="flex-1 py-3 font-black text-[10px] uppercase rounded-xl transition-all text-gray-400">Kuiz (10%)</button>
                     <button onclick="switchMarkTab('t2')" id="tab-t2" class="flex-1 py-3 font-black text-[10px] uppercase rounded-xl transition-all text-gray-400">Amali 1 (20%)</button>
                     <button onclick="switchMarkTab('t3')" id="tab-t3" class="flex-1 py-3 font-black text-[10px] uppercase rounded-xl transition-all bg-blue-900 text-white shadow">Amali 2 (70%)</button>
                 </div>
-
-                <div id="form-t1" class="mark-form bg-white p-8 border rounded-[32px] space-y-6 shadow-sm hidden">
+                <div id="form-t1" class="mark-form bg-white p-8 border rounded-[32px] space-y-6 hidden shadow-sm">
                     <h3 class="font-black text-blue-900 uppercase italic text-center">KUIZ AKADEMIK (10%)</h3>
                     <div class="grid grid-cols-2 gap-4">
                         <div><label class="text-[9px] font-bold">K1 (5)</label><input type="number" id="t1_m1" class="input-mark"></div>
@@ -147,7 +137,6 @@
                     </div>
                     <button onclick="submitMark('MARKAH_TUGASAN1')" class="w-full bg-blue-900 text-white py-4 font-bold rounded-2xl shadow uppercase">Simpan Kuiz</button>
                 </div>
-
                 <div id="form-t2" class="mark-form bg-white p-8 border rounded-[32px] space-y-6 hidden shadow-sm">
                     <h3 class="font-black text-blue-900 uppercase italic text-center">AMALI 1 (20%)</h3>
                     <div class="grid grid-cols-3 gap-4">
@@ -156,41 +145,28 @@
                         <div><label class="text-[9px] font-bold uppercase">HP5 KEWARGANEGARAAN (10)</label><input type="number" id="t2_m3" class="input-mark" oninput="calculateT2Total()"></div>
                     </div>
                     <div class="grid grid-cols-2 gap-4 pt-4 border-t border-dashed">
-                        <div class="bg-blue-50 p-3 rounded-xl text-center">
-                            <p class="text-[8px] font-bold text-blue-400 uppercase">Jumlah HP4 (10)</p>
-                            <p id="total-hp4" class="text-xl font-black text-blue-900">0.0</p>
-                        </div>
-                        <div class="bg-indigo-50 p-3 rounded-xl text-center">
-                            <p class="text-[8px] font-bold text-indigo-400 uppercase">Jumlah HP5 (10)</p>
-                            <p id="total-hp5" class="text-xl font-black text-indigo-900">0.0</p>
-                        </div>
+                        <div class="bg-blue-50 p-3 rounded-xl text-center"><p class="text-[8px] font-bold text-blue-400 uppercase">Jumlah HP4 (10)</p><p id="total-hp4" class="text-xl font-black text-blue-900">0.0</p></div>
+                        <div class="bg-indigo-50 p-3 rounded-xl text-center"><p class="text-[8px] font-bold text-indigo-400 uppercase">Jumlah HP5 (10)</p><p id="total-hp5" class="text-xl font-black text-indigo-900">0.0</p></div>
                     </div>
                     <button onclick="submitMark('MARKAH_TUGASAN2')" class="w-full bg-indigo-700 text-white py-4 font-bold rounded-2xl shadow uppercase">Simpan Amali 1</button>
                 </div>
-
                 <div id="form-t3" class="mark-form bg-white p-8 border rounded-[32px] space-y-10 shadow-sm hidden">
-                    <div>
-                        <h3 class="section-header">1. HP3: Amali II (25%)</h3>
-                        <div class="grid grid-cols-1 sm:grid-cols-5 gap-6" id="hp3-inputs"></div>
-                        <div class="mt-4 bg-blue-50 p-4 rounded-2xl text-center border border-blue-100">
-                            <p class="text-[10px] font-bold text-blue-400 uppercase">Jumlah HP3 (25%)</p>
-                            <p id="total-hp3" class="text-3xl font-black text-blue-900">0.0</p>
-                        </div>
-                    </div>
-                    <div>
-                        <h3 class="section-header">2. HP8: Kepimpinan Gabungan (45%)</h3>
-                        <div class="space-y-8">
-                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6" id="hp8i-inputs"></div>
-                            <div class="grid grid-cols-1 sm:grid-cols-4 gap-6" id="hp8k-inputs"></div>
-                        </div>
-                        <div class="mt-4 bg-purple-50 p-4 rounded-2xl text-center border border-purple-100">
-                            <p class="text-[10px] font-bold text-purple-400 uppercase">Jumlah HP8 Individu + Kumpulan (45%)</p>
-                            <p id="total-hp8" class="text-3xl font-black text-purple-900">0.0</p>
-                        </div>
-                    </div>
+                    <div><h3 class="section-header">1. HP3: Amali II (25%)</h3><div class="grid grid-cols-1 sm:grid-cols-5 gap-6" id="hp3-inputs"></div><div class="mt-4 bg-blue-50 p-4 rounded-2xl text-center border border-blue-100"><p class="text-[10px] font-bold text-blue-400 uppercase">Jumlah HP3 (25%)</p><p id="total-hp3" class="text-3xl font-black text-blue-900">0.0</p></div></div>
+                    <div><h3 class="section-header">2. HP8: Kepimpinan Gabungan (45%)</h3><div class="space-y-8"><div class="grid grid-cols-1 sm:grid-cols-3 gap-6" id="hp8i-inputs"></div><div class="grid grid-cols-1 sm:grid-cols-4 gap-6" id="hp8k-inputs"></div></div><div class="mt-4 bg-purple-50 p-4 rounded-2xl text-center border border-purple-100"><p class="text-[10px] font-bold text-purple-400 uppercase">Jumlah HP8 Individu + Kumpulan (45%)</p><p id="total-hp8" class="text-3xl font-black text-purple-900">0.0</p></div></div>
                     <button onclick="submitMark('MARKAH_TUGASAN3')" class="w-full bg-purple-700 text-white py-6 font-black rounded-2xl shadow-xl uppercase transform hover:scale-[1.01] text-lg">Simpan Amali 2</button>
                 </div>
             </div>
+        </div>
+
+        <div id="sec-biodata" class="hidden space-y-6">
+            <div class="bg-white p-6 rounded-3xl border shadow-sm space-y-4">
+                <p class="text-xs font-bold text-blue-900 uppercase italic">Pilih Siri dahulu untuk menapis Kelas:</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div><label class="text-[10px] font-bold text-gray-400 uppercase">1. Siri</label><select id="bio-filter-siri" onchange="updateBioClassFilter()" class="w-full p-3 rounded-xl border bg-gray-50 font-bold"></select></div>
+                    <div><label class="text-[10px] font-bold text-gray-400 uppercase">2. Kelas</label><select id="bio-filter-class" onchange="renderBiodata()" class="w-full p-3 rounded-xl border bg-gray-50 font-bold"><option value="">-- PILIH SIRI DAHULU --</option></select></div>
+                </div>
+            </div>
+            <div id="biodata-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
         </div>
 
         <div id="sec-summary" class="hidden space-y-6">
@@ -199,19 +175,11 @@
                 <div class="bg-blue-900 text-white p-6 rounded-3xl shadow-lg"><h4 class="text-4xl font-black" id="stat-sd">0.00</h4><p class="text-[10px] opacity-70 uppercase tracking-widest">Std Deviation</p></div>
                 <div class="bg-white p-6 rounded-3xl border shadow-sm flex flex-col justify-center text-center">
                     <p class="text-[10px] text-gray-400 font-black mb-2 uppercase">BILANGAN GRED</p>
-                    <div class="grid grid-cols-4 gap-1 text-[10px] font-black uppercase">
-                        <div class="text-green-500">A+:<span id="c-ap">0</span></div>
-                        <div class="text-green-500">A:<span id="c-a">0</span></div>
-                        <div class="text-green-500">A-:<span id="c-am">0</span></div>
-                        <div class="text-blue-500">B+:<span id="c-bp">0</span></div>
-                        <div class="text-blue-500">B:<span id="c-b">0</span></div>
-                        <div class="text-blue-500">B-:<span id="c-bm">0</span></div>
-                        <div class="text-orange-500">C+:<span id="c-cp">0</span></div>
-                        <div class="text-orange-500">C:<span id="c-c">0</span></div>
-                        <div class="text-orange-500">C-:<span id="c-cm">0</span></div>
-                        <div class="text-red-500">D+:<span id="c-dp">0</span></div>
-                        <div class="text-red-500">D:<span id="c-d">0</span></div>
-                        <div class="text-red-500">F:<span id="c-f">0</span></div>
+                    <div class="grid grid-cols-4 gap-1 text-[9px] font-black uppercase">
+                        <div class="text-green-600">A+:<span id="c-ap">0</span></div><div class="text-green-600">A:<span id="c-a">0</span></div><div class="text-green-600">A-:<span id="c-am">0</span></div>
+                        <div class="text-blue-600">B+:<span id="c-bp">0</span></div><div class="text-blue-600">B:<span id="c-b">0</span></div><div class="text-blue-600">B-:<span id="c-bm">0</span></div>
+                        <div class="text-orange-600">C+:<span id="c-cp">0</span></div><div class="text-orange-600">C:<span id="c-c">0</span></div><div class="text-orange-600">C-:<span id="c-cm">0</span></div>
+                        <div class="text-red-600">D+:<span id="c-dp">0</span></div><div class="text-red-600">D:<span id="c-d">0</span></div><div class="text-red-600">F:<span id="c-f">0</span></div>
                     </div>
                 </div>
                 <div class="bg-white p-2 rounded-3xl border shadow-sm h-48 flex items-center justify-center"><canvas id="bellCurveChart"></canvas></div>
@@ -227,7 +195,7 @@
 
         const peerK = ["Kepimpinan", "Kerjasama", "Komunikasi", "Komitmen", "Sahsiah"];
         const t3Items = {
-            hp3: [{id:1, name:"Patriotik", max:5}, {id:2, name:"Adab Makan", max:5}, {id:3, name:"Flying Fox", max:5}, {id:4, name:"Tazkirah/Moral", max:5}, {id:5, name:"Refleksi", max:5}],
+            hp3: [{id:1, name:"Patriotik", max:5}, {id:2, name:"Pemakanan Sihat", max:5}, {id:3, name:"Abseling", max:5}, {id:4, name:"Tazkirah/Moral", max:5}, {id:5, name:"Refleksi", max:5}],
             hp8i: [{id:6, name:"Kembara Ind", max:5}, {id:8, name:"Air Ind", max:5}, {id:10, name:"Rakit Ind", max:5}],
             hp8k: [{id:7, name:"Kembara Kump", max:10}, {id:9, name:"Air Kump", max:5}, {id:11, name:"Rakit Kump", max:5}, {id:12, name:"Amalan Kump", max:10}]
         };
@@ -238,12 +206,7 @@
             Object.keys(t3Items).forEach(cat => {
                 t3Items[cat].forEach(k => {
                     const box = (cat === 'hp3') ? h3 : (cat === 'hp8i' ? h8i : h8k);
-                    box.innerHTML += `
-                        <div class="flex flex-col">
-                            <label class="text-[11px] font-black text-blue-900 uppercase mb-1">K${k.id} (${k.max})</label>
-                            <input type="number" id="t3_k${k.id}" class="input-mark mb-1" placeholder="0" oninput="calculateT3Total()">
-                            <span class="text-[10px] text-gray-500 block uppercase font-bold leading-tight bg-gray-100 p-2 rounded-lg text-center h-full flex items-center justify-center">${k.name}</span>
-                        </div>`;
+                    box.innerHTML += `<div class="flex flex-col"><label class="text-[11px] font-black text-blue-900 uppercase mb-1">K${k.id} (${k.max})</label><input type="number" id="t3_k${k.id}" class="input-mark mb-1" placeholder="0" oninput="calculateT3Total()"><span class="text-[10px] text-gray-500 block uppercase font-bold leading-tight bg-gray-100 p-2 rounded-lg text-center h-full flex items-center justify-center">${k.name}</span></div>`;
                 });
             });
         };
@@ -265,18 +228,7 @@
         }
 
         function getGredIPG(score) {
-            if (score >= 90) return "A+";
-            if (score >= 80) return "A";
-            if (score >= 75) return "A-";
-            if (score >= 70) return "B+";
-            if (score >= 65) return "B";
-            if (score >= 60) return "B-";
-            if (score >= 55) return "C+";
-            if (score >= 50) return "C";
-            if (score >= 40) return "C-";
-            if (score >= 30) return "D+";
-            if (score >= 20) return "D";
-            return "F";
+            if (score >= 90) return "A+"; if (score >= 80) return "A"; if (score >= 75) return "A-"; if (score >= 70) return "B+"; if (score >= 65) return "B"; if (score >= 60) return "B-"; if (score >= 55) return "C+"; if (score >= 50) return "C"; if (score >= 40) return "C-"; if (score >= 30) return "D+"; if (score >= 20) return "D"; return "F";
         }
 
         function handleLogin(e, mode) {
@@ -291,49 +243,92 @@
             }).catch(err => { showLoader(false); alert("Ralat sambungan."); });
         }
 
-        function switchTab(t) {
-            const isP = (t === 'profil');
-            document.getElementById('tab-profil').classList.toggle('hidden', !isP);
-            document.getElementById('tab-rakan').classList.toggle('hidden', isP);
-            document.getElementById('btn-profil').className = isP ? "flex-1 py-3 rounded-xl font-bold text-[10px] uppercase shadow-md tab-active" : "flex-1 py-3 rounded-xl font-bold text-[10px] uppercase border bg-gray-50 text-gray-400";
-            document.getElementById('btn-rakan').className = !isP ? "flex-1 py-3 rounded-xl font-bold text-[10px] uppercase shadow-md tab-active" : "flex-1 py-3 rounded-xl font-bold text-[10px] uppercase border bg-gray-50 text-gray-400";
-            if(!isP) loadTeammates();
-        }
-
-        function loadStudentView(d) {
-            document.getElementById('view-login').classList.add('hidden');
-            document.getElementById('view-student').classList.remove('hidden');
-            document.getElementById('std-name-display').innerText = d.nama;
-            document.getElementById('header-info').innerText = `SIRI: ${d.siri} | KUMP: ${d.nama_kump}${d.no_kump} | KELAS: ${d.kelas}`;
-            document.getElementById('std-siri').value = d.siri; document.getElementById('std-kump').value = d.nama_kump; document.getElementById('std-no').value = d.no_kump;
-            document.getElementById('std-tel').value = d.tel_waris || ""; document.getElementById('std-alahan').value = d.alahan || ""; document.getElementById('std-ubat').value = d.ubat || "";
-            if (d.url_gambar) { const im = document.getElementById('std-img'); im.src = d.url_gambar; im.classList.remove('hidden'); document.getElementById('img-ph').classList.add('hidden'); }
-        }
-
         function loadLecturerView(res) {
             document.getElementById('view-login').classList.add('hidden');
             document.getElementById('view-lecturer').classList.remove('hidden');
             document.getElementById('lec-name').innerText = res.nama;
             allStudentsCache = res.students_list;
+            
             const sSet = [...new Set(allStudentsCache.map(s => s.siri))].filter(Boolean).sort();
-            const cSet = [...new Set(allStudentsCache.map(s => s.kelas))].filter(Boolean).sort();
-            const kSet = [...new Set(allStudentsCache.map(s => s.nama_kump))].filter(Boolean).sort();
-            document.getElementById('sel-siri').innerHTML = '<option value="">SEMUA SIRI</option>' + sSet.map(s => `<option value="${s}">SIRI ${s}</option>`).join('');
-            document.getElementById('sel-class').innerHTML = '<option value="">SEMUA KELAS</option>' + cSet.map(c => `<option value="${c}">${c}</option>`).join('');
-            document.getElementById('sel-kump').innerHTML = '<option value="">SEMUA KUMPULAN</option>' + kSet.map(k => `<option value="${k}">${k.toUpperCase()}</option>`).join('');
-            document.getElementById('sel-class-summary').innerHTML = '<option value="SEMUA">SEMUA KELAS</option>' + cSet.map(c => `<option value="${c}">${c}</option>`).join('');
-            updateFilters();
+            const sOpt = '<option value="">-- PILIH SIRI --</option>' + sSet.map(s => `<option value="${s}">SIRI ${s}</option>`).join('');
+            
+            document.getElementById('sel-siri').innerHTML = sOpt;
+            document.getElementById('bio-filter-siri').innerHTML = sOpt;
+            document.getElementById('sel-class-summary').innerHTML = '<option value="SEMUA">SEMUA KELAS</option>' + [...new Set(allStudentsCache.map(s => s.kelas))].filter(Boolean).sort().map(c => `<option value="${c}">${c}</option>`).join('');
+            
+            updateEntryFilters();
         }
 
-        function updateFilters() {
-            const s = document.getElementById('sel-siri').value, c = document.getElementById('sel-class').value, k = document.getElementById('sel-kump').value, selStd = document.getElementById('sel-student');
-            selStd.innerHTML = '<option value="">-- PILIH PELAJAR --</option>';
+        // --- DINAMIK FILTER UNTUK ENTRY MARKAH ---
+        function updateEntryFilters() {
+            const s = document.getElementById('sel-siri').value;
+            const cSelect = document.getElementById('sel-class');
+            const kSelect = document.getElementById('sel-kump');
+            const sSelect = document.getElementById('sel-student');
+
+            // 1. Tapis Kelas mengikut Siri
+            const classesInSiri = [...new Set(allStudentsCache.filter(st => !s || st.siri === s).map(st => st.kelas))].filter(Boolean).sort();
+            cSelect.innerHTML = '<option value="">-- PILIH KELAS --</option>' + classesInSiri.map(c => `<option value="${c}">${c}</option>`).join('');
+            
+            // 2. Tapis Kumpulan mengikut Siri & Kelas
+            const c = cSelect.value;
+            const kumpsInSiriClass = [...new Set(allStudentsCache.filter(st => (!s || st.siri === s) && (!c || st.kelas === c)).map(st => st.nama_kump))].filter(Boolean).sort();
+            kSelect.innerHTML = '<option value="">SEMUA KUMPULAN</option>' + kumpsInSiriClass.map(k => `<option value="${k}">${k.toUpperCase()}</option>`).join('');
+
+            // 3. Tapis Pelajar
+            const k = kSelect.value;
+            sSelect.innerHTML = '<option value="">-- PILIH PELAJAR --</option>';
             let filtered = allStudentsCache.filter(st => (!s || st.siri === s) && (!c || st.kelas === c) && (!k || st.nama_kump === k));
-            filtered.sort((a, b) => a.siri.localeCompare(b.siri, undefined, {numeric: true}) || a.nama_kump.localeCompare(b.nama_kump) || (parseInt(a.no_kump) - parseInt(b.no_kump)));
+            filtered.sort((a, b) => a.nama.localeCompare(b.nama));
             filtered.forEach(st => {
-                const no_display = st.no_kump && st.no_kump !== "undefined" ? st.no_kump : "0";
-                selStd.innerHTML += `<option value="${st.id}">${st.siri} | ${st.nama_kump.toUpperCase()} | No:${no_display} | ${st.nama}</option>`;
+                sSelect.innerHTML += `<option value="${st.id}">${st.siri} | ${st.nama_kump.toUpperCase()} | No:${st.no_kump || '0'} | ${st.nama}</option>`;
             });
+        }
+
+        // --- DINAMIK FILTER UNTUK BIODATA ---
+        function updateBioClassFilter() {
+            const s = document.getElementById('bio-filter-siri').value;
+            const cSelect = document.getElementById('bio-filter-class');
+            
+            if (!s) {
+                cSelect.innerHTML = '<option value="">-- PILIH SIRI DAHULU --</option>';
+            } else {
+                const classesInSiri = [...new Set(allStudentsCache.filter(st => st.siri === s).map(st => st.kelas))].filter(Boolean).sort();
+                cSelect.innerHTML = '<option value="">-- PILIH KELAS --</option>' + classesInSiri.map(c => `<option value="${c}">${c}</option>`).join('');
+            }
+            renderBiodata(); // Kosongkan grid jika siri ditukar
+        }
+
+        function renderBiodata() {
+            const s = document.getElementById('bio-filter-siri').value;
+            const c = document.getElementById('bio-filter-class').value;
+            const grid = document.getElementById('biodata-grid');
+            
+            if (!s || !c) {
+                grid.innerHTML = '<p class="col-span-full text-center py-10 opacity-40 font-bold italic">Sila pilih Siri & Kelas untuk paparkan biodata.</p>';
+                return;
+            }
+
+            grid.innerHTML = "";
+            let filtered = allStudentsCache.filter(st => st.siri === s && st.kelas === c);
+            filtered.sort((a, b) => a.nama.localeCompare(b.nama));
+
+            const fragment = document.createDocumentFragment();
+            filtered.forEach(st => {
+                const imgUrl = st.url_gambar && st.url_gambar.includes('id=') ? st.url_gambar.replace('sz=w1000', 'sz=w300') : "https://via.placeholder.com/150?text=No+Photo";
+                const card = document.createElement('div');
+                card.className = "bg-white p-3 rounded-2xl border shadow-sm flex flex-col items-center text-center hover:shadow-md transition-all";
+                card.innerHTML = `
+                    <div class="w-full h-[180px] overflow-hidden rounded-xl bg-gray-100 mb-3"><img src="${imgUrl}" class="w-full h-full object-cover" loading="lazy" onerror="this.src='https://via.placeholder.com/150?text=No+Photo'"></div>
+                    <h4 class="text-[10px] font-black text-blue-900 uppercase leading-tight mb-2 h-8 flex items-center justify-center">${st.nama}</h4>
+                    <div class="w-full pt-2 border-t border-gray-50 space-y-1">
+                        <p class="text-[8px] font-bold text-gray-400 uppercase">Siri: ${st.siri}</p>
+                        <p class="text-[8px] font-bold text-blue-600 uppercase">Kump: ${st.nama_kump} (${st.no_kump || '0'})</p>
+                        <p class="text-[8px] font-bold text-indigo-500 uppercase">Kelas: ${st.kelas}</p>
+                    </div>`;
+                fragment.appendChild(card);
+            });
+            grid.appendChild(fragment);
         }
 
         function loadGradingForm() {
@@ -345,119 +340,29 @@
                     document.getElementById('grading-area').classList.remove('hidden');
                     if(res.peer_averages) updateRadarChart(res.peer_averages);
                     if(res.data.t1) { document.getElementById('t1_m1').value = res.data.t1.m1; document.getElementById('t1_m2').value = res.data.t1.m2; }
-                    if(res.data.t2) { 
-                        document.getElementById('t2_m1').value = res.data.t2.m1; 
-                        document.getElementById('t2_m2').value = res.data.t2.m2; 
-                        document.getElementById('t2_m3').value = res.data.t2.m3;
-                        calculateT2Total();
-                    }
-                    for(let i=1; i<=12; i++){ 
-                        const el = document.getElementById('t3_k'+i); 
-                        if(el) el.value = res.data.t3.hp[i-1]; 
-                    }
-                    calculateT3Total();
-                    switchMarkTab('t3');
+                    if(res.data.t2) { document.getElementById('t2_m1').value = res.data.t2.m1; document.getElementById('t2_m2').value = res.data.t2.m2; document.getElementById('t2_m3').value = res.data.t2.m3; calculateT2Total(); }
+                    for(let i=1; i<=12; i++){ const el = document.getElementById('t3_k'+i); if(el) el.value = res.data.t3.hp[i-1]; }
+                    calculateT3Total(); switchMarkTab('t3');
                 }
             });
         }
 
         function updateRadarChart(averages) {
-            const ctx = document.getElementById('peerRadarChart').getContext('2d');
-            if(radarChart) radarChart.destroy();
-            radarChart = new Chart(ctx, { 
-                type: 'radar', 
-                data: { labels: peerK, datasets: [{ label: 'Peer Assesment', data: averages, backgroundColor: 'rgba(30, 58, 138, 0.2)', borderColor: '#1e3a8a', pointBackgroundColor: '#1e3a8a', borderWidth: 2 }] }, 
-                options: { scales: { r: { min: 0, max: 5, ticks: { display: false }, pointLabels: { font: { size: 10, weight: 'bold' } } } }, plugins: { legend: { display: false } } } 
-            });
-        }
-
-        function loadTeammates() {
-            showLoader(true);
-            fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify({ action: "get_teammates", reviewer_id: currentStudent.id, siri: currentStudent.siri, nama_kump: currentStudent.nama_kump }) }).then(r => r.json()).then(res => {
-                showLoader(false); if (res.result === 'success') { teammates = res.data; renderTeammates(); }
-            });
-        }
-
-        function renderTeammates() {
-            const list = document.getElementById('teammates-list'), btn = document.getElementById('btn-submit-peer');
-            if(teammates.length === 0) { list.innerHTML = '<p class="col-span-2 text-center opacity-30">Tiada rakan dikesan.</p>'; return; }
-            const labels = ["Kepimpinan", "Kerjasama", "Komunikasi", "Komitmen", "Sahsiah"];
-            list.innerHTML = teammates.map(m => `
-                <div class="bg-gray-50 p-6 rounded-[28px] border shadow-sm">
-                    <div class="flex items-center gap-3 mb-4">
-                        <img src="${m.url_gambar}" class="avatar-peer shadow-sm">
-                        <p class="text-[10px] font-black uppercase text-blue-900">${m.nama}</p>
-                    </div>
-                    <div class="grid grid-cols-5 gap-1">
-                        ${[1,2,3,4,5].map(i => `
-                            <div class="text-center">
-                                <label class="text-[7px] font-black text-blue-900 block mb-1">K${i}</label>
-                                <input type="number" id="m${i}_${m.id}" value="${m['m'+i] || 0}" min="0" max="5" class="input-mark" style="font-size: 0.9rem;">
-                                <span class="text-[5px] text-gray-400 block uppercase font-bold mt-1 leading-none">${labels[i-1]}</span>
-                            </div>`).join('')}
-                    </div>
-                </div>`).join('');
-            btn.classList.remove('hidden');
-        }
-
-        function submitPeerReviews() {
-            const reviews = teammates.map(m => ({ 
-                target_id: m.id, 
-                m1: document.getElementById('m1_'+m.id).value || 0, 
-                m2: document.getElementById('m2_'+m.id).value || 0, 
-                m3: document.getElementById('m3_'+m.id).value || 0, 
-                m4: document.getElementById('m4_'+m.id).value || 0, 
-                m5: document.getElementById('m5_'+m.id).value || 0 
-            }));
-            showLoader(true);
-            fetch(WEB_APP_URL, { 
-                method: "POST", 
-                body: JSON.stringify({ action: "submit_bulk_peer", reviewer_id: currentStudent.id, siri: currentStudent.siri, nama_kump: currentStudent.nama_kump, reviews: reviews }) 
-            }).then(r => r.json()).then(res => { 
-                showLoader(false); alert(res.message); 
-                loadTeammates();
-            });
+            const ctx = document.getElementById('peerRadarChart').getContext('2d'); if(radarChart) radarChart.destroy();
+            radarChart = new Chart(ctx, { type: 'radar', data: { labels: peerK, datasets: [{ label: 'Peer Assesment', data: averages, backgroundColor: 'rgba(30, 58, 138, 0.2)', borderColor: '#1e3a8a', pointBackgroundColor: '#1e3a8a', borderWidth: 2 }] }, options: { scales: { r: { min: 0, max: 5, ticks: { display: false }, pointLabels: { font: { size: 10, weight: 'bold' } } } }, plugins: { legend: { display: false } } } });
         }
 
         function loadSummaryData() {
             showLoader(true); const k = document.getElementById('sel-class-summary').value;
             fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify({ action: "get_summary_data", kelas: k }) }).then(r => r.json()).then(res => {
                 showLoader(false); const b = document.getElementById('summary-body'); b.innerHTML = "";
-                
-                // Objek untuk mengumpul statistik gred yang betul
                 let stats = { AP:0, A:0, AM:0, BP:0, B:0, BM:0, CP:0, C:0, CM:0, DP:0, D:0, F:0 };
-                let allScores = [];
-
                 res.data.forEach(r => { 
-                    const score = parseFloat(r.total);
-                    const gred = getGredIPG(score);
-                    allScores.push(score);
-
-                    // Update statistik gred
-                    if(gred === "A+") stats.AP++; else if(gred === "A") stats.A++; else if(gred === "A-") stats.AM++;
-                    else if(gred === "B+") stats.BP++; else if(gred === "B") stats.B++; else if(gred === "B-") stats.BM++;
-                    else if(gred === "C+") stats.CP++; else if(gred === "C") stats.C++; else if(gred === "C-") stats.CM++;
-                    else if(gred === "D+") stats.DP++; else if(gred === "D") stats.D++; else stats.F++;
-
+                    const score = parseFloat(r.total); const gred = getGredIPG(score);
+                    if(gred === "A+") stats.AP++; else if(gred === "A") stats.A++; else if(gred === "A-") stats.AM++; else if(gred === "B+") stats.BP++; else if(gred === "B") stats.B++; else if(gred === "B-") stats.BM++; else if(gred === "C+") stats.CP++; else if(gred === "C") stats.C++; else if(gred === "C-") stats.CM++; else if(gred === "D+") stats.DP++; else if(gred === "D") stats.D++; else stats.F++;
                     b.innerHTML += `<tr class="hover:bg-gray-50 border-b"><td class="p-4 text-left font-bold uppercase">${r.nama}</td><td class="p-4 font-bold text-blue-600 uppercase">${r.kump}</td><td class="p-4 font-black">${r.total}</td><td class="p-4 font-black text-indigo-700">${gred}</td></tr>`; 
                 });
-                
-                document.getElementById('stat-sd').innerText = res.stats.sd;
-                
-                // Update UI bilangan gred
-                document.getElementById('c-ap').innerText = stats.AP;
-                document.getElementById('c-a').innerText = stats.A;
-                document.getElementById('c-am').innerText = stats.AM;
-                document.getElementById('c-bp').innerText = stats.BP;
-                document.getElementById('c-b').innerText = stats.B;
-                document.getElementById('c-bm').innerText = stats.BM;
-                document.getElementById('c-cp').innerText = stats.CP;
-                document.getElementById('c-c').innerText = stats.C;
-                document.getElementById('c-cm').innerText = stats.CM;
-                document.getElementById('c-dp').innerText = stats.DP;
-                document.getElementById('c-d').innerText = stats.D;
-                document.getElementById('c-f').innerText = stats.F;
-
+                document.getElementById('c-ap').innerText = stats.AP; document.getElementById('c-a').innerText = stats.A; document.getElementById('c-am').innerText = stats.AM; document.getElementById('c-bp').innerText = stats.BP; document.getElementById('c-b').innerText = stats.B; document.getElementById('c-bm').innerText = stats.BM; document.getElementById('c-cp').innerText = stats.CP; document.getElementById('c-c').innerText = stats.C; document.getElementById('c-cm').innerText = stats.CM; document.getElementById('c-dp').innerText = stats.DP; document.getElementById('c-d').innerText = stats.D; document.getElementById('c-f').innerText = stats.F;
                 updateBellCurve(stats);
             });
         }
@@ -466,18 +371,19 @@
             const ctx = document.getElementById('bellCurveChart').getContext('2d'); if(myChart) myChart.destroy();
             const labels = ['F', 'D', 'D+', 'C-', 'C', 'C+', 'B-', 'B', 'B+', 'A-', 'A', 'A+'];
             const data = [stats.F, stats.D, stats.DP, stats.CM, stats.C, stats.CP, stats.BM, stats.B, stats.BP, stats.AM, stats.A, stats.AP];
-            
-            myChart = new Chart(ctx, { 
-                type: 'line', 
-                data: { 
-                    labels: labels, 
-                    datasets: [{ data: data, borderColor: '#1e3a8a', tension: 0.4, fill: true, backgroundColor: 'rgba(30, 58, 138, 0.1)' }] 
-                }, 
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { grid: { display: false } } } } 
-            });
+            myChart = new Chart(ctx, { type: 'line', data: { labels: labels, datasets: [{ data: data, borderColor: '#1e3a8a', tension: 0.4, fill: true, backgroundColor: 'rgba(30, 58, 138, 0.1)' }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { grid: { display: false } } } } });
         }
 
-        function showLecSection(s) { document.getElementById('sec-entry').classList.toggle('hidden', s !== 'entry'); document.getElementById('sec-summary').classList.toggle('hidden', s !== 'summary'); document.getElementById('btn-l-entry').className = (s === 'entry') ? 'px-6 py-2 rounded-lg font-bold text-xs bg-blue-900 text-white shadow' : 'px-6 py-2 rounded-lg font-bold text-xs bg-gray-50 text-gray-400 border transition-all'; document.getElementById('btn-l-summary').className = (s === 'summary') ? 'px-6 py-2 rounded-lg font-bold text-xs bg-blue-900 text-white shadow' : 'px-6 py-2 rounded-lg font-bold text-xs bg-gray-50 text-gray-400 border transition-all'; }
+        function showLecSection(s) { 
+            const sections = ['entry', 'biodata', 'summary'];
+            sections.forEach(sec => document.getElementById('sec-' + sec).classList.toggle('hidden', sec !== s));
+            sections.forEach(sec => {
+                const btn = document.getElementById('btn-l-' + sec);
+                if(sec === s) btn.className = 'px-6 py-2 rounded-lg font-bold text-xs bg-blue-900 text-white shadow min-w-fit';
+                else btn.className = 'px-6 py-2 rounded-lg font-bold text-xs bg-gray-50 text-gray-400 border min-w-fit transition-all';
+            });
+            if(s === 'biodata') renderBiodata();
+        }
         
         function switchMarkTab(t) {
             document.querySelectorAll('.mark-form').forEach(f => f.classList.add('hidden'));
@@ -503,6 +409,32 @@
         function showLoader(s) { document.getElementById('loader').classList.toggle('hidden', !s); }
         function showToast(m, t) { const el = document.getElementById('toast'); document.getElementById('toast-msg').innerText = m; el.className = 'fixed top-6 right-6 z-[90] px-8 py-4 rounded-2xl text-white font-black shadow-2xl transition-all ' + (t==='success'?'bg-green-500':'bg-red-500'); el.classList.remove('hidden'); setTimeout(() => el.classList.add('hidden'), 3500); }
         function switchLoginMode(m) { const isS = (m === 'student'); document.getElementById('form-student').classList.toggle('hidden', !isS); document.getElementById('form-lecturer').classList.toggle('hidden', isS); document.getElementById('l-std').className = isS ? "flex-1 py-2 text-xs font-bold bg-blue-900 text-white" : "flex-1 py-2 text-xs font-bold bg-gray-50 text-gray-400"; document.getElementById('l-lec').className = !isS ? "flex-1 py-2 text-xs font-bold bg-blue-900 text-white" : "flex-1 py-2 text-xs font-bold bg-gray-50 text-gray-400"; }
+        
+        function switchTab(t) {
+            const isP = (t === 'profil');
+            document.getElementById('tab-profil').classList.toggle('hidden', !isP);
+            document.getElementById('tab-rakan').classList.toggle('hidden', isP);
+            document.getElementById('btn-profil').className = isP ? "flex-1 py-3 rounded-xl font-bold text-[10px] uppercase shadow-md tab-active" : "flex-1 py-3 rounded-xl font-bold text-[10px] uppercase border bg-gray-50 text-gray-400";
+            document.getElementById('btn-rakan').className = !isP ? "flex-1 py-3 rounded-xl font-bold text-[10px] uppercase shadow-md tab-active" : "flex-1 py-3 rounded-xl font-bold text-[10px] uppercase border bg-gray-50 text-gray-400";
+            if(!isP) loadTeammates();
+        }
+
+        function loadStudentView(d) {
+            document.getElementById('view-login').classList.add('hidden');
+            document.getElementById('view-student').classList.remove('hidden');
+            document.getElementById('std-name-display').innerText = d.nama;
+            document.getElementById('header-info').innerText = `SIRI: ${d.siri} | KUMP: ${d.nama_kump}${d.no_kump} | KELAS: ${d.kelas}`;
+            document.getElementById('std-siri').value = d.siri; document.getElementById('std-kump').value = d.nama_kump; document.getElementById('std-no').value = d.no_kump;
+            document.getElementById('std-tel').value = d.tel_waris || ""; document.getElementById('std-alahan').value = d.alahan || ""; document.getElementById('std-ubat').value = d.ubat || "";
+            if (d.url_gambar) { const im = document.getElementById('std-img'); im.src = d.url_gambar; im.classList.remove('hidden'); document.getElementById('img-ph').classList.add('hidden'); }
+        }
+        
+        function loadTeammates() {
+            showLoader(true);
+            fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify({ action: "get_teammates", reviewer_id: currentStudent.id, siri: currentStudent.siri, nama_kump: currentStudent.nama_kump }) }).then(r => r.json()).then(res => {
+                showLoader(false); if (res.result === 'success') { teammates = res.data; renderTeammates(); }
+            });
+        }
     </script>
 </body>
 </html>
