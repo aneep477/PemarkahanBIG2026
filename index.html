@@ -32,7 +32,6 @@
     </div>
     <div id="toast" class="fixed top-6 right-6 z-[90] hidden px-8 py-4 rounded-2xl text-white font-black shadow-2xl transition-all"><span id="toast-msg"></span></div>
 
-    <!-- 1. LOGIN SCREEN -->
     <div id="view-login" class="glass w-full max-w-md p-10 text-center flex flex-col items-center shadow-lg">
         <h1 class="text-3xl font-black text-blue-900 uppercase mb-6 tracking-tighter italic">e-BIG IPGKDA</h1>
         <div class="flex border rounded-xl mb-6 overflow-hidden w-full shadow-sm">
@@ -51,7 +50,6 @@
         <p class="footer-credit">Hakmilik Unit Kokurikulum IPG Kampus Darulaman<br>Disediakan oleh Haniff Faizal bin Chek Ani</p>
     </div>
 
-    <!-- 2. STUDENT DASHBOARD -->
     <div id="view-student" class="glass w-full max-w-6xl p-8 hidden">
         <div class="flex justify-between items-start mb-6 border-b pb-4">
             <div><h2 class="text-2xl font-black text-blue-900 uppercase leading-none" id="std-name-display">...</h2><p class="text-blue-600 font-bold text-[10px] mt-1" id="header-info">...</p></div>
@@ -68,7 +66,6 @@
             <div class="lg:w-2/3 space-y-6">
                 <div class="grid grid-cols-3 gap-4">
                     <div><label class="text-[9px] font-bold uppercase text-gray-400">Siri BIG</label><input type="text" id="std-siri" class="w-full p-4 bg-gray-50 border rounded-2xl font-bold outline-none shadow-inner"></div>
-                    <!-- DROP DOWN KUMPULAN -->
                     <div>
                         <label class="text-[9px] font-bold uppercase text-gray-400">Kumpulan</label>
                         <select id="std-kump" class="w-full p-4 bg-gray-50 border rounded-2xl font-bold outline-none shadow-inner appearance-none cursor-pointer">
@@ -99,7 +96,6 @@
         <p class="footer-credit mt-10">Unit Kokurikulum IPG Kampus Darulaman | Haniff Faizal</p>
     </div>
 
-    <!-- 3. LECTURER DASHBOARD -->
     <div id="view-lecturer" class="glass w-full max-w-7xl p-8 hidden">
         <div class="flex justify-between items-center border-b pb-4 mb-6 leading-none"><h1 class="text-lg font-black text-blue-900 uppercase italic">Penilai: <span id="lec-name">...</span></h1><button onclick="location.reload()" class="bg-red-50 text-red-500 font-bold text-xs px-4 py-2 rounded-xl border uppercase">Log Keluar</button></div>
         <div class="flex gap-2 mb-6 shadow-sm"><button onclick="showLecSection('entry')" id="btn-l-entry" class="px-6 py-2 rounded-lg font-bold text-xs bg-blue-900 text-white shadow transition-all">ISI MARKAH</button><button onclick="showLecSection('summary')" id="btn-l-summary" class="px-6 py-2 rounded-lg font-bold text-xs bg-gray-50 text-gray-400 border transition-all">RUMUSAN</button></div>
@@ -141,10 +137,22 @@
                 <div id="form-t2" class="mark-form bg-white p-8 border rounded-[32px] space-y-6 hidden shadow-sm">
                     <h3 class="font-black text-blue-900 uppercase italic text-center">AMALI 1 (20%)</h3>
                     <div class="grid grid-cols-3 gap-4">
-                        <div><label class="text-[9px] font-bold uppercase">HP4 ETIKET DAN SOSIAL (5)</label><input type="number" id="t2_m1" class="input-mark"></div>
-                        <div><label class="text-[9px] font-bold uppercase">HP4 GURU DAN KOMUNITI (5)</label><input type="number" id="t2_m2" class="input-mark"></div>
-                        <div><label class="text-[9px] font-bold uppercase">HP5 KEWARGANEGARAAN (10)</label><input type="number" id="t2_m3" class="input-mark"></div>
+                        <div><label class="text-[9px] font-bold uppercase">HP4 ETIKET & SOSIAL (5)</label><input type="number" id="t2_m1" class="input-mark" oninput="calculateT2Total()"></div>
+                        <div><label class="text-[9px] font-bold uppercase">HP4 GURU & KOMUNITI (5)</label><input type="number" id="t2_m2" class="input-mark" oninput="calculateT2Total()"></div>
+                        <div><label class="text-[9px] font-bold uppercase">HP5 KEWARGANEGARAAN (10)</label><input type="number" id="t2_m3" class="input-mark" oninput="calculateT2Total()"></div>
                     </div>
+                    
+                    <div class="grid grid-cols-2 gap-4 pt-4 border-t border-dashed">
+                        <div class="bg-blue-50 p-3 rounded-xl text-center">
+                            <p class="text-[8px] font-bold text-blue-400 uppercase">Jumlah HP4 (10)</p>
+                            <p id="total-hp4" class="text-xl font-black text-blue-900">0.0</p>
+                        </div>
+                        <div class="bg-indigo-50 p-3 rounded-xl text-center">
+                            <p class="text-[8px] font-bold text-indigo-400 uppercase">Jumlah HP5 (10)</p>
+                            <p id="total-hp5" class="text-xl font-black text-indigo-900">0.0</p>
+                        </div>
+                    </div>
+
                     <button onclick="submitMark('MARKAH_TUGASAN2')" class="w-full bg-indigo-700 text-white py-4 font-bold rounded-2xl shadow uppercase">Simpan Amali 1</button>
                 </div>
 
@@ -170,7 +178,6 @@
     </div>
 
     <script>
-        // PASTIKAN URL DI BAWAH TEPAT
         const WEB_APP_URL = "https://script.google.com/macros/s/AKfycby3nQyBtnUOrng8S-HcUIPFdXHn9VfxcZ0ixKyTr9TiVhULonuHItI-bpHi_9TwSFE5/exec"; 
         let currentStudent = null, teammates = [], allStudentsCache = [], myChart = null, radarChart = null;
 
@@ -191,6 +198,14 @@
                 });
             });
         };
+
+        function calculateT2Total() {
+            const m1 = parseFloat(document.getElementById('t2_m1').value) || 0;
+            const m2 = parseFloat(document.getElementById('t2_m2').value) || 0;
+            const m3 = parseFloat(document.getElementById('t2_m3').value) || 0;
+            document.getElementById('total-hp4').innerText = (m1 + m2).toFixed(1);
+            document.getElementById('total-hp5').innerText = m3.toFixed(1);
+        }
 
         function handleLogin(e, mode) {
             e.preventDefault(); showLoader(true);
@@ -268,7 +283,12 @@
                     document.getElementById('grading-area').classList.remove('hidden');
                     if(res.peer_averages) updateRadarChart(res.peer_averages);
                     if(res.data.t1) { document.getElementById('t1_m1').value = res.data.t1.m1; document.getElementById('t1_m2').value = res.data.t1.m2; }
-                    if(res.data.t2) { document.getElementById('t2_m1').value = res.data.t2.m1; document.getElementById('t2_m2').value = res.data.t2.m2; document.getElementById('t2_m3').value = res.data.t2.m3; }
+                    if(res.data.t2) { 
+                        document.getElementById('t2_m1').value = res.data.t2.m1; 
+                        document.getElementById('t2_m2').value = res.data.t2.m2; 
+                        document.getElementById('t2_m3').value = res.data.t2.m3;
+                        calculateT2Total();
+                    }
                     for(let i=1; i<=12; i++){ const el = document.getElementById('t3_k'+i); if(el) el.value = res.data.t3.hp[i-1]; }
                     switchMarkTab('t3');
                 }
@@ -285,7 +305,6 @@
         function renderTeammates() {
             const list = document.getElementById('teammates-list'), btn = document.getElementById('btn-submit-peer');
             if(teammates.length === 0) { list.innerHTML = '<p class="col-span-2 text-center opacity-30">Tiada rakan dikesan.</p>'; return; }
-            // FIX: Masukkan value markah sedia ada (m1-m5) dari database
             list.innerHTML = teammates.map(m => `
                 <div class="bg-gray-50 p-6 rounded-[28px] border shadow-sm">
                     <div class="flex items-center gap-3 mb-4">
@@ -318,7 +337,6 @@
                 body: JSON.stringify({ action: "submit_bulk_peer", reviewer_id: currentStudent.id, siri: currentStudent.siri, nama_kump: currentStudent.nama_kump, reviews: reviews }) 
             }).then(r => r.json()).then(res => { 
                 showLoader(false); alert(res.message); 
-                // Segarkan data teammates selepas simpan
                 loadTeammates();
             });
         }
