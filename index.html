@@ -15,11 +15,11 @@
         .tab-active { background-color: #1e3a8a; color: white; border: none; }
         .loader { border-top-color: #3b82f6; animation: spinner 1s linear infinite; }
         @keyframes spinner { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .input-mark { text-align: center; border: 1px solid #d1d5db; border-radius: 0.75rem; padding: 0.5rem; width: 100%; font-weight: bold; background: #f9fafb; outline: none; transition: 0.2s; }
+        .input-mark { text-align: center; border: 1px solid #d1d5db; border-radius: 0.75rem; padding: 0.5rem; width: 100%; font-weight: bold; background: #f9fafb; outline: none; transition: 0.2s; font-size: 1.25rem; }
         .input-mark:focus { border-color: #3b82f6; background: white; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
         .avatar-main { width: 150px; height: 200px; border-radius: 20px; object-fit: cover; border: 5px solid white; box-shadow: 0 10px 20px rgba(0,0,0,0.1); background: #f3f4f6; }
         .avatar-peer { width: 45px; height: 45px; border-radius: 12px; object-fit: cover; background: #eef2ff; }
-        .section-header { font-size: 10px; font-weight: 800; color: #1e3a8a; margin-bottom: 10px; border-left: 4px solid #1e3a8a; padding-left: 10px; text-transform: uppercase; }
+        .section-header { font-size: 14px; font-weight: 800; color: #1e3a8a; margin-bottom: 15px; border-left: 5px solid #1e3a8a; padding-left: 12px; text-transform: uppercase; }
         .footer-credit { font-size: 8px; color: #9ca3af; font-weight: 600; margin-top: 30px; text-transform: uppercase; text-align: center; line-height: 1.5; }
         .radar-container { width: 100%; max-width: 280px; margin: 0 auto; height: 260px; }
     </style>
@@ -168,27 +168,27 @@
                     <button onclick="submitMark('MARKAH_TUGASAN2')" class="w-full bg-indigo-700 text-white py-4 font-bold rounded-2xl shadow uppercase">Simpan Amali 1</button>
                 </div>
 
-                <div id="form-t3" class="mark-form bg-white p-8 border rounded-[32px] space-y-8 shadow-sm hidden">
+                <div id="form-t3" class="mark-form bg-white p-8 border rounded-[32px] space-y-10 shadow-sm hidden">
                     <div>
                         <h3 class="section-header">1. HP3: Amali II (25%)</h3>
-                        <div class="grid grid-cols-5 gap-2" id="hp3-inputs"></div>
-                        <div class="mt-2 bg-blue-50 p-2 rounded-xl text-center border border-blue-100">
-                            <p class="text-[8px] font-bold text-blue-400 uppercase">Jumlah HP3 (25%)</p>
-                            <p id="total-hp3" class="text-xl font-black text-blue-900">0.0</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-5 gap-6" id="hp3-inputs"></div>
+                        <div class="mt-4 bg-blue-50 p-4 rounded-2xl text-center border border-blue-100">
+                            <p class="text-[10px] font-bold text-blue-400 uppercase">Jumlah HP3 (25%)</p>
+                            <p id="total-hp3" class="text-3xl font-black text-blue-900">0.0</p>
                         </div>
                     </div>
                     <div>
                         <h3 class="section-header">2. HP8: Kepimpinan Gabungan (45%)</h3>
-                        <div class="space-y-4">
-                            <div class="grid grid-cols-3 gap-2" id="hp8i-inputs"></div>
-                            <div class="grid grid-cols-4 gap-2" id="hp8k-inputs"></div>
+                        <div class="space-y-8">
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6" id="hp8i-inputs"></div>
+                            <div class="grid grid-cols-1 sm:grid-cols-4 gap-6" id="hp8k-inputs"></div>
                         </div>
-                        <div class="mt-2 bg-purple-50 p-2 rounded-xl text-center border border-purple-100">
-                            <p class="text-[8px] font-bold text-purple-400 uppercase">Jumlah HP8 Individu + Kumpulan (45%)</p>
-                            <p id="total-hp8" class="text-xl font-black text-purple-900">0.0</p>
+                        <div class="mt-4 bg-purple-50 p-4 rounded-2xl text-center border border-purple-100">
+                            <p class="text-[10px] font-bold text-purple-400 uppercase">Jumlah HP8 Individu + Kumpulan (45%)</p>
+                            <p id="total-hp8" class="text-3xl font-black text-purple-900">0.0</p>
                         </div>
                     </div>
-                    <button onclick="submitMark('MARKAH_TUGASAN3')" class="w-full bg-purple-700 text-white py-4 font-bold rounded-2xl shadow-xl uppercase transform hover:scale-[1.01]">Simpan Amali 2</button>
+                    <button onclick="submitMark('MARKAH_TUGASAN3')" class="w-full bg-purple-700 text-white py-6 font-black rounded-2xl shadow-xl uppercase transform hover:scale-[1.01] text-lg">Simpan Amali 2</button>
                 </div>
             </div>
         </div>
@@ -211,7 +211,7 @@
 
         const peerK = ["Kepimpinan", "Kerjasama", "Komunikasi", "Komitmen", "Sahsiah"];
         const t3Items = {
-            hp3: [{id:1, name:"Patriotik", max:5}, {id:2, name:"Makan", max:5}, {id:3, name:"Flying", max:5}, {id:4, name:"Tazkirah", max:5}, {id:5, name:"Refleksi", max:5}],
+            hp3: [{id:1, name:"Patriotik", max:5}, {id:2, name:"Pemakanan Sihat", max:5}, {id:3, name:"Abseiling", max:5}, {id:4, name:"Tazkirah/Moral", max:5}, {id:5, name:"Refleksi", max:5}],
             hp8i: [{id:6, name:"Kembara Ind", max:5}, {id:8, name:"Air Ind", max:5}, {id:10, name:"Rakit Ind", max:5}],
             hp8k: [{id:7, name:"Kembara Kump", max:10}, {id:9, name:"Air Kump", max:5}, {id:11, name:"Rakit Kump", max:5}, {id:12, name:"Amalan Kump", max:10}]
         };
@@ -222,7 +222,12 @@
             Object.keys(t3Items).forEach(cat => {
                 t3Items[cat].forEach(k => {
                     const box = (cat === 'hp3') ? h3 : (cat === 'hp8i' ? h8i : h8k);
-                    box.innerHTML += `<div><label class="text-[8px] font-bold text-gray-400">K${k.id}(${k.max})</label><input type="number" id="t3_k${k.id}" class="input-mark" placeholder="0" oninput="calculateT3Total()"><span class="text-[6px] text-gray-300 block uppercase font-bold tracking-tighter">${k.name}</span></div>`;
+                    box.innerHTML += `
+                        <div class="flex flex-col">
+                            <label class="text-[11px] font-black text-blue-900 uppercase mb-1">K${k.id} (${k.max})</label>
+                            <input type="number" id="t3_k${k.id}" class="input-mark mb-1" placeholder="0" oninput="calculateT3Total()">
+                            <span class="text-[10px] text-gray-500 block uppercase font-bold leading-tight bg-gray-100 p-2 rounded-lg text-center h-full flex items-center justify-center">${k.name}</span>
+                        </div>`;
                 });
             });
         };
@@ -331,7 +336,7 @@
             radarChart = new Chart(ctx, { 
                 type: 'radar', 
                 data: { labels: peerK, datasets: [{ label: 'Peer Assesment', data: averages, backgroundColor: 'rgba(30, 58, 138, 0.2)', borderColor: '#1e3a8a', pointBackgroundColor: '#1e3a8a', borderWidth: 2 }] }, 
-                options: { scales: { r: { min: 0, max: 5, ticks: { display: false }, pointLabels: { font: { size: 9, weight: 'bold' } } } }, plugins: { legend: { display: false } } } 
+                options: { scales: { r: { min: 0, max: 5, ticks: { display: false }, pointLabels: { font: { size: 10, weight: 'bold' } } } }, plugins: { legend: { display: false } } } 
             });
         }
 
@@ -345,10 +350,7 @@
         function renderTeammates() {
             const list = document.getElementById('teammates-list'), btn = document.getElementById('btn-submit-peer');
             if(teammates.length === 0) { list.innerHTML = '<p class="col-span-2 text-center opacity-30">Tiada rakan dikesan.</p>'; return; }
-            
-            // Nama kriteria penuh untuk label input
             const labels = ["Kepimpinan", "Kerjasama", "Komunikasi", "Komitmen", "Sahsiah"];
-
             list.innerHTML = teammates.map(m => `
                 <div class="bg-gray-50 p-6 rounded-[28px] border shadow-sm">
                     <div class="flex items-center gap-3 mb-4">
@@ -359,7 +361,7 @@
                         ${[1,2,3,4,5].map(i => `
                             <div class="text-center">
                                 <label class="text-[7px] font-black text-blue-900 block mb-1">K${i}</label>
-                                <input type="number" id="m${i}_${m.id}" value="${m['m'+i] || 0}" min="0" max="5" class="input-mark" placeholder="0">
+                                <input type="number" id="m${i}_${m.id}" value="${m['m'+i] || 0}" min="0" max="5" class="input-mark" style="font-size: 0.9rem;">
                                 <span class="text-[5px] text-gray-400 block uppercase font-bold mt-1 leading-none">${labels[i-1]}</span>
                             </div>`).join('')}
                     </div>
