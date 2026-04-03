@@ -57,7 +57,7 @@
         </div>
         <div class="flex gap-2 mb-8 shadow-sm">
             <button onclick="switchTab('profil')" id="btn-profil" class="flex-1 py-3 rounded-xl font-bold text-[10px] uppercase shadow-md tab-active">1. Profil & Kumpulan</button>
-            <button onclick="switchTab('rakan')" id="btn-rakan" class="flex-1 py-3 rounded-xl font-bold text-[10px] uppercase tab-inactive border bg-gray-50 text-gray-400">2. Penilaian Rakan</button>
+            <button onclick="switchTab('rakan')" id="btn-rakan" class="flex-1 py-3 rounded-xl font-bold text-[10px] uppercase border bg-gray-50 text-gray-400">2. Penilaian Rakan</button>
         </div>
         <div id="tab-profil" class="flex flex-col lg:flex-row gap-10">
             <div class="lg:w-1/3 flex flex-col items-center">
@@ -141,7 +141,6 @@
                         <div><label class="text-[9px] font-bold uppercase">HP4 GURU & KOMUNITI (5)</label><input type="number" id="t2_m2" class="input-mark" oninput="calculateT2Total()"></div>
                         <div><label class="text-[9px] font-bold uppercase">HP5 KEWARGANEGARAAN (10)</label><input type="number" id="t2_m3" class="input-mark" oninput="calculateT2Total()"></div>
                     </div>
-                    
                     <div class="grid grid-cols-2 gap-4 pt-4 border-t border-dashed">
                         <div class="bg-blue-50 p-3 rounded-xl text-center">
                             <p class="text-[8px] font-bold text-blue-400 uppercase">Jumlah HP4 (10)</p>
@@ -152,14 +151,29 @@
                             <p id="total-hp5" class="text-xl font-black text-indigo-900">0.0</p>
                         </div>
                     </div>
-
                     <button onclick="submitMark('MARKAH_TUGASAN2')" class="w-full bg-indigo-700 text-white py-4 font-bold rounded-2xl shadow uppercase">Simpan Amali 1</button>
                 </div>
 
                 <div id="form-t3" class="mark-form bg-white p-8 border rounded-[32px] space-y-8 shadow-sm hidden">
-                    <div><h3 class="section-header">1. HP3: Amali II (25%)</h3><div class="grid grid-cols-5 gap-2" id="hp3-inputs"></div></div>
-                    <div><h3 class="section-header">2. HP8: Kepimpinan Individu (15%)</h3><div class="grid grid-cols-3 gap-2" id="hp8i-inputs"></div></div>
-                    <div><h3 class="section-header">3. HP8: Kepimpinan Kumpulan (30%)</h3><div class="grid grid-cols-4 gap-2" id="hp8k-inputs"></div></div>
+                    <div>
+                        <h3 class="section-header">1. HP3: Amali II (25%)</h3>
+                        <div class="grid grid-cols-5 gap-2" id="hp3-inputs"></div>
+                        <div class="mt-2 bg-blue-50 p-2 rounded-xl text-center border border-blue-100">
+                            <p class="text-[8px] font-bold text-blue-400 uppercase">Jumlah HP3 (25%)</p>
+                            <p id="total-hp3" class="text-xl font-black text-blue-900">0.0</p>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="section-header">2. HP8: Kepimpinan Gabungan (45%)</h3>
+                        <div class="space-y-4">
+                            <div class="grid grid-cols-3 gap-2" id="hp8i-inputs"></div>
+                            <div class="grid grid-cols-4 gap-2" id="hp8k-inputs"></div>
+                        </div>
+                        <div class="mt-2 bg-purple-50 p-2 rounded-xl text-center border border-purple-100">
+                            <p class="text-[8px] font-bold text-purple-400 uppercase">Jumlah HP8 Individu + Kumpulan (45%)</p>
+                            <p id="total-hp8" class="text-xl font-black text-purple-900">0.0</p>
+                        </div>
+                    </div>
                     <button onclick="submitMark('MARKAH_TUGASAN3')" class="w-full bg-purple-700 text-white py-4 font-bold rounded-2xl shadow-xl uppercase transform hover:scale-[1.01]">Simpan Amali 2</button>
                 </div>
             </div>
@@ -194,17 +208,27 @@
             Object.keys(t3Items).forEach(cat => {
                 t3Items[cat].forEach(k => {
                     const box = (cat === 'hp3') ? h3 : (cat === 'hp8i' ? h8i : h8k);
-                    box.innerHTML += `<div><label class="text-[8px] font-bold text-gray-400">K${k.id}(${k.max})</label><input type="number" id="t3_k${k.id}" class="input-mark" placeholder="0"><span class="text-[6px] text-gray-300 block uppercase font-bold tracking-tighter">${k.name}</span></div>`;
+                    box.innerHTML += `<div><label class="text-[8px] font-bold text-gray-400">K${k.id}(${k.max})</label><input type="number" id="t3_k${k.id}" class="input-mark" placeholder="0" oninput="calculateT3Total()"><span class="text-[6px] text-gray-300 block uppercase font-bold tracking-tighter">${k.name}</span></div>`;
                 });
             });
         };
 
+        // PENGIRAAN T2 (AMALI 1)
         function calculateT2Total() {
             const m1 = parseFloat(document.getElementById('t2_m1').value) || 0;
             const m2 = parseFloat(document.getElementById('t2_m2').value) || 0;
             const m3 = parseFloat(document.getElementById('t2_m3').value) || 0;
             document.getElementById('total-hp4').innerText = (m1 + m2).toFixed(1);
             document.getElementById('total-hp5').innerText = m3.toFixed(1);
+        }
+
+        // PENGIRAAN T3 (AMALI 2)
+        function calculateT3Total() {
+            let hp3 = 0, hp8 = 0;
+            for(let i=1; i<=5; i++) hp3 += parseFloat(document.getElementById('t3_k'+i).value) || 0;
+            for(let i=6; i<=12; i++) hp8 += parseFloat(document.getElementById('t3_k'+i).value) || 0;
+            document.getElementById('total-hp3').innerText = hp3.toFixed(1);
+            document.getElementById('total-hp8').innerText = hp8.toFixed(1);
         }
 
         function handleLogin(e, mode) {
@@ -216,7 +240,7 @@
                     if (mode === 'lecturer') loadLecturerView(res);
                     else { currentStudent = res.data; loadStudentView(res.data); }
                 } else alert(res.message);
-            }).catch(err => { showLoader(false); alert("Ralat sambungan: Sila semak pautan URL Web App anda."); });
+            }).catch(err => { showLoader(false); alert("Ralat sambungan."); });
         }
 
         function switchTab(t) {
@@ -264,16 +288,6 @@
             });
         }
 
-        function updateRadarChart(averages) {
-            const ctx = document.getElementById('peerRadarChart').getContext('2d');
-            if(radarChart) radarChart.destroy();
-            radarChart = new Chart(ctx, { 
-                type: 'radar', 
-                data: { labels: peerK, datasets: [{ label: 'Peer Assesment', data: averages, backgroundColor: 'rgba(30, 58, 138, 0.2)', borderColor: '#1e3a8a', pointBackgroundColor: '#1e3a8a', borderWidth: 2 }] }, 
-                options: { scales: { r: { min: 0, max: 5, ticks: { display: false }, pointLabels: { font: { size: 9, weight: 'bold' } } } }, plugins: { legend: { display: false } } } 
-            });
-        }
-
         function loadGradingForm() {
             const sid = document.getElementById('sel-student').value; if(!sid) return; showLoader(true);
             fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify({ action: "get_student_marks", student_id: sid }) }).then(r => r.json()).then(res => {
@@ -289,9 +303,23 @@
                         document.getElementById('t2_m3').value = res.data.t2.m3;
                         calculateT2Total();
                     }
-                    for(let i=1; i<=12; i++){ const el = document.getElementById('t3_k'+i); if(el) el.value = res.data.t3.hp[i-1]; }
+                    for(let i=1; i<=12; i++){ 
+                        const el = document.getElementById('t3_k'+i); 
+                        if(el) el.value = res.data.t3.hp[i-1]; 
+                    }
+                    calculateT3Total();
                     switchMarkTab('t3');
                 }
+            });
+        }
+
+        function updateRadarChart(averages) {
+            const ctx = document.getElementById('peerRadarChart').getContext('2d');
+            if(radarChart) radarChart.destroy();
+            radarChart = new Chart(ctx, { 
+                type: 'radar', 
+                data: { labels: peerK, datasets: [{ label: 'Peer Assesment', data: averages, backgroundColor: 'rgba(30, 58, 138, 0.2)', borderColor: '#1e3a8a', pointBackgroundColor: '#1e3a8a', borderWidth: 2 }] }, 
+                options: { scales: { r: { min: 0, max: 5, ticks: { display: false }, pointLabels: { font: { size: 9, weight: 'bold' } } } }, plugins: { legend: { display: false } } } 
             });
         }
 
