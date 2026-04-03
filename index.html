@@ -92,7 +92,21 @@
                 <button onclick="updateStudentData()" class="w-full bg-blue-900 text-white py-5 rounded-2xl font-black uppercase shadow-lg transform hover:scale-[1.01]">Simpan Profil</button>
             </div>
         </div>
-        <div id="tab-rakan" class="hidden space-y-6"><div id="teammates-list" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div><button id="btn-submit-peer" onclick="submitPeerReviews()" class="w-full bg-indigo-600 text-white py-5 rounded-2xl font-black uppercase shadow-lg hidden">Hantar Penilaian</button></div>
+
+        <div id="tab-rakan" class="hidden space-y-6">
+            <div class="bg-blue-900 text-white p-4 rounded-2xl shadow-lg">
+                <p class="text-[10px] font-bold uppercase mb-2 opacity-80 italic">Petunjuk Kriteria (Skala 1-5):</p>
+                <div class="grid grid-cols-5 gap-1 text-[8px] font-black uppercase text-center">
+                    <div class="bg-blue-800 p-2 rounded-lg">K1: Kepimpinan</div>
+                    <div class="bg-blue-800 p-2 rounded-lg">K2: Kerjasama</div>
+                    <div class="bg-blue-800 p-2 rounded-lg">K3: Komunikasi</div>
+                    <div class="bg-blue-800 p-2 rounded-lg">K4: Komitmen</div>
+                    <div class="bg-blue-800 p-2 rounded-lg">K5: Sahsiah</div>
+                </div>
+            </div>
+            <div id="teammates-list" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+            <button id="btn-submit-peer" onclick="submitPeerReviews()" class="w-full bg-indigo-600 text-white py-5 rounded-2xl font-black uppercase shadow-lg hidden">Hantar Penilaian</button>
+        </div>
         <p class="footer-credit mt-10">Unit Kokurikulum IPG Kampus Darulaman | Haniff Faizal</p>
     </div>
 
@@ -188,7 +202,7 @@
             </div>
             <div class="overflow-x-auto bg-white rounded-3xl border shadow-sm"><table class="w-full text-center text-[11px]"><thead class="bg-gray-50 uppercase font-black text-gray-400 tracking-tighter"><tr class="border-b"><th class="p-4 text-left">PELAJAR</th><th class="p-4">KUMPULAN (NO)</th><th class="p-4">TOTAL</th><th class="p-4">GRED</th></tr></thead><tbody id="summary-body" class="divide-y divide-gray-50"></tbody></table></div>
         </div>
-        <p class="footer-credit mt-10">Hakmilik Unit Kokurikulum IPG Kampus Darulaman | Haniff Faizal bin Chek Ani</p>
+        <p class="footer-credit mt-10">Unit Kokurikulum IPG Kampus Darulaman | Haniff Faizal bin Chek Ani</p>
     </div>
 
     <script>
@@ -213,7 +227,6 @@
             });
         };
 
-        // PENGIRAAN T2 (AMALI 1)
         function calculateT2Total() {
             const m1 = parseFloat(document.getElementById('t2_m1').value) || 0;
             const m2 = parseFloat(document.getElementById('t2_m2').value) || 0;
@@ -222,7 +235,6 @@
             document.getElementById('total-hp5').innerText = m3.toFixed(1);
         }
 
-        // PENGIRAAN T3 (AMALI 2)
         function calculateT3Total() {
             let hp3 = 0, hp8 = 0;
             for(let i=1; i<=5; i++) hp3 += parseFloat(document.getElementById('t3_k'+i).value) || 0;
@@ -333,6 +345,10 @@
         function renderTeammates() {
             const list = document.getElementById('teammates-list'), btn = document.getElementById('btn-submit-peer');
             if(teammates.length === 0) { list.innerHTML = '<p class="col-span-2 text-center opacity-30">Tiada rakan dikesan.</p>'; return; }
+            
+            // Nama kriteria penuh untuk label input
+            const labels = ["Kepimpinan", "Kerjasama", "Komunikasi", "Komitmen", "Sahsiah"];
+
             list.innerHTML = teammates.map(m => `
                 <div class="bg-gray-50 p-6 rounded-[28px] border shadow-sm">
                     <div class="flex items-center gap-3 mb-4">
@@ -342,8 +358,9 @@
                     <div class="grid grid-cols-5 gap-1">
                         ${[1,2,3,4,5].map(i => `
                             <div class="text-center">
-                                <label class="text-[8px] font-bold text-blue-900">K${i}</label>
+                                <label class="text-[7px] font-black text-blue-900 block mb-1">K${i}</label>
                                 <input type="number" id="m${i}_${m.id}" value="${m['m'+i] || 0}" min="0" max="5" class="input-mark" placeholder="0">
+                                <span class="text-[5px] text-gray-400 block uppercase font-bold mt-1 leading-none">${labels[i-1]}</span>
                             </div>`).join('')}
                     </div>
                 </div>`).join('');
