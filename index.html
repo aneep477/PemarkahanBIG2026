@@ -59,6 +59,7 @@
             <button onclick="switchTab('profil')" id="btn-profil" class="flex-1 py-3 rounded-xl font-bold text-[10px] uppercase shadow-md tab-active">1. Profil & Kumpulan</button>
             <button onclick="switchTab('rakan')" id="btn-rakan" class="flex-1 py-3 rounded-xl font-bold text-[10px] uppercase border bg-gray-50 text-gray-400">2. Penilaian Rakan</button>
         </div>
+
         <div id="tab-profil" class="flex flex-col lg:flex-row gap-10">
             <div class="lg:w-1/3 flex flex-col items-center">
                 <img id="std-img" class="avatar-main shadow-2xl hidden"><div id="img-ph" class="avatar-main bg-blue-50 flex items-center justify-center text-blue-200"><i class="fas fa-user-circle text-8xl"></i></div>
@@ -66,13 +67,7 @@
             <div class="lg:w-2/3 space-y-6">
                 <div class="grid grid-cols-3 gap-4">
                     <div><label class="text-[9px] font-bold uppercase text-gray-400">Siri BIG</label><input type="text" id="std-siri" class="w-full p-4 bg-gray-50 border rounded-2xl font-bold outline-none shadow-inner"></div>
-                    <div>
-                        <label class="text-[9px] font-bold uppercase text-gray-400">Kumpulan</label>
-                        <select id="std-kump" class="w-full p-4 bg-gray-50 border rounded-2xl font-bold outline-none shadow-inner appearance-none cursor-pointer">
-                            <option value="">-- PILIH --</option>
-                            <option value="GREY">GREY</option><option value="JINGGA">JINGGA</option><option value="KUNING">KUNING</option><option value="UNGU">UNGU</option><option value="BIRU GELAP">BIRU GELAP</option><option value="BIRU">BIRU</option><option value="PINK">PINK</option><option value="COKLAT">COKLAT</option><option value="MERAH">MERAH</option><option value="HIJAU">HIJAU</option>
-                        </select>
-                    </div>
+                    <div><label class="text-[9px] font-bold uppercase text-gray-400">Kumpulan</label><select id="std-kump" class="w-full p-4 bg-gray-50 border rounded-2xl font-bold outline-none shadow-inner"><option value="">-- PILIH --</option><option value="GREY">GREY</option><option value="JINGGA">JINGGA</option><option value="KUNING">KUNING</option><option value="UNGU">UNGU</option><option value="BIRU GELAP">BIRU GELAP</option><option value="BIRU">BIRU</option><option value="PINK">PINK</option><option value="COKLAT">COKLAT</option><option value="MERAH">MERAH</option><option value="HIJAU">HIJAU</option></select></div>
                     <div><label class="text-[9px] font-bold uppercase text-gray-400">No. Ahli</label><input type="text" id="std-no" class="w-full p-4 bg-gray-50 border rounded-2xl font-bold outline-none shadow-inner"></div>
                 </div>
                 <div class="grid grid-cols-2 gap-4">
@@ -80,9 +75,10 @@
                     <div><label class="text-[9px] font-bold uppercase text-gray-400">Ubat</label><input type="text" id="std-ubat" class="w-full p-4 border rounded-2xl font-bold outline-none shadow-inner"></div>
                 </div>
                 <div><label class="text-[9px] font-bold uppercase text-gray-400">No. Tel Waris</label><input type="text" id="std-tel" class="w-full p-4 border rounded-2xl font-bold outline-none shadow-inner"></div>
-                <button onclick="updateStudentData()" class="w-full bg-blue-900 text-white py-5 rounded-2xl font-black uppercase shadow-lg transform hover:scale-[1.01]">Simpan Profil</button>
+                <button onclick="updateStudentData()" class="w-full bg-blue-900 text-white py-5 rounded-2xl font-black uppercase shadow-lg">Simpan Profil</button>
             </div>
         </div>
+
         <div id="tab-rakan" class="hidden space-y-6">
             <div class="bg-blue-900 text-white p-4 rounded-2xl shadow-lg text-center">
                 <p class="text-[10px] font-bold uppercase mb-2 opacity-80 italic">Petunjuk Kriteria (Skala 1-5):</p>
@@ -102,11 +98,12 @@
         <div class="flex gap-2 mb-6 overflow-x-auto pb-2">
             <button onclick="showLecSection('entry')" id="btn-l-entry" class="px-6 py-2 rounded-lg font-bold text-xs bg-blue-900 text-white shadow min-w-fit">ISI MARKAH</button>
             <button onclick="showLecSection('biodata')" id="btn-l-biodata" class="px-6 py-2 rounded-lg font-bold text-xs bg-gray-50 text-gray-400 border min-w-fit">BIODATA PELAJAR</button>
+            <button onclick="showLecSection('status')" id="btn-l-status" class="px-6 py-2 rounded-lg font-bold text-xs bg-gray-50 text-gray-400 border min-w-fit">STATUS PENILAIAN</button>
             <button onclick="showLecSection('summary')" id="btn-l-summary" class="px-6 py-2 rounded-lg font-bold text-xs bg-gray-50 text-gray-400 border min-w-fit">RUMUSAN</button>
         </div>
         
         <div id="sec-entry" class="space-y-6">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 bg-gray-50 p-6 rounded-[32px] border border-blue-50 shadow-inner">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 bg-gray-50 p-6 rounded-[32px] border border-blue-50">
                 <div class="md:col-span-2 space-y-4">
                     <div class="grid grid-cols-2 gap-2">
                         <div><label class="text-[10px] font-bold text-gray-400 uppercase">Siri BIG</label><select id="sel-siri" onchange="updateEntryFilters()" class="w-full p-4 rounded-2xl border font-bold bg-white"></select></div>
@@ -114,84 +111,73 @@
                     </div>
                     <div><label class="text-[10px] font-bold text-gray-400 uppercase">Kumpulan BIG</label><select id="sel-kump" onchange="updateEntryFilters()" class="w-full p-4 rounded-2xl border font-bold bg-white"></select></div>
                     <div><label class="text-[10px] font-bold text-gray-400 uppercase">Pilih Pelajar</label><select id="sel-student" class="w-full p-4 rounded-2xl border font-bold bg-white"></select></div>
-                    <button onclick="loadGradingForm()" class="w-full bg-blue-700 text-white py-4 rounded-2xl font-bold shadow uppercase transform hover:scale-[1.01]">Mula Menilai</button>
+                    <button onclick="loadGradingForm()" class="w-full bg-blue-700 text-white py-4 rounded-2xl font-bold shadow uppercase">Mula Menilai</button>
                 </div>
-                <div class="flex flex-col items-center justify-center space-y-4">
-                    <img id="lec-preview-img" class="avatar-main border-4 border-white shadow-xl hidden">
-                    <div id="lec-preview-ph" class="avatar-main bg-blue-100 flex items-center justify-center text-blue-300 shadow-inner"><i class="fas fa-user-circle text-6xl"></i></div>
-                    <div class="w-full max-w-[280px] h-[260px]"><canvas id="peerRadarChart"></canvas></div>
+                <div class="flex flex-col items-center justify-center">
+                    <img id="lec-preview-img" class="avatar-main hidden"><div id="lec-preview-ph" class="avatar-main bg-blue-100 flex items-center justify-center text-blue-300"><i class="fas fa-user-circle text-6xl"></i></div>
+                    <div class="w-full h-[200px] mt-4"><canvas id="peerRadarChart"></canvas></div>
                 </div>
             </div>
             
             <div id="grading-area" class="hidden space-y-8">
                 <div class="flex gap-1 bg-gray-100 p-1 rounded-2xl shadow-inner">
-                    <button onclick="switchMarkTab('t1')" id="tab-t1" class="flex-1 py-3 font-black text-[10px] uppercase rounded-xl transition-all text-gray-400">Kuiz (10%)</button>
-                    <button onclick="switchMarkTab('t2')" id="tab-t2" class="flex-1 py-3 font-black text-[10px] uppercase rounded-xl transition-all text-gray-400">Amali 1 (20%)</button>
-                    <button onclick="switchMarkTab('t3')" id="tab-t3" class="flex-1 py-3 font-black text-[10px] uppercase rounded-xl transition-all bg-blue-900 text-white shadow">Amali 2 (70%)</button>
+                    <button onclick="switchMarkTab('t1')" id="tab-t1" class="flex-1 py-3 font-black text-[10px] uppercase rounded-xl">Kuiz</button>
+                    <button onclick="switchMarkTab('t2')" id="tab-t2" class="flex-1 py-3 font-black text-[10px] uppercase rounded-xl">Amali 1</button>
+                    <button onclick="switchMarkTab('t3')" id="tab-t3" class="flex-1 py-3 font-black text-[10px] uppercase rounded-xl bg-blue-900 text-white shadow">Amali 2</button>
                 </div>
-                <div id="form-t1" class="mark-form bg-white p-8 border rounded-[32px] space-y-6 hidden shadow-sm">
-                    <h3 class="font-black text-blue-900 uppercase italic text-center">KUIZ AKADEMIK (10%)</h3>
+                <div id="form-t1" class="mark-form bg-white p-8 border rounded-[32px] hidden shadow-sm">
                     <div class="grid grid-cols-2 gap-4">
                         <div><label class="text-[9px] font-bold">K1 (5)</label><input type="number" id="t1_m1" class="input-mark"></div>
                         <div><label class="text-[9px] font-bold">K2 (5)</label><input type="number" id="t1_m2" class="input-mark"></div>
                     </div>
-                    <button onclick="submitMark('MARKAH_TUGASAN1')" class="w-full bg-blue-900 text-white py-4 font-bold rounded-2xl shadow uppercase">Simpan Kuiz</button>
+                    <button onclick="submitMark('MARKAH_TUGASAN1')" class="w-full bg-blue-900 text-white py-4 mt-4 rounded-2xl font-bold">SIMPAN KUIZ</button>
                 </div>
-                <div id="form-t2" class="mark-form bg-white p-8 border rounded-[32px] space-y-6 hidden shadow-sm">
-                    <h3 class="font-black text-blue-900 uppercase italic text-center">AMALI 1 (20%)</h3>
+                <div id="form-t2" class="mark-form bg-white p-8 border rounded-[32px] hidden shadow-sm">
                     <div class="grid grid-cols-3 gap-4">
-                        <div><label class="text-[9px] font-bold uppercase">HP4 ETIKET & SOSIAL (5)</label><input type="number" id="t2_m1" class="input-mark" oninput="calculateT2Total()"></div>
-                        <div><label class="text-[9px] font-bold uppercase">HP4 GURU & KOMUNITI (5)</label><input type="number" id="t2_m2" class="input-mark" oninput="calculateT2Total()"></div>
-                        <div><label class="text-[9px] font-bold uppercase">HP5 KEWARGANEGARAAN (10)</label><input type="number" id="t2_m3" class="input-mark" oninput="calculateT2Total()"></div>
+                        <div><label class="text-[9px] font-bold uppercase">HP4 ETIKET (5)</label><input type="number" id="t2_m1" class="input-mark" oninput="calculateT2Total()"></div>
+                        <div><label class="text-[9px] font-bold uppercase">HP4 KOMUNITI (5)</label><input type="number" id="t2_m2" class="input-mark" oninput="calculateT2Total()"></div>
+                        <div><label class="text-[9px] font-bold uppercase">HP5 KEW (10)</label><input type="number" id="t2_m3" class="input-mark" oninput="calculateT2Total()"></div>
                     </div>
-                    <div class="grid grid-cols-2 gap-4 pt-4 border-t border-dashed">
-                        <div class="bg-blue-50 p-3 rounded-xl text-center"><p class="text-[8px] font-bold text-blue-400 uppercase">Jumlah HP4 (10)</p><p id="total-hp4" class="text-xl font-black text-blue-900">0.0</p></div>
-                        <div class="bg-indigo-50 p-3 rounded-xl text-center"><p class="text-[8px] font-bold text-indigo-400 uppercase">Jumlah HP5 (10)</p><p id="total-hp5" class="text-xl font-black text-indigo-900">0.0</p></div>
-                    </div>
-                    <button onclick="submitMark('MARKAH_TUGASAN2')" class="w-full bg-indigo-700 text-white py-4 font-bold rounded-2xl shadow uppercase">Simpan Amali 1</button>
+                    <div class="grid grid-cols-2 gap-4 mt-4"><div class="bg-blue-50 p-2 rounded-xl text-center"><p class="text-[8px] font-bold">JUMLAH HP4</p><p id="total-hp4" class="font-black">0.0</p></div><div class="bg-indigo-50 p-2 rounded-xl text-center"><p class="text-[8px] font-bold">JUMLAH HP5</p><p id="total-hp5" class="font-black">0.0</p></div></div>
+                    <button onclick="submitMark('MARKAH_TUGASAN2')" class="w-full bg-indigo-700 text-white py-4 mt-4 rounded-2xl font-bold">SIMPAN AMALI 1</button>
                 </div>
-                <div id="form-t3" class="mark-form bg-white p-8 border rounded-[32px] space-y-10 shadow-sm hidden">
-                    <div><h3 class="section-header">1. HP3: Amali II (25%)</h3><div class="grid grid-cols-1 sm:grid-cols-5 gap-6" id="hp3-inputs"></div><div class="mt-4 bg-blue-50 p-4 rounded-2xl text-center border border-blue-100"><p class="text-[10px] font-bold text-blue-400 uppercase">Jumlah HP3 (25%)</p><p id="total-hp3" class="text-3xl font-black text-blue-900">0.0</p></div></div>
-                    <div><h3 class="section-header">2. HP8: Kepimpinan Gabungan (45%)</h3><div class="space-y-8"><div class="grid grid-cols-1 sm:grid-cols-3 gap-6" id="hp8i-inputs"></div><div class="grid grid-cols-1 sm:grid-cols-4 gap-6" id="hp8k-inputs"></div></div><div class="mt-4 bg-purple-50 p-4 rounded-2xl text-center border border-purple-100"><p class="text-[10px] font-bold text-purple-400 uppercase">Jumlah HP8 Individu + Kumpulan (45%)</p><p id="total-hp8" class="text-3xl font-black text-purple-900">0.0</p></div></div>
-                    <button onclick="submitMark('MARKAH_TUGASAN3')" class="w-full bg-purple-700 text-white py-6 font-black rounded-2xl shadow-xl uppercase transform hover:scale-[1.01] text-lg">Simpan Amali 2</button>
+                <div id="form-t3" class="mark-form bg-white p-8 border rounded-[32px] hidden shadow-sm">
+                    <div id="hp3-inputs" class="grid grid-cols-5 gap-2 mb-4"></div>
+                    <div id="hp8i-inputs" class="grid grid-cols-3 gap-2 mb-2"></div>
+                    <div id="hp8k-inputs" class="grid grid-cols-4 gap-2 mb-4"></div>
+                    <div class="grid grid-cols-2 gap-4 mb-4"><div class="bg-blue-50 p-2 rounded-xl text-center"><p class="text-[8px] font-bold">JUMLAH HP3</p><p id="total-hp3" class="font-black">0.0</p></div><div class="bg-purple-50 p-2 rounded-xl text-center"><p class="text-[8px] font-bold">JUMLAH HP8</p><p id="total-hp8" class="font-black">0.0</p></div></div>
+                    <button onclick="submitMark('MARKAH_TUGASAN3')" class="w-full bg-purple-700 text-white py-4 rounded-2xl font-black">SIMPAN AMALI 2</button>
                 </div>
             </div>
         </div>
 
         <div id="sec-biodata" class="hidden space-y-6">
-            <div class="bg-white p-6 rounded-3xl border shadow-sm space-y-4">
-                <p class="text-xs font-bold text-blue-900 uppercase italic">Pilih Siri dahulu untuk menapis Kelas:</p>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div><label class="text-[10px] font-bold text-gray-400 uppercase">1. Siri</label><select id="bio-filter-siri" onchange="updateBioClassFilter()" class="w-full p-3 rounded-xl border bg-gray-50 font-bold"></select></div>
-                    <div><label class="text-[10px] font-bold text-gray-400 uppercase">2. Kelas</label><select id="bio-filter-class" onchange="renderBiodata()" class="w-full p-3 rounded-xl border bg-gray-50 font-bold"><option value="">-- PILIH SIRI DAHULU --</option></select></div>
-                </div>
+            <div class="bg-white p-6 rounded-3xl border shadow-sm flex gap-4">
+                <div class="flex-1"><label class="text-[10px] font-bold text-gray-400 uppercase">Siri</label><select id="bio-filter-siri" onchange="updateBioClassFilter()" class="w-full p-3 rounded-xl border bg-gray-50 font-bold"></select></div>
+                <div class="flex-1"><label class="text-[10px] font-bold text-gray-400 uppercase">Kelas</label><select id="bio-filter-class" onchange="renderBiodata()" class="w-full p-3 rounded-xl border bg-gray-50 font-bold"></select></div>
             </div>
             <div id="biodata-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
         </div>
 
+        <div id="sec-status" class="hidden space-y-6">
+            <div class="bg-white p-6 rounded-3xl border shadow-sm space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div><label class="text-[10px] font-bold text-gray-400 uppercase">Siri</label><select id="status-filter-siri" onchange="updateStatusKumpFilter()" class="w-full p-3 rounded-xl border bg-gray-50 font-bold"></select></div>
+                    <div><label class="text-[10px] font-bold text-gray-400 uppercase">Kumpulan</label><select id="status-filter-kump" onchange="checkPeerStatus()" class="w-full p-3 rounded-xl border bg-gray-50 font-bold"><option value="">-- PILIH SIRI --</option></select></div>
+                </div>
+            </div>
+            <div id="status-result" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+        </div>
+
         <div id="sec-summary" class="hidden space-y-6">
             <div class="flex gap-2"><select id="sel-class-summary" class="p-2 border rounded text-xs bg-gray-50 outline-none"></select><button onclick="loadSummaryData()" class="bg-black text-white px-6 py-2 rounded text-[10px] font-black shadow uppercase">Analisis</button></div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
-                <div class="bg-blue-900 text-white p-6 rounded-3xl shadow-lg"><h4 class="text-4xl font-black" id="stat-sd">0.00</h4><p class="text-[10px] opacity-70 uppercase tracking-widest">Std Deviation</p></div>
-                <div class="bg-white p-6 rounded-3xl border shadow-sm flex flex-col justify-center text-center">
-                    <p class="text-[10px] text-gray-400 font-black mb-2 uppercase">BILANGAN GRED</p>
-                    <div class="grid grid-cols-4 gap-1 text-[9px] font-black uppercase">
-                        <div class="text-green-600">A+:<span id="c-ap">0</span></div><div class="text-green-600">A:<span id="c-a">0</span></div><div class="text-green-600">A-:<span id="c-am">0</span></div>
-                        <div class="text-blue-600">B+:<span id="c-bp">0</span></div><div class="text-blue-600">B:<span id="c-b">0</span></div><div class="text-blue-600">B-:<span id="c-bm">0</span></div>
-                        <div class="text-orange-600">C+:<span id="c-cp">0</span></div><div class="text-orange-600">C:<span id="c-c">0</span></div><div class="text-orange-600">C-:<span id="c-cm">0</span></div>
-                        <div class="text-red-600">D+:<span id="c-dp">0</span></div><div class="text-red-600">D:<span id="c-d">0</span></div><div class="text-red-600">F:<span id="c-f">0</span></div>
-                    </div>
-                </div>
-                <div class="bg-white p-2 rounded-3xl border shadow-sm h-48 flex items-center justify-center"><canvas id="bellCurveChart"></canvas></div>
-            </div>
-            <div class="overflow-x-auto bg-white rounded-3xl border shadow-sm"><table class="w-full text-center text-[11px]"><thead class="bg-gray-50 uppercase font-black text-gray-400 tracking-tighter"><tr class="border-b"><th class="p-4 text-left">PELAJAR</th><th class="p-4">KUMPULAN (NO)</th><th class="p-4">TOTAL</th><th class="p-4">GRED</th></tr></thead><tbody id="summary-body" class="divide-y divide-gray-50"></tbody></table></div>
+            <div id="summary-result" class="bg-white p-6 rounded-3xl border shadow-sm overflow-x-auto"><table class="w-full text-[11px]"><thead class="bg-gray-50"><tr><th class="p-4">PELAJAR</th><th class="p-4">KUMP</th><th class="p-4">TOTAL</th><th class="p-4">GRED</th></tr></thead><tbody id="summary-body" class="divide-y"></tbody></table></div>
         </div>
-        <p class="footer-credit mt-10">Unit Kokurikulum IPG Kampus Darulaman | Haniff Faizal bin Chek Ani</p>
     </div>
 
     <script>
         const WEB_APP_URL = "https://script.google.com/macros/s/AKfycby3nQyBtnUOrng8S-HcUIPFdXHn9VfxcZ0ixKyTr9TiVhULonuHItI-bpHi_9TwSFE5/exec"; 
-        let currentStudent = null, teammates = [], allStudentsCache = [], myChart = null, radarChart = null;
+        let currentStudent = null, teammates = [], allStudentsCache = [], radarChart = null, myChart = null;
 
         const peerK = ["Kepimpinan", "Kerjasama", "Komunikasi", "Komitmen", "Sahsiah"];
         const t3Items = {
@@ -206,30 +192,10 @@
             Object.keys(t3Items).forEach(cat => {
                 t3Items[cat].forEach(k => {
                     const box = (cat === 'hp3') ? h3 : (cat === 'hp8i' ? h8i : h8k);
-                    box.innerHTML += `<div class="flex flex-col"><label class="text-[11px] font-black text-blue-900 uppercase mb-1">K${k.id} (${k.max})</label><input type="number" id="t3_k${k.id}" class="input-mark mb-1" placeholder="0" oninput="calculateT3Total()"><span class="text-[10px] text-gray-500 block uppercase font-bold leading-tight bg-gray-100 p-2 rounded-lg text-center h-full flex items-center justify-center">${k.name}</span></div>`;
+                    box.innerHTML += `<div class="flex flex-col"><label class="text-[10px] font-black text-blue-900 uppercase">K${k.id}</label><input type="number" id="t3_k${k.id}" class="input-mark mb-1" placeholder="0" oninput="calculateT3Total()"><span class="text-[8px] text-gray-400 uppercase font-bold text-center">${k.name}</span></div>`;
                 });
             });
         };
-
-        function calculateT2Total() {
-            const m1 = parseFloat(document.getElementById('t2_m1').value) || 0;
-            const m2 = parseFloat(document.getElementById('t2_m2').value) || 0;
-            const m3 = parseFloat(document.getElementById('t2_m3').value) || 0;
-            document.getElementById('total-hp4').innerText = (m1 + m2).toFixed(1);
-            document.getElementById('total-hp5').innerText = m3.toFixed(1);
-        }
-
-        function calculateT3Total() {
-            let hp3 = 0, hp8 = 0;
-            for(let i=1; i<=5; i++) hp3 += parseFloat(document.getElementById('t3_k'+i).value) || 0;
-            for(let i=6; i<=12; i++) hp8 += parseFloat(document.getElementById('t3_k'+i).value) || 0;
-            document.getElementById('total-hp3').innerText = hp3.toFixed(1);
-            document.getElementById('total-hp8').innerText = hp8.toFixed(1);
-        }
-
-        function getGredIPG(score) {
-            if (score >= 90) return "A+"; if (score >= 80) return "A"; if (score >= 75) return "A-"; if (score >= 70) return "B+"; if (score >= 65) return "B"; if (score >= 60) return "B-"; if (score >= 55) return "C+"; if (score >= 50) return "C"; if (score >= 40) return "C-"; if (score >= 30) return "D+"; if (score >= 20) return "D"; return "F";
-        }
 
         function handleLogin(e, mode) {
             e.preventDefault(); showLoader(true);
@@ -243,198 +209,123 @@
             }).catch(err => { showLoader(false); alert("Ralat sambungan."); });
         }
 
-        function loadLecturerView(res) {
-            document.getElementById('view-login').classList.add('hidden');
-            document.getElementById('view-lecturer').classList.remove('hidden');
-            document.getElementById('lec-name').innerText = res.nama;
-            allStudentsCache = res.students_list;
-            
-            const sSet = [...new Set(allStudentsCache.map(s => s.siri))].filter(Boolean).sort();
-            const sOpt = '<option value="">-- PILIH SIRI --</option>' + sSet.map(s => `<option value="${s}">SIRI ${s}</option>`).join('');
-            
-            document.getElementById('sel-siri').innerHTML = sOpt;
-            document.getElementById('bio-filter-siri').innerHTML = sOpt;
-            document.getElementById('sel-class-summary').innerHTML = '<option value="SEMUA">SEMUA KELAS</option>' + [...new Set(allStudentsCache.map(s => s.kelas))].filter(Boolean).sort().map(c => `<option value="${c}">${c}</option>`).join('');
-            
-            updateEntryFilters();
-        }
-
-        // --- DINAMIK FILTER UNTUK ENTRY MARKAH ---
-        function updateEntryFilters() {
-            const s = document.getElementById('sel-siri').value;
-            const cSelect = document.getElementById('sel-class');
-            const kSelect = document.getElementById('sel-kump');
-            const sSelect = document.getElementById('sel-student');
-
-            // 1. Tapis Kelas mengikut Siri
-            const classesInSiri = [...new Set(allStudentsCache.filter(st => !s || st.siri === s).map(st => st.kelas))].filter(Boolean).sort();
-            cSelect.innerHTML = '<option value="">-- PILIH KELAS --</option>' + classesInSiri.map(c => `<option value="${c}">${c}</option>`).join('');
-            
-            // 2. Tapis Kumpulan mengikut Siri & Kelas
-            const c = cSelect.value;
-            const kumpsInSiriClass = [...new Set(allStudentsCache.filter(st => (!s || st.siri === s) && (!c || st.kelas === c)).map(st => st.nama_kump))].filter(Boolean).sort();
-            kSelect.innerHTML = '<option value="">SEMUA KUMPULAN</option>' + kumpsInSiriClass.map(k => `<option value="${k}">${k.toUpperCase()}</option>`).join('');
-
-            // 3. Tapis Pelajar
-            const k = kSelect.value;
-            sSelect.innerHTML = '<option value="">-- PILIH PELAJAR --</option>';
-            let filtered = allStudentsCache.filter(st => (!s || st.siri === s) && (!c || st.kelas === c) && (!k || st.nama_kump === k));
-            filtered.sort((a, b) => a.nama.localeCompare(b.nama));
-            filtered.forEach(st => {
-                sSelect.innerHTML += `<option value="${st.id}">${st.siri} | ${st.nama_kump.toUpperCase()} | No:${st.no_kump || '0'} | ${st.nama}</option>`;
-            });
-        }
-
-        // --- DINAMIK FILTER UNTUK BIODATA ---
-        function updateBioClassFilter() {
-            const s = document.getElementById('bio-filter-siri').value;
-            const cSelect = document.getElementById('bio-filter-class');
-            
-            if (!s) {
-                cSelect.innerHTML = '<option value="">-- PILIH SIRI DAHULU --</option>';
-            } else {
-                const classesInSiri = [...new Set(allStudentsCache.filter(st => st.siri === s).map(st => st.kelas))].filter(Boolean).sort();
-                cSelect.innerHTML = '<option value="">-- PILIH KELAS --</option>' + classesInSiri.map(c => `<option value="${c}">${c}</option>`).join('');
-            }
-            renderBiodata(); // Kosongkan grid jika siri ditukar
-        }
-
-        function renderBiodata() {
-            const s = document.getElementById('bio-filter-siri').value;
-            const c = document.getElementById('bio-filter-class').value;
-            const grid = document.getElementById('biodata-grid');
-            
-            if (!s || !c) {
-                grid.innerHTML = '<p class="col-span-full text-center py-10 opacity-40 font-bold italic">Sila pilih Siri & Kelas untuk paparkan biodata.</p>';
-                return;
-            }
-
-            grid.innerHTML = "";
-            let filtered = allStudentsCache.filter(st => st.siri === s && st.kelas === c);
-            filtered.sort((a, b) => a.nama.localeCompare(b.nama));
-
-            const fragment = document.createDocumentFragment();
-            filtered.forEach(st => {
-                const imgUrl = st.url_gambar && st.url_gambar.includes('id=') ? st.url_gambar.replace('sz=w1000', 'sz=w300') : "https://via.placeholder.com/150?text=No+Photo";
-                const card = document.createElement('div');
-                card.className = "bg-white p-3 rounded-2xl border shadow-sm flex flex-col items-center text-center hover:shadow-md transition-all";
-                card.innerHTML = `
-                    <div class="w-full h-[180px] overflow-hidden rounded-xl bg-gray-100 mb-3"><img src="${imgUrl}" class="w-full h-full object-cover" loading="lazy" onerror="this.src='https://via.placeholder.com/150?text=No+Photo'"></div>
-                    <h4 class="text-[10px] font-black text-blue-900 uppercase leading-tight mb-2 h-8 flex items-center justify-center">${st.nama}</h4>
-                    <div class="w-full pt-2 border-t border-gray-50 space-y-1">
-                        <p class="text-[8px] font-bold text-gray-400 uppercase">Siri: ${st.siri}</p>
-                        <p class="text-[8px] font-bold text-blue-600 uppercase">Kump: ${st.nama_kump} (${st.no_kump || '0'})</p>
-                        <p class="text-[8px] font-bold text-indigo-500 uppercase">Kelas: ${st.kelas}</p>
-                    </div>`;
-                fragment.appendChild(card);
-            });
-            grid.appendChild(fragment);
-        }
-
-        function loadGradingForm() {
-            const sid = document.getElementById('sel-student').value; if(!sid) return; showLoader(true);
-            fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify({ action: "get_student_marks", student_id: sid }) }).then(r => r.json()).then(res => {
-                showLoader(false); if (res.result === 'success') {
-                    const im = document.getElementById('lec-preview-img'), ph = document.getElementById('lec-preview-ph');
-                    if(res.latest_img && res.latest_img.length > 20) { im.src = res.latest_img; im.classList.remove('hidden'); ph.classList.add('hidden'); } else { im.classList.add('hidden'); ph.classList.remove('hidden'); }
-                    document.getElementById('grading-area').classList.remove('hidden');
-                    if(res.peer_averages) updateRadarChart(res.peer_averages);
-                    if(res.data.t1) { document.getElementById('t1_m1').value = res.data.t1.m1; document.getElementById('t1_m2').value = res.data.t1.m2; }
-                    if(res.data.t2) { document.getElementById('t2_m1').value = res.data.t2.m1; document.getElementById('t2_m2').value = res.data.t2.m2; document.getElementById('t2_m3').value = res.data.t2.m3; calculateT2Total(); }
-                    for(let i=1; i<=12; i++){ const el = document.getElementById('t3_k'+i); if(el) el.value = res.data.t3.hp[i-1]; }
-                    calculateT3Total(); switchMarkTab('t3');
-                }
-            });
-        }
-
-        function updateRadarChart(averages) {
-            const ctx = document.getElementById('peerRadarChart').getContext('2d'); if(radarChart) radarChart.destroy();
-            radarChart = new Chart(ctx, { type: 'radar', data: { labels: peerK, datasets: [{ label: 'Peer Assesment', data: averages, backgroundColor: 'rgba(30, 58, 138, 0.2)', borderColor: '#1e3a8a', pointBackgroundColor: '#1e3a8a', borderWidth: 2 }] }, options: { scales: { r: { min: 0, max: 5, ticks: { display: false }, pointLabels: { font: { size: 10, weight: 'bold' } } } }, plugins: { legend: { display: false } } } });
-        }
-
-        function loadSummaryData() {
-            showLoader(true); const k = document.getElementById('sel-class-summary').value;
-            fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify({ action: "get_summary_data", kelas: k }) }).then(r => r.json()).then(res => {
-                showLoader(false); const b = document.getElementById('summary-body'); b.innerHTML = "";
-                let stats = { AP:0, A:0, AM:0, BP:0, B:0, BM:0, CP:0, C:0, CM:0, DP:0, D:0, F:0 };
-                res.data.forEach(r => { 
-                    const score = parseFloat(r.total); const gred = getGredIPG(score);
-                    if(gred === "A+") stats.AP++; else if(gred === "A") stats.A++; else if(gred === "A-") stats.AM++; else if(gred === "B+") stats.BP++; else if(gred === "B") stats.B++; else if(gred === "B-") stats.BM++; else if(gred === "C+") stats.CP++; else if(gred === "C") stats.C++; else if(gred === "C-") stats.CM++; else if(gred === "D+") stats.DP++; else if(gred === "D") stats.D++; else stats.F++;
-                    b.innerHTML += `<tr class="hover:bg-gray-50 border-b"><td class="p-4 text-left font-bold uppercase">${r.nama}</td><td class="p-4 font-bold text-blue-600 uppercase">${r.kump}</td><td class="p-4 font-black">${r.total}</td><td class="p-4 font-black text-indigo-700">${gred}</td></tr>`; 
-                });
-                document.getElementById('c-ap').innerText = stats.AP; document.getElementById('c-a').innerText = stats.A; document.getElementById('c-am').innerText = stats.AM; document.getElementById('c-bp').innerText = stats.BP; document.getElementById('c-b').innerText = stats.B; document.getElementById('c-bm').innerText = stats.BM; document.getElementById('c-cp').innerText = stats.CP; document.getElementById('c-c').innerText = stats.C; document.getElementById('c-cm').innerText = stats.CM; document.getElementById('c-dp').innerText = stats.DP; document.getElementById('c-d').innerText = stats.D; document.getElementById('c-f').innerText = stats.F;
-                updateBellCurve(stats);
-            });
-        }
-
-        function updateBellCurve(stats) {
-            const ctx = document.getElementById('bellCurveChart').getContext('2d'); if(myChart) myChart.destroy();
-            const labels = ['F', 'D', 'D+', 'C-', 'C', 'C+', 'B-', 'B', 'B+', 'A-', 'A', 'A+'];
-            const data = [stats.F, stats.D, stats.DP, stats.CM, stats.C, stats.CP, stats.BM, stats.B, stats.BP, stats.AM, stats.A, stats.AP];
-            myChart = new Chart(ctx, { type: 'line', data: { labels: labels, datasets: [{ data: data, borderColor: '#1e3a8a', tension: 0.4, fill: true, backgroundColor: 'rgba(30, 58, 138, 0.1)' }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { grid: { display: false } } } } });
-        }
-
-        function showLecSection(s) { 
-            const sections = ['entry', 'biodata', 'summary'];
-            sections.forEach(sec => document.getElementById('sec-' + sec).classList.toggle('hidden', sec !== s));
-            sections.forEach(sec => {
-                const btn = document.getElementById('btn-l-' + sec);
-                if(sec === s) btn.className = 'px-6 py-2 rounded-lg font-bold text-xs bg-blue-900 text-white shadow min-w-fit';
-                else btn.className = 'px-6 py-2 rounded-lg font-bold text-xs bg-gray-50 text-gray-400 border min-w-fit transition-all';
-            });
-            if(s === 'biodata') renderBiodata();
-        }
-        
-        function switchMarkTab(t) {
-            document.querySelectorAll('.mark-form').forEach(f => f.classList.add('hidden'));
-            document.getElementById('form-' + t).classList.remove('hidden');
-            ['t1','t2','t3'].forEach(id => {
-                const el = document.getElementById('tab-' + id);
-                if(id === t) el.className = "flex-1 py-3 font-black text-[10px] uppercase rounded-xl transition-all bg-blue-900 text-white shadow";
-                else el.className = "flex-1 py-3 font-black text-[10px] uppercase rounded-xl transition-all text-gray-400";
-            });
-        }
-
-        function submitMark(sn) { 
-            const sid = document.getElementById('sel-student').value; if(!sid) return; 
-            let b = { action: "save_mark", sheet_name: sn, student_id: sid }; 
-            if(sn === 'MARKAH_TUGASAN1') { b.m1 = document.getElementById('t1_m1').value; b.m2 = document.getElementById('t1_m2').value; }
-            else if(sn === 'MARKAH_TUGASAN2') { b.m1 = document.getElementById('t2_m1').value; b.m2 = document.getElementById('t2_m2').value; b.m3 = document.getElementById('t2_m3').value; }
-            else { for(let i=1; i<=12; i++) b['k'+i] = document.getElementById('t3_k'+i).value; }
-            showLoader(true); 
-            fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify(b) }).then(r => r.json()).then(res => { showLoader(false); showToast(res.message, 'success'); }); 
-        }
-
-        function updateStudentData() { showLoader(true); const b = { action: "update_student_info", no_kp: currentStudent.no_kp, siri: document.getElementById('std-siri').value, nama_kump: document.getElementById('std-kump').value, no_kump: document.getElementById('std-no').value, alahan: document.getElementById('std-alahan').value, ubat: document.getElementById('std-ubat').value, tel_waris: document.getElementById('std-tel').value }; fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify(b) }).then(r => r.json()).then(res => { showLoader(false); if (res.result === 'success') showToast("Profil Disimpan", "success"); }); }
-        function showLoader(s) { document.getElementById('loader').classList.toggle('hidden', !s); }
-        function showToast(m, t) { const el = document.getElementById('toast'); document.getElementById('toast-msg').innerText = m; el.className = 'fixed top-6 right-6 z-[90] px-8 py-4 rounded-2xl text-white font-black shadow-2xl transition-all ' + (t==='success'?'bg-green-500':'bg-red-500'); el.classList.remove('hidden'); setTimeout(() => el.classList.add('hidden'), 3500); }
-        function switchLoginMode(m) { const isS = (m === 'student'); document.getElementById('form-student').classList.toggle('hidden', !isS); document.getElementById('form-lecturer').classList.toggle('hidden', isS); document.getElementById('l-std').className = isS ? "flex-1 py-2 text-xs font-bold bg-blue-900 text-white" : "flex-1 py-2 text-xs font-bold bg-gray-50 text-gray-400"; document.getElementById('l-lec').className = !isS ? "flex-1 py-2 text-xs font-bold bg-blue-900 text-white" : "flex-1 py-2 text-xs font-bold bg-gray-50 text-gray-400"; }
-        
         function switchTab(t) {
             const isP = (t === 'profil');
             document.getElementById('tab-profil').classList.toggle('hidden', !isP);
             document.getElementById('tab-rakan').classList.toggle('hidden', isP);
             document.getElementById('btn-profil').className = isP ? "flex-1 py-3 rounded-xl font-bold text-[10px] uppercase shadow-md tab-active" : "flex-1 py-3 rounded-xl font-bold text-[10px] uppercase border bg-gray-50 text-gray-400";
             document.getElementById('btn-rakan').className = !isP ? "flex-1 py-3 rounded-xl font-bold text-[10px] uppercase shadow-md tab-active" : "flex-1 py-3 rounded-xl font-bold text-[10px] uppercase border bg-gray-50 text-gray-400";
-            if(!isP) loadTeammates();
+            if(!isP) loadTeammates(); // Pastikan panggil load rakan semasa buka tab rakan
         }
 
         function loadStudentView(d) {
             document.getElementById('view-login').classList.add('hidden');
             document.getElementById('view-student').classList.remove('hidden');
             document.getElementById('std-name-display').innerText = d.nama;
-            document.getElementById('header-info').innerText = `SIRI: ${d.siri} | KUMP: ${d.nama_kump}${d.no_kump} | KELAS: ${d.kelas}`;
+            document.getElementById('header-info').innerText = `SIRI: ${d.siri} | KUMP: ${d.nama_kump} | KELAS: ${d.kelas}`;
             document.getElementById('std-siri').value = d.siri; document.getElementById('std-kump').value = d.nama_kump; document.getElementById('std-no').value = d.no_kump;
-            document.getElementById('std-tel').value = d.tel_waris || ""; document.getElementById('std-alahan').value = d.alahan || ""; document.getElementById('std-ubat').value = d.ubat || "";
             if (d.url_gambar) { const im = document.getElementById('std-img'); im.src = d.url_gambar; im.classList.remove('hidden'); document.getElementById('img-ph').classList.add('hidden'); }
         }
-        
+
         function loadTeammates() {
+            if (!currentStudent) return;
             showLoader(true);
-            fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify({ action: "get_teammates", reviewer_id: currentStudent.id, siri: currentStudent.siri, nama_kump: currentStudent.nama_kump }) }).then(r => r.json()).then(res => {
-                showLoader(false); if (res.result === 'success') { teammates = res.data; renderTeammates(); }
+            fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify({ action: "get_teammates", reviewer_id: currentStudent.id, siri: currentStudent.siri, nama_kump: currentStudent.nama_kump }) })
+            .then(r => r.json()).then(res => {
+                showLoader(false);
+                if (res.result === 'success') {
+                    teammates = res.data;
+                    renderTeammates();
+                }
             });
         }
+
+        function renderTeammates() {
+            const list = document.getElementById('teammates-list');
+            const btn = document.getElementById('btn-submit-peer');
+            if(teammates.length === 0) { list.innerHTML = '<p class="col-span-full text-center opacity-40 py-10 font-bold">Tiada rakan dikesan dalam kumpulan anda.</p>'; btn.classList.add('hidden'); return; }
+            
+            const labels = ["Kepimpinan", "Kerjasama", "Komunikasi", "Komitmen", "Sahsiah"];
+            list.innerHTML = teammates.map(m => `
+                <div class="bg-gray-50 p-6 rounded-[28px] border shadow-sm">
+                    <div class="flex items-center gap-3 mb-4">
+                        <img src="${m.url_gambar}" class="avatar-peer shadow-sm">
+                        <p class="text-[10px] font-black uppercase text-blue-900">${m.nama}</p>
+                    </div>
+                    <div class="grid grid-cols-5 gap-1">
+                        ${[1,2,3,4,5].map(i => `
+                            <div class="text-center">
+                                <label class="text-[7px] font-black text-blue-900 block mb-1">K${i}</label>
+                                <input type="number" id="m${i}_${m.id}" value="${m['m'+i] || 0}" min="0" max="5" class="input-mark" style="font-size: 0.9rem;">
+                                <span class="text-[5px] text-gray-400 block uppercase font-bold mt-1 leading-none">${labels[i-1]}</span>
+                            </div>`).join('')}
+                    </div>
+                </div>`).join('');
+            btn.classList.remove('hidden');
+        }
+
+        function submitPeerReviews() {
+            const reviews = teammates.map(m => ({ target_id: m.id, m1: document.getElementById('m1_'+m.id).value||0, m2: document.getElementById('m2_'+m.id).value||0, m3: document.getElementById('m3_'+m.id).value||0, m4: document.getElementById('m4_'+m.id).value||0, m5: document.getElementById('m5_'+m.id).value||0 }));
+            showLoader(true);
+            fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify({ action: "submit_bulk_peer", reviewer_id: currentStudent.id, siri: currentStudent.siri, nama_kump: currentStudent.nama_kump, reviews: reviews }) }).then(r => r.json()).then(res => { showLoader(false); alert(res.message); loadTeammates(); });
+        }
+
+        // --- LECTURER LOGIC ---
+        function loadLecturerView(res) {
+            document.getElementById('view-login').classList.add('hidden');
+            document.getElementById('view-lecturer').classList.remove('hidden');
+            document.getElementById('lec-name').innerText = res.nama;
+            allStudentsCache = res.students_list;
+            const sSet = [...new Set(allStudentsCache.map(s => s.siri))].filter(Boolean).sort();
+            const sOpt = '<option value="">-- PILIH SIRI --</option>' + sSet.map(s => `<option value="${s}">SIRI ${s}</option>`).join('');
+            document.getElementById('sel-siri').innerHTML = sOpt;
+            document.getElementById('bio-filter-siri').innerHTML = sOpt;
+            document.getElementById('status-filter-siri').innerHTML = sOpt;
+            updateEntryFilters();
+        }
+
+        function updateStatusKumpFilter() {
+            const s = document.getElementById('status-filter-siri').value;
+            const kSelect = document.getElementById('status-filter-kump');
+            const kumps = [...new Set(allStudentsCache.filter(st => st.siri === s).map(st => st.nama_kump))].filter(Boolean).sort();
+            kSelect.innerHTML = '<option value="">-- PILIH KUMPULAN --</option>' + kumps.map(k => `<option value="${k}">${k.toUpperCase()}</option>`).join('');
+        }
+
+        function checkPeerStatus() {
+            const s = document.getElementById('status-filter-siri').value;
+            const k = document.getElementById('status-filter-kump').value;
+            const resDiv = document.getElementById('status-result');
+            if(!s || !k) return;
+            showLoader(true);
+            const studentsInKump = allStudentsCache.filter(st => st.siri === s && st.nama_kump === k);
+            resDiv.innerHTML = "";
+            studentsInKump.forEach(st => {
+                const card = document.createElement('div');
+                card.className = "bg-white p-4 rounded-2xl border shadow-sm flex items-center justify-between";
+                card.innerHTML = `<div><p class="text-[10px] font-black uppercase text-blue-900">${st.nama}</p></div><div id="tag-${st.id}" class="text-[8px] font-black px-3 py-1 rounded-full bg-gray-100 text-gray-400">SEMAK...</div>`;
+                resDiv.appendChild(card);
+                fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify({ action: "get_teammates", reviewer_id: st.id, siri: s, nama_kump: k }) }).then(r => r.json()).then(res2 => {
+                    const tag = document.getElementById('tag-'+st.id);
+                    const done = res2.data.some(p => p.m1 > 0);
+                    tag.innerText = done ? "SELESAI" : "BELUM MENILAI";
+                    tag.className = done ? "text-[8px] font-black px-3 py-1 rounded-full bg-green-100 text-green-600" : "text-[8px] font-black px-3 py-1 rounded-full bg-red-100 text-red-600";
+                });
+            });
+            showLoader(false);
+        }
+
+        // --- COMMON UTILS ---
+        function calculateT2Total() { document.getElementById('total-hp4').innerText = ((parseFloat(document.getElementById('t2_m1').value)||0)+(parseFloat(document.getElementById('t2_m2').value)||0)).toFixed(1); document.getElementById('total-hp5').innerText = (parseFloat(document.getElementById('t2_m3').value)||0).toFixed(1); }
+        function calculateT3Total() { let h3=0, h8=0; for(let i=1; i<=5; i++) h3+=parseFloat(document.getElementById('t3_k'+i).value)||0; for(let i=6; i<=12; i++) h8+=parseFloat(document.getElementById('t3_k'+i).value)||0; document.getElementById('total-hp3').innerText=h3.toFixed(1); document.getElementById('total-hp8').innerText=h8.toFixed(1); }
+        function showLecSection(s) { ['entry','biodata','status','summary'].forEach(sec => document.getElementById('sec-'+sec).classList.toggle('hidden', sec!==s)); ['entry','biodata','status','summary'].forEach(sec => { const b = document.getElementById('btn-l-'+sec); if(sec===s) b.className='px-6 py-2 rounded-lg font-bold text-xs bg-blue-900 text-white shadow min-w-fit'; else b.className='px-6 py-2 rounded-lg font-bold text-xs bg-gray-50 text-gray-400 border min-w-fit'; }); if(s==='biodata') renderBiodata(); }
+        function updateEntryFilters() { const s = document.getElementById('sel-siri').value; const classes = [...new Set(allStudentsCache.filter(st => !s || st.siri===s).map(st => st.kelas))].filter(Boolean).sort(); document.getElementById('sel-class').innerHTML = '<option value="">-- KELAS --</option>' + classes.map(c => `<option value="${c}">${c}</option>`).join(''); const c = document.getElementById('sel-class').value; const kumps = [...new Set(allStudentsCache.filter(st => (!s || st.siri===s) && (!c || st.kelas===c)).map(st => st.nama_kump))].filter(Boolean).sort(); document.getElementById('sel-kump').innerHTML = '<option value="">-- KUMPULAN --</option>' + kumps.map(k => `<option value="${k}">${k}</option>`).join(''); const k = document.getElementById('sel-kump').value; document.getElementById('sel-student').innerHTML = '<option value="">-- PELAJAR --</option>' + allStudentsCache.filter(st => (!s || st.siri===s) && (!c || st.kelas===c) && (!k || st.nama_kump===k)).map(st => `<option value="${st.id}">${st.nama}</option>`).join(''); }
+        function updateBioClassFilter() { const s = document.getElementById('bio-filter-siri').value; const classes = [...new Set(allStudentsCache.filter(st => st.siri===s).map(st => st.kelas))].filter(Boolean).sort(); document.getElementById('bio-filter-class').innerHTML = '<option value="">-- KELAS --</option>' + classes.map(c => `<option value="${c}">${c}</option>`).join(''); renderBiodata(); }
+        function renderBiodata() { const s = document.getElementById('bio-filter-siri').value, c = document.getElementById('bio-filter-class').value, g = document.getElementById('biodata-grid'); if(!s || !c) { g.innerHTML = ""; return; } g.innerHTML = allStudentsCache.filter(st => st.siri===s && st.kelas===c).map(st => `<div class="bg-white p-3 rounded-2xl border shadow-sm text-center"><img src="${st.url_gambar}" class="w-full h-32 object-cover rounded-xl mb-2"><p class="text-[9px] font-black uppercase">${st.nama}</p></div>`).join(''); }
+        function switchMarkTab(t) { document.querySelectorAll('.mark-form').forEach(f => f.classList.add('hidden')); document.getElementById('form-'+t).classList.remove('hidden'); ['t1','t2','t3'].forEach(id => { const el = document.getElementById('tab-'+id); el.className = id===t ? "flex-1 py-3 font-black text-[10px] uppercase rounded-xl bg-blue-900 text-white shadow" : "flex-1 py-3 font-black text-[10px] uppercase rounded-xl text-gray-400"; }); }
+        function submitMark(sn) { const sid = document.getElementById('sel-student').value; if(!sid) return; showLoader(true); let b = { action: "save_mark", sheet_name: sn, student_id: sid }; if(sn === 'MARKAH_TUGASAN1') { b.m1 = document.getElementById('t1_m1').value; b.m2 = document.getElementById('t1_m2').value; } else if(sn === 'MARKAH_TUGASAN2') { b.m1 = document.getElementById('t2_m1').value; b.m2 = document.getElementById('t2_m2').value; b.m3 = document.getElementById('t2_m3').value; } else { for(let i=1; i<=12; i++) b['k'+i] = document.getElementById('t3_k'+i).value; } fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify(b) }).then(r => r.json()).then(res => { showLoader(false); showToast(res.message, 'success'); }); }
+        function showLoader(s) { document.getElementById('loader').classList.toggle('hidden', !s); }
+        function showToast(m, t) { const el = document.getElementById('toast'); document.getElementById('toast-msg').innerText = m; el.className = 'fixed top-6 right-6 z-[90] px-8 py-4 rounded-2xl text-white font-black shadow-2xl ' + (t==='success'?'bg-green-500':'bg-red-500'); el.classList.remove('hidden'); setTimeout(() => el.classList.add('hidden'), 3000); }
+        function switchLoginMode(m) { const isS = m==='student'; document.getElementById('form-student').classList.toggle('hidden', !isS); document.getElementById('form-lecturer').classList.toggle('hidden', isS); document.getElementById('l-std').className = isS ? "flex-1 py-2 text-xs font-bold bg-blue-900 text-white" : "flex-1 py-2 text-xs font-bold bg-gray-50 text-gray-400"; document.getElementById('l-lec').className = !isS ? "flex-1 py-2 text-xs font-bold bg-blue-900 text-white" : "flex-1 py-2 text-xs font-bold bg-gray-50 text-gray-400"; }
     </script>
 </body>
 </html>
